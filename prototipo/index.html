@@ -700,7 +700,7 @@ function veredicto(e){
   if(e.s>=2)return "Va a costar. Mucho.";
   return "Esto es mierda. Pero es tu mierda.";
 }
-function sorteo(){
+function sorteo(sinGiro){
   show('sorteo');
   const t=G.tirada, e=G.candidatos[t], pom=t>=G.maxRechazos, ultima=t===G.maxRechazos-1;
   $('#tiradaLbl').textContent=ORD[t]+" tirada"+(ultima?" · la última con derecho a decir que no":"")+(pom?" · plata o mierda":"");
@@ -719,10 +719,12 @@ function sorteo(){
     const b=$('#sorteoBtns');
     if(pom){ b.innerHTML=`<button class="btn" id="bQuedo">Te tocó ${e.n}. A bancársela.</button>`; }
     else{ const quedan=G.maxRechazos-1-t;
-      b.innerHTML=`<button class="btn" id="bQuedo">Me lo quedo: ${e.n}<small>Vas a la copa con esto.</small></button><button class="btn sec" id="bOtra2">Otra oportunidad<small>${ultima?(G.triviaHecha?"Ojo: la próxima es PLATA O MIERDA. No hay vuelta.":"Ojo: la próxima es PLATA O MIERDA... salvo que sepas de fútbol."):"Te quedan "+quedan+" rechazo"+(quedan===1?"":"s")+" más antes del plata o mierda."}</small></button>`; }
+      b.innerHTML=`<button class="btn" id="bQuedo">Me lo quedo: ${e.n}<small>Vas a la copa con esto.</small></button><button class="btn sec" id="bOtra2">Otra oportunidad<small>${ultima?"Ojo: la próxima es PLATA O MIERDA. No hay vuelta.":"Te quedan "+quedan+" rechazo"+(quedan===1?"":"s")+" más antes del plata o mierda."}</small></button>`+(G.triviaHecha?"":`<button class="btn sec" id="bTrivia" style="border:1px dashed var(--plata)">¿Sabés de fútbol?<small>Una pregunta. Si acertás, ganás una tirada más antes del plata o mierda.</small></button>`); }
     $('#bQuedo').onclick=()=>{G.eq=e;armarCuadro();renderCuadro()};
-    const o=$('#bOtra2'); if(o)o.onclick=()=>{G.rechazados.push(e);G.tirada++; if(ultima&&!G.triviaHecha)trivia(); else sorteo();};
+    const o=$('#bOtra2'); if(o)o.onclick=()=>{G.rechazados.push(e);G.tirada++;sorteo()};
+    const tq=$('#bTrivia'); if(tq)tq.onclick=trivia;
   };
+  if(sinGiro){ parar(); return; }
   if(pom){ epico(()=>{ $('#sorteoBtns').innerHTML='<button class="btn" id="bTirar">Tirar</button>'; $('#bTirar').onclick=()=>{$('#sorteoBtns').innerHTML="";girar()}; }); }
   else girar();
 }
@@ -741,16 +743,16 @@ function trivia(){
   G.triviaHecha=true;
   const q=TRIVIA[Math.floor(rnd()*TRIVIA.length)];
   const ops=shuffle([q[1],q[2],q[3],q[4]]);
-  $('#tiradaLbl').textContent="Última chance · ¿sabés de fútbol?"; $('#tiradaLbl').className='tirada pom';
+  $('#tiradaLbl').textContent="¿Sabés de fútbol?"; $('#tiradaLbl').className='tirada pom';
   $('#nom').className='nom'; $('#nom').textContent='';
-  $('#det').innerHTML=`<b style="color:var(--ink);font-size:17px">${q[0]}</b>`; $('#veredicto').textContent="Si acertás, tenés una tirada más antes del plata o mierda. Si no, toca lo que toca.";
+  $('#det').innerHTML=`<b style="color:var(--ink);font-size:17px">${q[0]}</b>`; $('#veredicto').textContent="Si acertás, tenés una tirada más antes del plata o mierda. Si no, seguís igual. Una sola pregunta por copa.";
   $('#sorteoBtns').innerHTML=ops.map(o=>`<button class="btn sec" data-o="${o.replace(/"/g,'&quot;')}">${o}</button>`).join("");
   $('#rechazados').innerHTML="";
   $('#sorteoBtns').querySelectorAll('button').forEach(b=>b.onclick=()=>{
     const ok=b.dataset.o===q[1];
     if(ok){G.maxRechazos=4;}
-    $('#sorteoBtns').innerHTML=`<p class="veredicto" style="color:${ok?'var(--plata)':'var(--mierda)'};font-weight:700">${ok?"Correcto. Una tirada más. Aprovechala.":"No. Era "+q[1]+". Toca lo que toca."}</p><button class="btn" id="bSigue">${ok?"Tirar de nuevo":"Plata o mierda"}</button>`;
-    $('#bSigue').onclick=sorteo;
+    $('#sorteoBtns').innerHTML=`<p class="veredicto" style="color:${ok?'var(--plata)':'var(--mierda)'};font-weight:700">${ok?"Correcto. Tenés una tirada más antes del plata o mierda.":"No. Era "+q[1]+". Seguís con lo que tenías."}</p><button class="btn" id="bSigue">Volver a la tirada</button>`;
+    $('#bSigue').onclick=()=>sorteo(true);
   });
 }
 
