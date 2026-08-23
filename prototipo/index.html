@@ -721,7 +721,7 @@ const SFX=(()=>{
   const noiseBuf=(c,sec)=>{ const b=c.createBuffer(1,Math.ceil(c.sampleRate*sec),c.sampleRate); const d=b.getChannelData(0); let last=0; for(let i=0;i<d.length;i++){ const w=Math.random()*2-1; last=(last+.02*w)/1.02; d[i]=w*.5+last*2.5; } return b; };
   const env=(g,t,a,d,s,r,peak)=>{ const p=peak||1; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(p,t+a); g.gain.linearRampToValueAtTime(p*s,t+a+d); g.gain.setValueAtTime(p*s,t+a+d); g.gain.exponentialRampToValueAtTime(.0001,t+a+d+r); };
   const playClip=async(name,vol,rate)=>{ const c=ac(); if(!c)return; let b=bufs[name];
-    if(!b){ try{ const ab=await (await fetch(CLIPS[name])).arrayBuffer(); b=await new Promise((res,rej)=>c.decodeAudioData(ab,res,rej)); bufs[name]=b; }catch(e){return} }
+    if(!b){ try{ const bin=atob(CLIPS[name].split(',')[1]); const arr=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i); b=await new Promise((res,rej)=>c.decodeAudioData(arr.buffer,res,rej)); bufs[name]=b; }catch(e){return} }
     const src=c.createBufferSource(); src.buffer=b; if(rate)src.playbackRate.value=rate; const g=c.createGain(); g.gain.value=vol||1; src.connect(g); g.connect(master); src.start(); };
   const S={
     // multitud: capas de ruido filtrado + "voces" detonadas
