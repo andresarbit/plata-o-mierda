@@ -54,6 +54,16 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
 .pomtitle{animation:pulse 1.2s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){.pomtitle{animation:none}}
+/* entrada épica */
+.epic{position:fixed;left:0;top:0;width:100%;height:100%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;z-index:50;overflow:hidden}
+.epic .w{font-family:"Anton",sans-serif;font-size:clamp(72px,24vw,150px);line-height:.92;text-transform:uppercase;opacity:0;transform:scale(9);will-change:transform,opacity}
+.epic .w.hit{animation:slam .42s cubic-bezier(.15,.9,.25,1) forwards}
+@keyframes slam{0%{opacity:0;transform:scale(9) translateY(-6%)}55%{opacity:1;transform:scale(.94)}78%{transform:scale(1.07)}100%{opacity:1;transform:scale(1)}}
+.epic.shake{animation:shake .32s linear}
+@keyframes shake{0%,100%{transform:translate(0,0)}15%{transform:translate(-10px,6px)}35%{transform:translate(9px,-7px)}55%{transform:translate(-7px,4px)}75%{transform:translate(5px,-3px)}}
+.epic.zoom{animation:zoomin .7s ease-in forwards}
+@keyframes zoomin{0%{transform:scale(1);opacity:1}60%{transform:scale(1.1);opacity:1}100%{transform:scale(1.28);opacity:0}}
+@media (prefers-reduced-motion:reduce){.epic .w{opacity:1;transform:none;animation:none}.epic.shake,.epic.zoom{animation:none}}
 /* cuadro */
 .bracket{display:grid;gap:8px;margin:16px 0}
 .r{display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center;padding:10px 12px;background:var(--bg2);border-left:4px solid var(--line);font-size:14px}
@@ -172,6 +182,7 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 <div class="app">
 
 <!-- PORTADA -->
+<img src="https://hits.sh/andresarbit.github.io/plata-o-mierda.svg" alt="" width="1" height="1" style="position:absolute;opacity:0;pointer-events:none">
 <section class="screen on" id="portada">
   <div class="hero">
     <div class="eyebrow">Versión de prueba · 0.1</div>
@@ -255,7 +266,7 @@ const EQUIPOS = [
 // Brasil
 ["Flamengo","Brasil","Brasileirão",4.5,"#c8102e","#111111"],["Palmeiras","Brasil","Brasileirão",4.5,"#0b6e3a","#ffffff"],["Botafogo","Brasil","Brasileirão",4,"#111111","#ffffff"],["São Paulo","Brasil","Brasileirão",4,"#ffffff","#c8102e"],["Corinthians","Brasil","Brasileirão",4,"#111111","#ffffff"],["Atlético Mineiro","Brasil","Brasileirão",4,"#111111","#ffffff"],["Fluminense","Brasil","Brasileirão",3.5,"#7a1a2b","#0b6e3a"],["Grêmio","Brasil","Brasileirão",3.5,"#3b8fd9","#111111"],["Internacional","Brasil","Brasileirão",3.5,"#c8102e","#ffffff"],["Cruzeiro","Brasil","Brasileirão",3.5,"#1f3a93","#ffffff"],["Vasco","Brasil","Brasileirão",3,"#111111","#ffffff"],["Bahia","Brasil","Brasileirão",3,"#1f3a93","#c8102e"],["Fortaleza","Brasil","Brasileirão",3,"#c8102e","#1f3a93"],["Athletico Paranaense","Brasil","Brasileirão",3,"#c8102e","#111111"],
 // Resto de Sudamérica
-["Colo-Colo","Chile","Primera División",3,"#ffffff","#111111"],["Universidad de Chile","Chile","Primera División",3,"#1f3a93","#ffffff"],["Universidad Católica","Chile","Primera División",3,"#ffffff","#1f3a93"],["Peñarol","Uruguay","Primera División",3,"#f2c100","#111111"],["Nacional","Uruguay","Primera División",3,"#ffffff","#1f3a93"],["Olimpia","Paraguay","Primera División",3,"#ffffff","#111111"],["Cerro Porteño","Paraguay","Primera División",3,"#1f3a93","#c8102e"],["Atlético Nacional","Colombia","Liga BetPlay",3,"#0b6e3a","#ffffff"],["Millonarios","Colombia","Liga BetPlay",3,"#1f3a93","#ffffff"],["Junior","Colombia","Liga BetPlay",3,"#c8102e","#ffffff"],["LDU Quito","Ecuador","LigaPro",3,"#ffffff","#111111"],["Barcelona SC","Ecuador","LigaPro",3,"#f2c100","#111111"],["Alianza Lima","Perú","Liga 1",2.5,"#1f3a93","#ffffff"],["Universitario","Perú","Liga 1",2.5,"#7a1a2b","#f2e6c0"],["Bolívar","Bolivia","División Profesional",2.5,"#7fb9e6","#ffffff"],["The Strongest","Bolivia","División Profesional",2,"#f2c100","#111111"],["Caracas FC","Venezuela","Liga FUTVE",2,"#7a1a2b","#ffffff"],
+["Colo-Colo","Chile","Primera División",3,"#ffffff","#111111"],["Universidad de Chile","Chile","Primera División",3,"#1f3a93","#ffffff"],["Universidad Católica","Chile","Primera División",3,"#ffffff","#1f3a93"],["Peñarol","Uruguay","Primera División",3,"#f2c100","#111111"],["Nacional (Montevideo)","Uruguay","Primera División",3,"#ffffff","#1f3a93"],["Olimpia","Paraguay","Primera División",3,"#ffffff","#111111"],["Cerro Porteño","Paraguay","Primera División",3,"#1f3a93","#c8102e"],["Atlético Nacional","Colombia","Liga BetPlay",3,"#0b6e3a","#ffffff"],["Millonarios","Colombia","Liga BetPlay",3,"#1f3a93","#ffffff"],["Junior","Colombia","Liga BetPlay",3,"#c8102e","#ffffff"],["LDU Quito","Ecuador","LigaPro",3,"#ffffff","#111111"],["Barcelona SC","Ecuador","LigaPro",3,"#f2c100","#111111"],["Alianza Lima","Perú","Liga 1",2.5,"#1f3a93","#ffffff"],["Universitario","Perú","Liga 1",2.5,"#7a1a2b","#f2e6c0"],["Bolívar","Bolivia","División Profesional",2.5,"#7fb9e6","#ffffff"],["The Strongest","Bolivia","División Profesional",2,"#f2c100","#111111"],["Caracas FC","Venezuela","Liga FUTVE",2,"#7a1a2b","#ffffff"],
 // México / USA
 ["América","México","Liga MX",4,"#f2c100","#1f3a93"],["Monterrey","México","Liga MX",4,"#1f3a93","#ffffff"],["Tigres","México","Liga MX",4,"#f2c100","#1f3a93"],["Cruz Azul","México","Liga MX",4,"#1f3a93","#ffffff"],["Chivas","México","Liga MX",3.5,"#c8102e","#ffffff"],["Toluca","México","Liga MX",3.5,"#c8102e","#ffffff"],["Pumas","México","Liga MX",3.5,"#1f3a93","#f2c100"],["Inter Miami","Estados Unidos","MLS",4,"#f7b5cd","#111111"],["LA Galaxy","Estados Unidos","MLS",3.5,"#1f3a93","#ffffff"],["LAFC","Estados Unidos","MLS",3.5,"#111111","#f2c100"],["Atlanta United","Estados Unidos","MLS",3,"#c8102e","#111111"],["Seattle Sounders","Estados Unidos","MLS",3,"#0b6e3a","#1f3a93"],["Columbus Crew","Estados Unidos","MLS",3,"#f2c100","#111111"],["Toronto FC","Canadá","MLS",2.5,"#c8102e","#ffffff"],
 // Inglaterra
@@ -275,6 +286,157 @@ const EQUIPOS = [
 // Asia / Arabia / Australia / África
 ["Al Hilal","Arabia Saudita","Saudi Pro League",4.5,"#1f3a93","#ffffff"],["Al Nassr","Arabia Saudita","Saudi Pro League",4,"#f2c100","#1f3a93"],["Al Ittihad","Arabia Saudita","Saudi Pro League",4,"#f2c100","#111111"],["Al Ahli","Arabia Saudita","Saudi Pro League",4,"#0b6e3a","#ffffff"],["Al Shabab","Arabia Saudita","Saudi Pro League",3,"#ffffff","#111111"],["Al Taawoun","Arabia Saudita","Saudi Pro League",2.5,"#f2c100","#1f3a93"],["Vissel Kobe","Japón","J1 League",3,"#7a1a2b","#ffffff"],["Kawasaki Frontale","Japón","J1 League",3,"#7fb9e6","#111111"],["Urawa Reds","Japón","J1 League",3,"#c8102e","#ffffff"],["Yokohama F. Marinos","Japón","J1 League",3,"#1f3a93","#c8102e"],["Sanfrecce Hiroshima","Japón","J1 League",3,"#6a3fa0","#ffffff"],["Gamba Osaka","Japón","J1 League",2.5,"#1f3a93","#111111"],["Ulsan HD","Corea del Sur","K League 1",3,"#1f3a93","#f2c100"],["Jeonbuk","Corea del Sur","K League 1",3,"#0b6e3a","#f2c100"],["Pohang Steelers","Corea del Sur","K League 1",2.5,"#c8102e","#111111"],["FC Seoul","Corea del Sur","K League 1",2.5,"#111111","#c8102e"],["Shanghai Port","China","Super League",2.5,"#c8102e","#ffffff"],["Shandong Taishan","China","Super League",2.5,"#f2a300","#111111"],["Mumbai City","India","ISL",1.5,"#7fb9e6","#ffffff"],["Melbourne Victory","Australia","A-League",2.5,"#1a2a6c","#ffffff"],["Sydney FC","Australia","A-League",2.5,"#7fb9e6","#1a2a6c"],["Melbourne City","Australia","A-League",2.5,"#7fb9e6","#ffffff"],["Western Sydney","Australia","A-League",2,"#c8102e","#111111"],["Auckland FC","Nueva Zelanda","A-League",2,"#111111","#7fb9e6"],["Al Ahly","Egipto","Premier League egipcia",3,"#c8102e","#ffffff"],["Zamalek","Egipto","Premier League egipcia",2.5,"#ffffff","#c8102e"],["Mamelodi Sundowns","Sudáfrica","Premiership",3,"#f2c100","#1f3a93"],["Kaizer Chiefs","Sudáfrica","Premiership",2.5,"#f2a300","#111111"],["Orlando Pirates","Sudáfrica","Premiership",2.5,"#111111","#ffffff"],["Wydad","Marruecos","Botola",2.5,"#c8102e","#ffffff"],["Raja","Marruecos","Botola",2.5,"#0b6e3a","#ffffff"],["Espérance","Túnez","Ligue 1",2.5,"#f2c100","#c8102e"],
 ].map((e,i)=>({id:i,n:e[0],pais:e[1],liga:e[2],s:e[3],c1:e[4],c2:e[5]}));
+
+/* ---- más equipos (primeras divisiones) ---- */
+[
+["Atlético Tucumán","Argentina","Liga Profesional",2.5,"#7fb9e6","#ffffff"],["Unión","Argentina","Liga Profesional",2.5,"#c8102e","#ffffff"],["Central Córdoba","Argentina","Liga Profesional",2.5,"#111111","#ffffff"],["Defensa y Justicia","Argentina","Liga Profesional",3,"#0b6e3a","#f2c100"],["Tigre","Argentina","Liga Profesional",2.5,"#1f3a93","#c8102e"],["Sarmiento","Argentina","Liga Profesional",2,"#0b6e3a","#ffffff"],["Gimnasia","Argentina","Liga Profesional",2.5,"#ffffff","#1a2a6c"],["Barracas Central","Argentina","Liga Profesional",2,"#c8102e","#ffffff"],["Independiente Rivadavia","Argentina","Liga Profesional",2.5,"#1f3a93","#ffffff"],["Deportivo Riestra","Argentina","Liga Profesional",2,"#111111","#ffffff"],["Aldosivi","Argentina","Liga Profesional",2,"#0b6e3a","#f2c100"],["San Martín (SJ)","Argentina","Liga Profesional",2,"#0b6e3a","#111111"],
+["Santos","Brasil","Brasileirão",3,"#ffffff","#111111"],["Bragantino","Brasil","Brasileirão",3,"#ffffff","#111111"],["Vitória","Brasil","Brasileirão",2.5,"#c8102e","#111111"],["Juventude","Brasil","Brasileirão",2.5,"#0b6e3a","#ffffff"],["Mirassol","Brasil","Brasileirão",2.5,"#f2c100","#0b6e3a"],["Ceará","Brasil","Brasileirão",2.5,"#111111","#ffffff"],["Sport Recife","Brasil","Brasileirão",2.5,"#c8102e","#111111"],
+["Hellas Verona","Italia","Serie A",2.5,"#f2c100","#1f3a93"],
+["Sparta Rotterdam","Países Bajos","Eredivisie",2.5,"#c8102e","#ffffff"],["NEC","Países Bajos","Eredivisie",2.5,"#c8102e","#0b6e3a"],["Fortuna Sittard","Países Bajos","Eredivisie",2,"#f2c100","#0b6e3a"],["Groningen","Países Bajos","Eredivisie",2.5,"#0b6e3a","#ffffff"],["Heerenveen","Países Bajos","Eredivisie",2.5,"#1f3a93","#ffffff"],["PEC Zwolle","Países Bajos","Eredivisie",2,"#1f3a93","#ffffff"],["Excelsior","Países Bajos","Eredivisie",2,"#111111","#c8102e"],["Volendam","Países Bajos","Eredivisie",2,"#f2a300","#111111"],["Telstar","Países Bajos","Eredivisie",1.5,"#ffffff","#c8102e"],["NAC Breda","Países Bajos","Eredivisie",2,"#f2c100","#111111"],
+["Rio Ave","Portugal","Liga Portugal",2.5,"#0b6e3a","#ffffff"],["Gil Vicente","Portugal","Liga Portugal",2.5,"#c8102e","#1f3a93"],["Moreirense","Portugal","Liga Portugal",2.5,"#0b6e3a","#ffffff"],["Santa Clara","Portugal","Liga Portugal",2.5,"#c8102e","#ffffff"],["Estoril","Portugal","Liga Portugal",2.5,"#f2c100","#1f3a93"],["Arouca","Portugal","Liga Portugal",2.5,"#f2c100","#1f3a93"],["Nacional (Madeira)","Portugal","Liga Portugal",2,"#111111","#ffffff"],["Casa Pia","Portugal","Liga Portugal",2,"#111111","#ffffff"],["Alverca","Portugal","Liga Portugal",2,"#c8102e","#ffffff"],["Tondela","Portugal","Liga Portugal",2,"#f2c100","#0b6e3a"],["Estrela Amadora","Portugal","Liga Portugal",2,"#c8102e","#0b6e3a"],
+["Antwerp","Bélgica","Pro League",3,"#c8102e","#ffffff"],["Mechelen","Bélgica","Pro League",2.5,"#f2c100","#c8102e"],["Westerlo","Bélgica","Pro League",2.5,"#f2c100","#1f3a93"],["Charleroi","Bélgica","Pro League",2.5,"#111111","#ffffff"],["OH Leuven","Bélgica","Pro League",2.5,"#ffffff","#0b6e3a"],["Cercle Brugge","Bélgica","Pro League",2.5,"#0b6e3a","#111111"],["Sint-Truiden","Bélgica","Pro League",2.5,"#f2c100","#1f3a93"],["Zulte Waregem","Bélgica","Pro League",2,"#c8102e","#0b6e3a"],["Dender","Bélgica","Pro League",2,"#1f3a93","#ffffff"],["La Louvière","Bélgica","Pro League",2,"#0b6e3a","#ffffff"],
+["Başakşehir","Turquía","Süper Lig",3,"#f2a300","#1a2a6c"],["Samsunspor","Turquía","Süper Lig",3,"#c8102e","#ffffff"],["Göztepe","Turquía","Süper Lig",2.5,"#f2c100","#c8102e"],["Alanyaspor","Turquía","Süper Lig",2.5,"#f2a300","#0b6e3a"],["Kasımpaşa","Turquía","Süper Lig",2.5,"#1a2a6c","#ffffff"],["Konyaspor","Turquía","Süper Lig",2.5,"#0b6e3a","#ffffff"],["Rizespor","Turquía","Süper Lig",2.5,"#0b6e3a","#1f3a93"],["Antalyaspor","Turquía","Süper Lig",2.5,"#c8102e","#ffffff"],["Gaziantep","Turquía","Süper Lig",2.5,"#c8102e","#111111"],["Eyüpspor","Turquía","Süper Lig",2.5,"#6a3fa0","#f2c100"],["Kayserispor","Turquía","Süper Lig",2.5,"#f2c100","#c8102e"],["Gençlerbirliği","Turquía","Süper Lig",2,"#c8102e","#111111"],["Kocaelispor","Turquía","Süper Lig",2,"#0b6e3a","#111111"],["Karagümrük","Turquía","Süper Lig",2,"#c8102e","#111111"],
+["Motherwell","Escocia","Premiership",2,"#f2c100","#7a1a2b"],["Dundee","Escocia","Premiership",2,"#1a2a6c","#ffffff"],["Dundee United","Escocia","Premiership",2,"#f2a300","#111111"],["St Mirren","Escocia","Premiership",2,"#111111","#ffffff"],["Kilmarnock","Escocia","Premiership",2,"#1f3a93","#ffffff"],["Livingston","Escocia","Premiership",1.5,"#f2c100","#111111"],["Falkirk","Escocia","Premiership",1.5,"#1a2a6c","#ffffff"],
+["Orlando City","Estados Unidos","MLS",3,"#6a3fa0","#ffffff"],["FC Cincinnati","Estados Unidos","MLS",3,"#f2a300","#1f3a93"],["Philadelphia Union","Estados Unidos","MLS",3,"#1a2a6c","#f2c100"],["New York Red Bulls","Estados Unidos","MLS",2.5,"#c8102e","#ffffff"],["New York City FC","Estados Unidos","MLS",3,"#7fb9e6","#1a2a6c"],["Portland Timbers","Estados Unidos","MLS",2.5,"#0b6e3a","#f2c100"],["Vancouver Whitecaps","Canadá","MLS",3,"#1f3a93","#ffffff"],["Charlotte FC","Estados Unidos","MLS",2.5,"#7fb9e6","#111111"],["Nashville SC","Estados Unidos","MLS",2.5,"#f2c100","#1a2a6c"],["San Diego FC","Estados Unidos","MLS",3,"#7fb9e6","#1a2a6c"],["Austin FC","Estados Unidos","MLS",2.5,"#0b6e3a","#111111"],["Houston Dynamo","Estados Unidos","MLS",2.5,"#f2a300","#111111"],["Minnesota United","Estados Unidos","MLS",2.5,"#7fb9e6","#111111"],["Real Salt Lake","Estados Unidos","MLS",2.5,"#7a1a2b","#1f3a93"],["Colorado Rapids","Estados Unidos","MLS",2.5,"#7a1a2b","#7fb9e6"],["FC Dallas","Estados Unidos","MLS",2.5,"#c8102e","#1f3a93"],["Sporting Kansas City","Estados Unidos","MLS",2.5,"#7fb9e6","#1a2a6c"],["DC United","Estados Unidos","MLS",2,"#111111","#c8102e"],["Chicago Fire","Estados Unidos","MLS",2.5,"#c8102e","#1a2a6c"],["New England Revolution","Estados Unidos","MLS",2.5,"#1a2a6c","#c8102e"],["San Jose Earthquakes","Estados Unidos","MLS",2.5,"#1f3a93","#111111"],["St. Louis City","Estados Unidos","MLS",2.5,"#c8102e","#7fb9e6"],["CF Montréal","Canadá","MLS",2,"#1f3a93","#111111"],
+["Santos Laguna","México","Liga MX",2.5,"#0b6e3a","#ffffff"],["León","México","Liga MX",3,"#0b6e3a","#ffffff"],["Pachuca","México","Liga MX",3.5,"#1f3a93","#ffffff"],["Necaxa","México","Liga MX",3,"#c8102e","#ffffff"],["Atlas","México","Liga MX",3,"#c8102e","#111111"],["Puebla","México","Liga MX",2.5,"#ffffff","#1f3a93"],["Querétaro","México","Liga MX",2.5,"#1f3a93","#111111"],["Juárez","México","Liga MX",2.5,"#0b6e3a","#c8102e"],["Mazatlán","México","Liga MX",2.5,"#6a3fa0","#111111"],["Tijuana","México","Liga MX",3,"#c8102e","#111111"],["Atlético San Luis","México","Liga MX",2.5,"#c8102e","#1f3a93"],
+["Al Qadsiah","Arabia Saudita","Saudi Pro League",3.5,"#f2c100","#111111"],["Al Fateh","Arabia Saudita","Saudi Pro League",2.5,"#0b6e3a","#ffffff"],["Al Ettifaq","Arabia Saudita","Saudi Pro League",3,"#0b6e3a","#c8102e"],["Al Khaleej","Arabia Saudita","Saudi Pro League",2.5,"#f2a300","#111111"],["Al Riyadh","Arabia Saudita","Saudi Pro League",2.5,"#f2c100","#111111"],["Damac","Arabia Saudita","Saudi Pro League",2.5,"#c8102e","#ffffff"],["Al Hazem","Arabia Saudita","Saudi Pro League",2,"#c8102e","#ffffff"],["Al Okhdood","Arabia Saudita","Saudi Pro League",2,"#f2c100","#0b6e3a"],["Al Najma","Arabia Saudita","Saudi Pro League",2,"#1f3a93","#ffffff"],["NEOM","Arabia Saudita","Saudi Pro League",3,"#7fb9e6","#111111"],["Al Kholood","Arabia Saudita","Saudi Pro League",2,"#1a2a6c","#ffffff"],
+["Machida Zelvia","Japón","J1 League",3,"#1f3a93","#ffffff"],["Kashima Antlers","Japón","J1 League",3,"#7a1a2b","#ffffff"],["Cerezo Osaka","Japón","J1 League",3,"#f7b5cd","#1a2a6c"],["Kyoto Sanga","Japón","J1 League",2.5,"#6a3fa0","#ffffff"],["Avispa Fukuoka","Japón","J1 League",2.5,"#1f3a93","#ffffff"],["Tokyo Verdy","Japón","J1 League",2.5,"#0b6e3a","#ffffff"],["FC Tokyo","Japón","J1 League",3,"#1f3a93","#c8102e"],["Nagoya Grampus","Japón","J1 League",3,"#c8102e","#f2c100"],["Shonan Bellmare","Japón","J1 League",2.5,"#7fb9e6","#0b6e3a"],["Kashiwa Reysol","Japón","J1 League",3,"#f2c100","#111111"],["Albirex Niigata","Japón","J1 League",2.5,"#f2a300","#1f3a93"],["Yokohama FC","Japón","J1 League",2.5,"#7fb9e6","#1a2a6c"],["Fagiano Okayama","Japón","J1 League",2.5,"#c8102e","#ffffff"],["Shimizu S-Pulse","Japón","J1 League",2.5,"#f2a300","#ffffff"],
+["Gangwon","Corea del Sur","K League 1",2.5,"#f2a300","#0b6e3a"],["Gimcheon Sangmu","Corea del Sur","K League 1",2.5,"#c8102e","#ffffff"],["Daejeon Hana","Corea del Sur","K League 1",2.5,"#7a1a2b","#7fb9e6"],["Suwon FC","Corea del Sur","K League 1",2.5,"#c8102e","#1f3a93"],["Gwangju","Corea del Sur","K League 1",2.5,"#f2c100","#111111"],["Jeju SK","Corea del Sur","K League 1",2.5,"#f2a300","#c8102e"],["Daegu","Corea del Sur","K League 1",2.5,"#7fb9e6","#1f3a93"],["FC Anyang","Corea del Sur","K League 1",2,"#6a3fa0","#ffffff"],
+["Adelaide United","Australia","A-League",2.5,"#c8102e","#111111"],["Brisbane Roar","Australia","A-League",2,"#f2a300","#7a1a2b"],["Central Coast Mariners","Australia","A-League",2.5,"#f2c100","#1f3a93"],["Macarthur","Australia","A-League",2,"#111111","#f2a300"],["Newcastle Jets","Australia","A-League",2,"#c8102e","#f2c100"],["Perth Glory","Australia","A-League",2,"#6a3fa0","#ffffff"],["Wellington Phoenix","Nueva Zelanda","A-League",2.5,"#f2c100","#111111"],["Western United","Australia","A-League",2,"#0b6e3a","#111111"],
+["Palestino","Chile","Primera División",2.5,"#0b6e3a","#c8102e"],["Cobresal","Chile","Primera División",2.5,"#f2a300","#ffffff"],["Coquimbo Unido","Chile","Primera División",2.5,"#f2c100","#111111"],["Huachipato","Chile","Primera División",2.5,"#1f3a93","#111111"],["Audax Italiano","Chile","Primera División",2.5,"#0b6e3a","#ffffff"],["O'Higgins","Chile","Primera División",2.5,"#7fb9e6","#ffffff"],["Everton de Viña","Chile","Primera División",2,"#1f3a93","#f2c100"],["Unión Española","Chile","Primera División",2.5,"#c8102e","#ffffff"],["Ñublense","Chile","Primera División",2,"#c8102e","#ffffff"],["Deportes Iquique","Chile","Primera División",2,"#7fb9e6","#ffffff"],
+["América de Cali","Colombia","Liga BetPlay",3,"#c8102e","#ffffff"],["Deportivo Cali","Colombia","Liga BetPlay",2.5,"#0b6e3a","#ffffff"],["Independiente Santa Fe","Colombia","Liga BetPlay",3,"#c8102e","#ffffff"],["Independiente Medellín","Colombia","Liga BetPlay",3,"#c8102e","#1f3a93"],["Once Caldas","Colombia","Liga BetPlay",2.5,"#ffffff","#111111"],["Deportes Tolima","Colombia","Liga BetPlay",2.5,"#7a1a2b","#f2c100"],["Atlético Bucaramanga","Colombia","Liga BetPlay",2.5,"#0b6e3a","#f2c100"],
+["Liverpool (Montevideo)","Uruguay","Primera División",2.5,"#111111","#1f3a93"],["Defensor Sporting","Uruguay","Primera División",2.5,"#6a3fa0","#ffffff"],["Danubio","Uruguay","Primera División",2,"#ffffff","#111111"],["Boston River","Uruguay","Primera División",2,"#0b6e3a","#c8102e"],["Racing de Montevideo","Uruguay","Primera División",2,"#0b6e3a","#ffffff"],["Montevideo City Torque","Uruguay","Primera División",2,"#7fb9e6","#ffffff"],
+["Libertad","Paraguay","Primera División",3,"#111111","#ffffff"],["Guaraní","Paraguay","Primera División",2.5,"#f2c100","#111111"],["Sportivo Luqueño","Paraguay","Primera División",2,"#1f3a93","#f2c100"],["Nacional (Asunción)","Paraguay","Primera División",2,"#ffffff","#1f3a93"],
+["Independiente del Valle","Ecuador","LigaPro",3.5,"#1a2a6c","#111111"],["Emelec","Ecuador","LigaPro",2.5,"#1f3a93","#ffffff"],["Aucas","Ecuador","LigaPro",2.5,"#f2c100","#c8102e"],["Delfín","Ecuador","LigaPro",2,"#7fb9e6","#c8102e"],
+["Sporting Cristal","Perú","Liga 1",2.5,"#7fb9e6","#ffffff"],["Melgar","Perú","Liga 1",2.5,"#c8102e","#111111"],["Cienciano","Perú","Liga 1",2,"#c8102e","#ffffff"],
+["Always Ready","Bolivia","División Profesional",2,"#c8102e","#ffffff"],["Blooming","Bolivia","División Profesional",2,"#7fb9e6","#ffffff"],["Oriente Petrolero","Bolivia","División Profesional",1.5,"#0b6e3a","#ffffff"],
+["Deportivo Táchira","Venezuela","Liga FUTVE",2,"#f2c100","#111111"],["Carabobo","Venezuela","Liga FUTVE",1.5,"#7a1a2b","#f2c100"],
+["Nordsjælland","Dinamarca","Superliga",2.5,"#f2c100","#c8102e"],["AGF","Dinamarca","Superliga",2.5,"#ffffff","#1f3a93"],["Randers","Dinamarca","Superliga",2,"#1f3a93","#ffffff"],["Viborg","Dinamarca","Superliga",2,"#0b6e3a","#ffffff"],["Silkeborg","Dinamarca","Superliga",2.5,"#c8102e","#ffffff"],
+["IFK Göteborg","Suecia","Allsvenskan",2.5,"#1f3a93","#ffffff"],["Elfsborg","Suecia","Allsvenskan",2.5,"#f2c100","#111111"],["Häcken","Suecia","Allsvenskan",2.5,"#f2c100","#111111"],["Mjällby","Suecia","Allsvenskan",2.5,"#f2c100","#111111"],["Norrköping","Suecia","Allsvenskan",2,"#1f3a93","#ffffff"],
+["Lillestrøm","Noruega","Eliteserien",2,"#f2c100","#111111"],["Vålerenga","Noruega","Eliteserien",2.5,"#1f3a93","#c8102e"],["Tromsø","Noruega","Eliteserien",2,"#c8102e","#ffffff"],["Sarpsborg 08","Noruega","Eliteserien",2,"#1f3a93","#ffffff"],["Fredrikstad","Noruega","Eliteserien",2,"#c8102e","#ffffff"],["Kristiansund","Noruega","Eliteserien",1.5,"#1f3a93","#c8102e"],
+["Austria Viena","Austria","Bundesliga austríaca",2.5,"#6a3fa0","#ffffff"],["Wolfsberger","Austria","Bundesliga austríaca",2.5,"#111111","#ffffff"],["Hartberg","Austria","Bundesliga austríaca",2,"#1f3a93","#ffffff"],["Blau-Weiß Linz","Austria","Bundesliga austríaca",2,"#1f3a93","#ffffff"],
+["Luzern","Suiza","Super League",2.5,"#1f3a93","#ffffff"],["St. Gallen","Suiza","Super League",2.5,"#0b6e3a","#ffffff"],["Lausanne","Suiza","Super League",2.5,"#1f3a93","#ffffff"],["Sion","Suiza","Super League",2,"#c8102e","#ffffff"],["Winterthur","Suiza","Super League",2,"#c8102e","#ffffff"],["Grasshopper","Suiza","Super League",2,"#1f3a93","#ffffff"],["Thun","Suiza","Super League",2,"#c8102e","#ffffff"],
+["Górnik Zabrze","Polonia","Ekstraklasa",2.5,"#1f3a93","#ffffff"],["Pogoń Szczecin","Polonia","Ekstraklasa",2.5,"#1a2a6c","#7a1a2b"],["Cracovia","Polonia","Ekstraklasa",2,"#c8102e","#ffffff"],["Widzew Łódź","Polonia","Ekstraklasa",2,"#c8102e","#ffffff"],["Motor Lublin","Polonia","Ekstraklasa",2,"#f2c100","#ffffff"],
+["Aris","Grecia","Super League",2.5,"#f2c100","#111111"],["Atromitos","Grecia","Super League",2,"#1f3a93","#ffffff"],["Levadiakos","Grecia","Super League",2,"#0b6e3a","#ffffff"],["Asteras Tripolis","Grecia","Super League",2,"#f2c100","#1f3a93"],["Volos","Grecia","Super League",2,"#c8102e","#ffffff"],
+["Viktoria Plzeň","Chequia","Chance Liga",3,"#1f3a93","#c8102e"],["Baník Ostrava","Chequia","Chance Liga",2.5,"#1f3a93","#ffffff"],["Slovan Liberec","Chequia","Chance Liga",2,"#1f3a93","#ffffff"],
+["Rijeka","Croacia","HNL",2.5,"#ffffff","#1f3a93"],["Osijek","Croacia","HNL",2,"#1f3a93","#ffffff"],
+["Puskás Akadémia","Hungría","NB I",2,"#1f3a93","#f2c100"],["Paks","Hungría","NB I",2,"#0b6e3a","#ffffff"],
+["Universitatea Craiova","Rumania","SuperLiga",2.5,"#1f3a93","#ffffff"],["Rapid Bucarest","Rumania","SuperLiga",2.5,"#7a1a2b","#ffffff"],["Dinamo Bucarest","Rumania","SuperLiga",2,"#c8102e","#ffffff"],
+["Vojvodina","Serbia","Superliga",2,"#c8102e","#ffffff"],
+["Polissya","Ucrania","Premier League ucraniana",2.5,"#0b6e3a","#ffffff"],["Zorya Luhansk","Ucrania","Premier League ucraniana",2.5,"#111111","#ffffff"],
+["Maccabi Haifa","Israel","Ligat ha'Al",2.5,"#0b6e3a","#ffffff"],["Beitar Jerusalén","Israel","Ligat ha'Al",2,"#f2c100","#111111"],
+["APOEL","Chipre","Primera División",2.5,"#1f3a93","#f2c100"],["Omonia","Chipre","Primera División",2.5,"#0b6e3a","#ffffff"],["Pafos","Chipre","Primera División",2.5,"#7fb9e6","#ffffff"],["AEK Larnaca","Chipre","Primera División",2,"#f2c100","#0b6e3a"],
+["Pyramids","Egipto","Premier League egipcia",3,"#7fb9e6","#ffffff"],["SuperSport United","Sudáfrica","Premiership",2,"#1f3a93","#ffffff"],["Stellenbosch","Sudáfrica","Premiership",2,"#7a1a2b","#ffffff"],["FAR Rabat","Marruecos","Botola",2.5,"#111111","#0b6e3a"],["Étoile du Sahel","Túnez","Ligue 1",2,"#c8102e","#ffffff"],
+["Mohun Bagan","India","ISL",2,"#0b6e3a","#7a1a2b"],["Bengaluru","India","ISL",1.5,"#1f3a93","#c8102e"],
+["Chengdu Rongcheng","China","Super League",2.5,"#c8102e","#ffffff"],["Beijing Guoan","China","Super League",2.5,"#0b6e3a","#ffffff"],["Shanghai Shenhua","China","Super League",2.5,"#1f3a93","#ffffff"],
+["Shelbourne","Irlanda","Premier Division",1.5,"#c8102e","#ffffff"],["Bohemians","Irlanda","Premier Division",1.5,"#c8102e","#111111"],["St Patrick's","Irlanda","Premier Division",1.5,"#c8102e","#ffffff"],["Derry City","Irlanda","Premier Division",1.5,"#c8102e","#ffffff"],
+["Linfield","Irlanda del Norte","Premiership",1.5,"#1f3a93","#ffffff"],["Glentoran","Irlanda del Norte","Premiership",1.5,"#0b6e3a","#c8102e"],["The New Saints","Gales","Cymru Premier",1.5,"#0b6e3a","#ffffff"],["Differdange","Luxemburgo","BGL Ligue",1,"#c8102e","#111111"],["Noah","Armenia","Premier League",1.5,"#c8102e","#111111"],["Kairat","Kazajistán","Premier League",2.5,"#f2c100","#111111"],["Slovan Bratislava","Eslovaquia","Niké liga",2.5,"#7fb9e6","#ffffff"],["Olimpija Ljubljana","Eslovenia","Prva liga",2,"#0b6e3a","#ffffff"],["Celje","Eslovenia","Prva liga",2,"#f2c100","#1f3a93"],["Zrinjski","Bosnia","Premijer liga",2,"#c8102e","#ffffff"],["Budućnost","Montenegro","Primera Liga",1.5,"#1f3a93","#ffffff"],["Egnatia","Albania","Kategoria Superiore",1.5,"#1f3a93","#ffffff"],["Riga FC","Letonia","Virslīga",1.5,"#f2a300","#111111"]
+].forEach(e=>EQUIPOS.push({id:EQUIPOS.length,n:e[0],pais:e[1],liga:e[2],s:e[3],c1:e[4],c2:e[5]}));
+
+
+/* ============ TRIVIA: [pregunta, correcta, distractor, distractor, distractor] ============ */
+const TRIVIA=[
+// Mundiales
+["¿Quién ganó el Mundial 2022?","Argentina","Francia","Brasil","Alemania"],
+["¿Quién ganó el Mundial 2018?","Francia","Croacia","Bélgica","Alemania"],
+["¿Quién ganó el Mundial 2014?","Alemania","Argentina","Brasil","Países Bajos"],
+["¿Quién ganó el Mundial 2010?","España","Países Bajos","Alemania","Uruguay"],
+["¿Quién ganó el Mundial 2006?","Italia","Francia","Alemania","Brasil"],
+["¿Quién ganó el Mundial 2002?","Brasil","Alemania","Turquía","Corea del Sur"],
+["¿Quién ganó el Mundial 1998?","Francia","Brasil","Croacia","Países Bajos"],
+["¿Quién ganó el Mundial 1994?","Brasil","Italia","Suecia","Bulgaria"],
+["¿Quién ganó el Mundial 1990?","Alemania","Argentina","Italia","Inglaterra"],
+["¿Quién ganó el Mundial 1986?","Argentina","Alemania","Bélgica","Francia"],
+["¿Quién ganó el Mundial 1978?","Argentina","Países Bajos","Brasil","Italia"],
+["¿Quién ganó el Mundial 1982?","Italia","Alemania","Polonia","Francia"],
+["¿Quién ganó el Mundial 1966?","Inglaterra","Alemania","Portugal","URSS"],
+["¿Quién ganó el primer Mundial, en 1930?","Uruguay","Argentina","Brasil","Italia"],
+["¿Qué país tiene más Mundiales ganados?","Brasil","Alemania","Italia","Argentina"],
+["¿Quién fue el goleador del Mundial 2022?","Mbappé","Messi","Giroud","Julián Álvarez"],
+["¿Quién fue el goleador del Mundial 2014?","James Rodríguez","Müller","Messi","Neymar"],
+["¿En qué país se jugó el Mundial 2014?","Brasil","Sudáfrica","Rusia","México"],
+["¿En qué país se jugó el Mundial 2010?","Sudáfrica","Brasil","Alemania","Corea/Japón"],
+["¿Quién fue el goleador del Mundial 2018?","Harry Kane","Mbappé","Griezmann","Lukaku"],
+// Liga argentina
+["¿Qué club tiene más títulos de Primera División en Argentina?","River Plate","Boca Juniors","Independiente","Racing"],
+["¿Quién ganó la Liga Profesional 2022?","Boca Juniors","River Plate","Racing","Huracán"],
+["¿Quién ganó la Liga Profesional 2021?","River Plate","Boca Juniors","Talleres","Defensa y Justicia"],
+["¿Quién ganó la Liga Profesional 2023?","River Plate","Talleres","San Lorenzo","Boca Juniors"],
+["¿Quién ganó la Liga Profesional 2024?","Vélez","Huracán","Talleres","Racing"],
+["¿Quién ganó el Torneo Apertura 2025?","Platense","Huracán","Boca Juniors","River Plate"],
+["¿Quién ganó la Copa de la Liga 2024?","Estudiantes","Vélez","Boca Juniors","Argentinos Juniors"],
+["¿Quién ganó la Copa de la Liga 2023?","Rosario Central","Platense","River Plate","Boca Juniors"],
+["¿Quién ganó el Torneo de Transición 2014?","Racing","River Plate","Boca Juniors","San Lorenzo"],
+["¿Quién ganó la Superliga 2017/18?","Boca Juniors","Godoy Cruz","River Plate","Talleres"],
+["¿Quién ganó la Superliga 2018/19?","Racing","Defensa y Justicia","Boca Juniors","River Plate"],
+["¿Quién ganó la Superliga 2019/20?","Boca Juniors","River Plate","Vélez","Racing"],
+["¿Quién ganó la Copa Diego Maradona 2020?","Boca Juniors","Banfield","River Plate","Racing"],
+["¿Quién ganó el Torneo 2016/17?","Boca Juniors","River Plate","Banfield","San Lorenzo"],
+["¿Quién ganó el Torneo 2015?","Boca Juniors","San Lorenzo","Rosario Central","River Plate"],
+["¿Qué grande descendió por primera vez en 2011?","River Plate","Independiente","San Lorenzo","Racing"],
+["¿Quién ganó el Apertura 2008?","Boca Juniors","San Lorenzo","Tigre","River Plate"],
+["¿Quién ganó el Clausura 2008?","River Plate","Estudiantes","Boca Juniors","Lanús"],
+// Libertadores
+["¿Quién ganó la Libertadores 2018 (final en Madrid)?","River Plate","Boca Juniors","Grêmio","Palmeiras"],
+["¿Quién ganó la Libertadores 2019?","Flamengo","River Plate","Grêmio","Boca Juniors"],
+["¿Quién ganó la Libertadores 2020?","Palmeiras","Santos","Boca Juniors","River Plate"],
+["¿Quién ganó la Libertadores 2021?","Palmeiras","Flamengo","Atlético Mineiro","Barcelona SC"],
+["¿Quién ganó la Libertadores 2022?","Flamengo","Athletico Paranaense","Palmeiras","Vélez"],
+["¿Quién ganó la Libertadores 2023?","Fluminense","Boca Juniors","Internacional","Palmeiras"],
+["¿Quién ganó la Libertadores 2024?","Botafogo","Atlético Mineiro","River Plate","Peñarol"],
+["¿Quién ganó la Libertadores 2025?","Flamengo","Palmeiras","Racing","LDU Quito"],
+["¿Qué club tiene más Copas Libertadores?","Independiente","Boca Juniors","Peñarol","River Plate"],
+["¿Quién ganó la Libertadores 2015?","River Plate","Tigres","Boca Juniors","Internacional"],
+["¿Quién ganó la Libertadores 2007?","Boca Juniors","Grêmio","Santos","Cúcuta"],
+["¿Quién ganó la Libertadores 2014?","San Lorenzo","Nacional","Bolívar","Defensor Sporting"],
+["¿Quién ganó la Libertadores 2012?","Corinthians","Boca Juniors","Santos","Universidad de Chile"],
+["¿Quién ganó la Libertadores 2017?","Grêmio","Lanús","River Plate","Barcelona SC"],
+["¿Quién ganó la Libertadores 2016?","Atlético Nacional","Independiente del Valle","Boca Juniors","São Paulo"],
+["¿Quién ganó la Libertadores 2009?","Estudiantes","Cruzeiro","Grêmio","Nacional"],
+["¿Quién ganó la Libertadores 2003?","Boca Juniors","Santos","River Plate","Independiente Medellín"],
+// Sudamericana
+["¿Quién ganó la Sudamericana 2022?","Independiente del Valle","São Paulo","Atlético Goianiense","Melgar"],
+["¿Quién ganó la Sudamericana 2023?","LDU Quito","Fortaleza","Defensa y Justicia","Corinthians"],
+["¿Quién ganó la Sudamericana 2024?","Racing","Cruzeiro","Corinthians","Lanús"],
+["¿Quién ganó la Sudamericana 2025?","Lanús","Atlético Mineiro","Independiente del Valle","Fluminense"],
+["¿Quién ganó la Sudamericana 2021?","Athletico Paranaense","Bragantino","Peñarol","Libertad"],
+["¿Quién ganó la Sudamericana 2020?","Defensa y Justicia","Lanús","Vélez","Coquimbo Unido"],
+["¿Quién ganó la Sudamericana 2019?","Independiente del Valle","Colón","Corinthians","Atlético Mineiro"],
+["¿Quién ganó la Sudamericana 2017?","Independiente","Flamengo","Junior","Libertad"],
+["¿Quién ganó la Sudamericana 2013?","Lanús","Ponte Preta","Libertad","São Paulo"],
+// Champions
+["¿Quién ganó la Champions 2023/24?","Real Madrid","Borussia Dortmund","Bayern","PSG"],
+["¿Quién ganó la Champions 2024/25?","PSG","Inter","Barcelona","Arsenal"],
+["¿Quién ganó la Champions 2022/23?","Manchester City","Inter","Real Madrid","Milan"],
+["¿Quién ganó la Champions 2021/22?","Real Madrid","Liverpool","Villarreal","Manchester City"],
+["¿Quién ganó la Champions 2020/21?","Chelsea","Manchester City","PSG","Real Madrid"],
+["¿Quién ganó la Champions 2019/20?","Bayern","PSG","Lyon","Leipzig"],
+["¿Quién ganó la Champions 2018/19?","Liverpool","Tottenham","Ajax","Barcelona"],
+["¿Qué club tiene más Champions League?","Real Madrid","Milan","Bayern","Liverpool"],
+["¿Quién ganó la Champions 2011/12?","Chelsea","Bayern","Real Madrid","Barcelona"],
+["¿Quién ganó la Champions 2003/04?","Porto","Mónaco","Deportivo","Chelsea"],
+// Europa League
+["¿Quién ganó la Europa League 2023/24?","Atalanta","Bayer Leverkusen","Roma","Marsella"],
+["¿Quién ganó la Europa League 2024/25?","Tottenham","Manchester United","Athletic Club","Bodø/Glimt"],
+["¿Quién ganó la Europa League 2022/23?","Sevilla","Roma","Juventus","Bayer Leverkusen"],
+["¿Qué club tiene más Europa League / Copa UEFA?","Sevilla","Inter","Liverpool","Atlético de Madrid"],
+["¿Quién ganó la Europa League 2021/22?","Eintracht Frankfurt","Rangers","West Ham","Leipzig"],
+["¿Quién ganó la Europa League 2020/21?","Villarreal","Manchester United","Roma","Arsenal"],
+// Eurocopa
+["¿Quién ganó la Eurocopa 2024?","España","Inglaterra","Francia","Países Bajos"],
+["¿Quién ganó la Eurocopa 2020 (jugada en 2021)?","Italia","Inglaterra","Dinamarca","España"],
+["¿Quién ganó la Eurocopa 2016?","Portugal","Francia","Alemania","Gales"],
+["¿Quién ganó la Eurocopa 2012?","España","Italia","Alemania","Portugal"],
+// Balón de Oro
+["¿Quién ganó el Balón de Oro 2024?","Rodri","Vinícius","Bellingham","Carvajal"],
+["¿Quién ganó el Balón de Oro 2023?","Messi","Haaland","Mbappé","De Bruyne"],
+["¿Quién ganó el Balón de Oro 2022?","Benzema","Mané","De Bruyne","Lewandowski"],
+["¿Quién ganó el Balón de Oro 2025?","Ousmane Dembélé","Lamine Yamal","Vitinha","Salah"],
+["¿Cuántos Balones de Oro tiene Messi?","8","7","6","5"],
+["¿Quién ganó el Balón de Oro 2018?","Modrić","Cristiano Ronaldo","Griezmann","Mbappé"],
+["¿Quién ganó el Balón de Oro 2017?","Cristiano Ronaldo","Messi","Neymar","Buffon"],
+];
+
 
 /* ============ DATOS: SITUACIONES ============
  tipo: PT (primer tiempo), ST (segundo tiempo), ET (entretiempo), ARQ (sos el arquero, decisión de texto), CAM (camino entre partidos)
@@ -309,7 +471,7 @@ const SITUACIONES = [
 {id:"salida",usa:["1", "2"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Tu arquero la tiene en la mano. Presionan arriba.",ops:[
  {l:"Salida corta con el 2",tag:"plata",d:"Si sale, jugada de gol. Si no, te la roban en tu área.",r:[{p:.35,gf:1,txt:"Salió corta, tres pases, y te encontraron mal parados a ellos. Gol de pizarrón."},{p:.4,txt:"Salió corta, la tuvieron, la perdieron. Nada."},{p:.25,gc:1,txt:"Te la robaron en tu área. Gol. El 2 no levantó la cabeza por un rato."}]},
  {l:"Patadón a dividir",tag:"mierda",d:"La pelota vuelve en 10 segundos.",r:[{p:1,txt:"Patadón a dividir. Volvió en 10 segundos. Así todo el primer tiempo."}]}]},
-{id:"lesion",usa:["9"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Tu 9 pide el cambio. Dice que 'siente algo'.",ops:[
+{id:"lesion",cat:"lesion",usa:["9"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Tu 9 pide el cambio. Dice que 'siente algo'.",ops:[
  {l:"Que aguante",tag:"plata",d:"Se queda en la cancha. Puede romperse.",r:[{p:.6,txt:"Aguantó. Renguea, pero aguantó. Y los centrales le tienen miedo igual."},{p:.4,atk:.8,saca:"9",txt:"Se rompió a los 5 minutos. Entra el pibe de la reserva. Menos gol."}]},
  {l:"Sacarlo ya",tag:"mierda",d:"Entra el suplente. Perdés gol, no perdés al 9 para la copa.",r:[{p:1,atk:.9,saca:"9",txt:"Lo sacaste. Entra el suplente, que corre mucho y define poco."}]}]},
 {id:"offside",usa:["2"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Tu DT grita 'línea alta'. Los 2 se miran.",ops:[
@@ -343,7 +505,7 @@ const SITUACIONES = [
 {id:"pressing",usa:[],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Tus jugadores están muertos. El DT pide presionar arriba igual.",ops:[
  {l:"Presión alta, a morir",tag:"plata",d:"Se recupera arriba o se abre todo.",r:[{p:.4,gf:1,txt:"Recuperaste en la salida de ellos y el 10 la puso. Gol de presión."},{p:.6,def:.85,txt:"Presionaron 5 minutos y se murieron. Ahora no llega nadie a nada."}]},
  {l:"Bajar todos, esperar",tag:"mierda",d:"Guardás piernas.",r:[{p:1,def:1.08,atk:.9,txt:"Todos atrás. Guardás piernas. No te hacen gol, pero no hacés gol."}]}]},
-{id:"arquerolesion",usa:["1"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Tu arquero se golpeó la cabeza. Dice que está bien. El médico duda.",ops:[
+{id:"arquerolesion",cat:"lesion",usa:["1"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Tu arquero se golpeó la cabeza. Dice que está bien. El médico duda.",ops:[
  {l:"Que siga",tag:"plata",d:"Es el que tenés. Puede estar mareado.",r:[{p:.6,txt:"Siguió. Atajó dos que no se pueden atajar. Mareado, pero loco."},{p:.4,def:.8,txt:"Siguió mareado y se le escapó una pelota fácil. No entró de casualidad. Por ahora."}]},
  {l:"Cambiarlo",tag:"mierda",d:"Entra el suplente frío.",r:[{p:1,def:.92,saca:"1",txt:"Cambiaste al arquero. El suplente entró frío, sin calentar. Se lo ve nervioso."}]}]},
 // ---------- ENTRETIEMPO (siempre dos opciones) ----------
@@ -381,7 +543,7 @@ const SITUACIONES = [
 {id:"c3",usa:["3","4"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. El 3 la está pasando mal con el 7 de ellos. Tenés al 4 en el banco, que es central.",ops:[
  {l:"Sacás al 3, el 4 de lateral",d:"Un central de lateral: marca, no pasa.",r:[{p:.7,def:1.12,atk:.95,saca:"3",txt:"El 4 de lateral. No pasó más nadie por ahí. Tampoco vos."},{p:.3,def:.9,saca:"3",txt:"El 4 de lateral. Lento. Lo pasaron igual, pero ahora de a dos."}]},
  {l:"Lo bancás, le mandás ayuda",d:"El 11 baja a ayudar.",r:[{p:.6,def:1.05,atk:.92,txt:"El 11 bajó a ayudar. Se cerró la banda, pero perdiste al 11 arriba."},{p:.4,gc:1,txt:"El 11 bajó, no llegó, y el 7 de ellos metió el centro del gol."}]}]},
-{id:"c10b",usa:["10","8"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. Vas perdiendo y el 10 pide salir: está acalambrado.",ops:[
+{id:"c10b",cat:"lesion",usa:["10","8"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. Vas perdiendo y el 10 pide salir: está acalambrado.",ops:[
  {l:"Sacalo, entra el 8",d:"Menos magia, más pulmón.",r:[{p:.5,atk:.95,def:1.08,saca:"10",txt:"Entró el 8 y el equipo corre. Corre mucho. Gol, poco."},{p:.5,atk:1.05,saca:"10",txt:"Entró el 8 y sorprendió: llegó dos veces al área como un 10."}]},
  {l:"Que se quede aunque sea parado",d:"Un 10 acalambrado sigue siendo un 10.",r:[{p:.4,atk:1.15,txt:"Se quedó parado en la medialuna. Le llegó una y metió el pase del año."},{p:.6,atk:.88,txt:"Se quedó parado. Jugaste con diez y medio. Se notó."}]}]},
 {id:"c9b",usa:["9"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. El 9 erró tres goles. La gente lo silba. El suplente se saca la pechera.",ops:[
@@ -396,12 +558,73 @@ const SITUACIONES = [
 {id:"c11",usa:["11"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. El 11 se peleó con el DT en la línea. Quiere salir él mismo.",ops:[
  {l:"Lo sacás y que no vuelva",d:"Nadie es más grande que el equipo.",r:[{p:.55,atk:1.05,def:1.05,saca:"11",txt:"Lo sacaste. El equipo lo entendió: acá manda el DT. Salieron más juntos."},{p:.45,atk:.9,saca:"11",txt:"Lo sacaste y perdiste al único que desbordaba. El DT tenía razón. Igual perdiste eso."}]},
  {l:"Lo calmás y sigue",d:"Tragarse el orgullo.",r:[{p:.5,atk:1.1,txt:"Siguió, caliente. Y caliente juega mejor: dos centros de gol."},{p:.5,rojo:true,saca:"11",atk:.88,def:.88,txt:"Siguió caliente y a los cinco minutos le pegó a uno. Roja."}]}]},
-{id:"c4",usa:["4"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. El 4 pide el cambio con la mano en el muslo. El médico dice que puede seguir.",ops:[
+{id:"c4",cat:"lesion",usa:["4"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. El 4 pide el cambio con la mano en el muslo. El médico dice que puede seguir.",ops:[
  {l:"Lo sacás igual",d:"No vale la pena arriesgarlo.",r:[{p:1,def:.94,saca:"4",txt:"Lo sacaste. Entró el pibe de la reserva atrás. Se lo ve chiquito al lado del 9 de ellos."}]},
  {l:"Que siga, que el médico sabe",d:"Si dice que puede, puede.",r:[{p:.6,txt:"Siguió. Rengueando, pero ganó todas por arriba."},{p:.4,def:.82,saca:"4",txt:"Siguió diez minutos y se rompió. Ahora jugás con diez hasta que entre el cambio. El médico no sabía."}]}]},
 {id:"cdoble",usa:["8","7"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. Cambio doble. El ayudante dice 'dos frescos, todos adelante'.",ops:[
  {l:"Cambio doble ofensivo",d:"Entran dos delanteros por el 8 y el 7.",r:[{p:.5,atk:1.25,def:.8,saca:"8",txt:"Dos delanteros frescos. El partido se volvió un ida y vuelta de locos."},{p:.5,atk:1.1,def:.75,saca:"8",txt:"Entraron los dos y nadie marca. Ellos también tienen delanteros."}]},
  {l:"Un cambio solo, equilibrado",d:"No te desarmás.",r:[{p:1,atk:1.05,def:1.02,txt:"Un cambio, uno solo. El equipo sigue parado igual. Un poco más fresco."}]}]},
+// ---------- 20 SITUACIONES NUEVAS ----------
+{id:"n1",usa:["2"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Lateral a favor en campo rival. Tu 2 lo quiere tirar largo al área.",ops:[
+ {l:"Lateral largo al área",d:"Pelotazo y a pelearla.",r:[{p:.2,gf:1,txt:"Lateral largo, peinada en el primer palo y gol. El 2 festeja como si fuera un tiro libre."},{p:.8,txt:"Lateral largo, despejaron. Otra vez. Y otra vez."}]},
+ {l:"Corto y a jugar",d:"Tenencia.",r:[{p:.1,gf:1,txt:"Corto, triangulación, centro atrás, gol. Fútbol."},{p:.9,atk:1.03,txt:"Corto, la tuviste, el rival se cansó de correr atrás."}]}]},
+{id:"n2",usa:["1"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Centro al área. Tu arquero grita 'mía' pero el 4 también va.",ops:[
+ {l:"Que salga el arquero",d:"Sale con los puños.",r:[{p:.7,txt:"Salió, dos puños, y la mandó a la mitad de la cancha. Autoridad."},{p:.3,gc:1,txt:"Salió, chocó con el 4, y la pelota entró sola. Ridículo."}]},
+ {l:"Que despeje el 4",d:"De cabeza.",r:[{p:.8,txt:"El 4 la sacó de cabeza. Normal. Sin sustos."},{p:.2,gc:1,txt:"El 4 la peinó hacia atrás. Gol en contra. Mirá la cara del arquero."}]}]},
+{id:"n3",usa:["10","8"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Tu 10 y tu 8 se gritan en la cancha. Se pelean por quién organiza.",ops:[
+ {l:"Que mande el 10",d:"Es el que piensa.",r:[{p:.5,atk:1.1,txt:"El 10 agarró la manija. El 8 se calló y corrió. Funciona."},{p:.5,atk:.95,txt:"El 10 quiso jugar solo. El 8 dejó de pasársela. Ahora hay dos equipos."}]},
+ {l:"Que mande el 8",d:"Es el que corre.",r:[{p:.5,def:1.08,txt:"El 8 ordenó. Menos lujo, más orden. El 10 se ofendió pero marca."},{p:.5,atk:.92,txt:"El 8 manda y el 10 camina. Perdiste la magia y no ganaste nada."}]}]},
+{id:"n4",usa:["7"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Tu 7 tiene al lateral rival con amarilla. Puede encararlo siempre.",ops:[
+ {l:"Que lo encare hasta que lo echen",d:"Provocar la segunda amarilla.",r:[{p:.4,atk:1.15,txt:"Lo encaró cinco veces. A la sexta, falta y roja al lateral. Juegan con diez."},{p:.6,txt:"Lo encaró y lo encaró. El lateral aprendió a no tocarlo. Nada."}]},
+ {l:"Que cambie de banda",d:"Buscar al otro lateral, que es más lento.",r:[{p:.35,gf:1,txt:"Cambió de banda, lo pasó al lento y metió el centro del gol."},{p:.65,atk:1.03,txt:"Cambió de banda. Más cómodo, pero sin gol."}]}]},
+{id:"n5",usa:[],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Llueve a cántaros. La pelota no corre.",ops:[
+ {l:"Juego directo, todo por arriba",d:"La pelota no pica, que vuele.",r:[{p:.5,atk:1.1,def:1.05,txt:"Todo por arriba. Ellos quisieron jugar al piso y se ahogaron. Vos flotás."},{p:.5,txt:"Pelotazos en el barro. Un partido horrible. 0 a 0 en tu corazón."}]},
+ {l:"Seguir jugando al piso",d:"Tu estilo no se negocia.",r:[{p:.35,gf:1,txt:"Seguiste al piso y en un charco la pelota se frenó: el 9 la empujó. Gol de barro."},{p:.65,atk:.92,txt:"Seguiste al piso y la pelota se frenaba en cada charco. No llegaste nunca."}]}]},
+{id:"n6",usa:["5"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. El 10 de ellos la rompe. Tu 5 pregunta si lo marca hombre a hombre.",ops:[
+ {l:"Hombre a hombre, hasta el baño",d:"Que no lo deje respirar.",r:[{p:.6,def:1.15,atk:.95,txt:"El 5 lo siguió hasta el baño. El 10 de ellos desapareció del partido."},{p:.4,gc:1,txt:"El 5 lo siguió y se fue con él, dejando un agujero por donde pasó el otro. Gol."}]},
+ {l:"Marca zonal, que pase por varios",d:"Lo espera la defensa.",r:[{p:.6,def:1.05,txt:"Zona. Lo esperaron entre dos y tres. Pasó poco."},{p:.4,gc:1,txt:"Zona, y en la zona no había nadie. El 10 de ellos la clavó de afuera."}]}]},
+{id:"n7",usa:["9"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Penal a favor. Tu 9 la agarra. Tu 10 la pide.",ops:[
+ {l:"Patea el 9",d:"El goleador.",r:[{p:.72,gf:1,txt:"Penal del 9. Cruzado, abajo. Gol."},{p:.28,txt:"Penal del 9. Lo atajó. El 10 miraba con cara de 'te dije'."}]},
+ {l:"Patea el 10",d:"El frío.",r:[{p:.78,gf:1,txt:"Penal del 10. A lo Panenka. Gol. Insoportable."},{p:.22,txt:"Penal del 10. A lo Panenka. La agarró con las manos. Ridículo histórico."}]}]},
+{id:"n8",usa:["3"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Tu 3 se va al ataque y deja la banda sola.",ops:[
+ {l:"Que suba, que tiene gol",d:"Lateral ofensivo.",r:[{p:.3,gf:1,txt:"Subió, se la dieron, y definió como un 9. Gol del 3."},{p:.4,txt:"Subió, tiró el centro, nada. Volvió caminando."},{p:.3,gc:1,txt:"Subió, la perdieron, y por su banda vacía entró el gol. Vos lo mandaste."}]},
+ {l:"Que se quede",d:"Lateral de toda la vida.",r:[{p:1,def:1.05,txt:"Se quedó. Marcó. Nadie se acuerda de él. Eso es un lateral."}]}]},
+{id:"n9",usa:["1"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Tiro libre de ellos desde lejos. Tu arquero quiere mandar a todos arriba para el contraataque.",ops:[
+ {l:"Todos arriba, contra asegurada",d:"Si la saca, es gol tuyo.",r:[{p:.35,gf:1,txt:"La sacó el arquero, pelotazo, y el 7 solo. Gol de contra."},{p:.65,gc:1,txt:"No la sacó. Entró. Y no había nadie."}]},
+ {l:"Todos atrás, cerrar el área",d:"Lo seguro.",r:[{p:.88,txt:"Cerraste el área. Despeje. Nada."},{p:.12,gc:1,txt:"Cerraste el área y entre tanta gente la pelota entró igual. Rebote."}]}]},
+{id:"n10",usa:["9","7"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Contra tuya, dos contra uno. El 7 tiene la pelota, el 9 pide.",ops:[
+ {l:"Que se la dé al 9",d:"El pase.",r:[{p:.65,gf:1,txt:"Se la dio. Gol del 9. Fácil."},{p:.35,txt:"Se la dio mal. Se la comió el 9. Increíble."}]},
+ {l:"Que defina el 7",d:"El egoísta.",r:[{p:.45,gf:1,txt:"Definió el 7 al palo lejano. Gol. El 9 se enojó igual."},{p:.55,txt:"Definió el 7 al cuerpo del arquero. El 9 no le habla más."}]}]},
+{id:"n11",usa:["4"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Córner en contra. El 9 de ellos mide dos metros. ¿Quién lo marca?",ops:[
+ {l:"El 4, cuerpo a cuerpo",d:"El más alto tuyo.",r:[{p:.7,txt:"El 4 le ganó por arriba. Despeje."},{p:.3,gc:1,txt:"El 4 saltó, el de dos metros saltó más. Gol de cabeza."}]},
+ {l:"Dos encima, que no salte",d:"Lo agarrás de la camiseta.",r:[{p:.5,txt:"Lo agarraron entre dos. No saltó. Penal no cobraron. Zafaste."},{p:.5,gc:1,txt:"Lo agarraron entre dos, el árbitro lo vio, penal. Gol."}]}]},
+{id:"n12",usa:["10"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Tiro libre lejano. Tu 10 quiere patear directo desde 35 metros.",ops:[
+ {l:"Que patee",d:"Desde 35. Por qué no.",r:[{p:.15,gf:1,txt:"Desde 35 metros. Al ángulo. Golazo histórico."},{p:.85,txt:"Desde 35 metros. A la tribuna. Silbidos."}]},
+ {l:"Centro al área",d:"Lo normal.",r:[{p:.18,gf:1,txt:"Centro, cabezazo, gol. Lo normal salió bien."},{p:.82,txt:"Centro, despeje. Lo normal."}]}]},
+{id:"n13",usa:[],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Se cortó la luz de una torre. Medio estadio a oscuras. El árbitro espera.",ops:[
+ {l:"Pedir que se juegue igual",d:"A oscuras se juega con el corazón.",r:[{p:.5,atk:1.08,def:.95,txt:"Se jugó a media luz. Nadie ve nada. Todo es pelotazo y pelea. Te gusta."},{p:.5,def:.9,txt:"A media luz tu arquero no ve venir las pelotas. Sufrís."}]},
+ {l:"Esperar que vuelva la luz",d:"Diez minutos de nada.",r:[{p:1,atk:.95,def:1.05,txt:"Volvió la luz después de 10 minutos. Todos fríos. Partido trabado."}]}]},
+{id:"n14",usa:["6"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Tu 6 quiere subir al córner. Es el que mejor cabecea, pero queda el fondo solo.",ops:[
+ {l:"Que suba",d:"Cabezazo asegurado.",r:[{p:.3,gf:1,txt:"Subió el 6 y la clavó de cabeza. Gol del central."},{p:.5,txt:"Subió, cabeceó afuera, volvió corriendo. Nada."},{p:.2,gc:1,txt:"Subió, la sacaron, contra, y el fondo era un desierto. Gol."}]},
+ {l:"Que se quede atrás",d:"Seguridad.",r:[{p:.1,gf:1,txt:"Se quedó, y sin él igual alguien la peinó. Gol."},{p:.9,txt:"Se quedó. Córner, despeje, nada."}]}]},
+{id:"n15",usa:["8"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. El 8 de ellos te está pegando a todos. Tu 8 quiere 'hablarle'.",ops:[
+ {l:"Que le hable",d:"Cara a cara.",r:[{p:.6,atk:1.05,def:1.05,txt:"Le habló. El otro se calmó. Se juega al fútbol de nuevo."},{p:.4,rojo:true,saca:"8",atk:.88,def:.88,txt:"Le habló, se empujaron, el árbitro vio al tuyo. Roja."}]},
+ {l:"Que siga jugando",d:"Aguantar las patadas.",r:[{p:.7,txt:"Aguantó las patadas. Moretones, pero once en la cancha."},{p:.3,atk:.92,txt:"Aguantó hasta que le dolió. Ahora juega con miedo."}]}]},
+{id:"n16",usa:["11"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Tu 11 quedó solo contra el arquero, pero el línea levantó la bandera. No sabés si es offside.",ops:[
+ {l:"Que siga y defina",d:"Hasta que pite, se juega.",r:[{p:.45,gf:1,txt:"Siguió, definió, y el VAR dijo que estaba habilitado. Gol."},{p:.55,txt:"Siguió, definió, y estaba offside por un pie. Se anuló."}]},
+ {l:"Que frene",d:"Respetar al línea.",r:[{p:1,txt:"Frenó. Estaba habilitado. Te lo dice el VAR cuando ya no importa."}]}]},
+{id:"n17",usa:["2","3"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Van ganando. El 2 y el 3 te preguntan si siguen subiendo.",ops:[
+ {l:"Que suban, vamos por otro",d:"Laterales volantes.",r:[{p:.4,gf:1,txt:"Subieron, desborde y gol. Liquidado."},{p:.6,gc:1,txt:"Subieron los dos y te agarraron con tres atrás. Empataron."}]},
+ {l:"Que se queden, cerrá el partido",d:"Línea de cuatro fija.",r:[{p:.85,def:1.15,atk:.9,txt:"Se quedaron. Cerraste el partido. Aburrido y efectivo."},{p:.15,gc:1,txt:"Se quedaron, pero igual entró un gol de pelota parada. Fútbol."}]}]},
+{id:"n18",usa:[],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. El árbitro te cobró una falta inexistente en la puerta del área. Tiro libre de ellos.",ops:[
+ {l:"Barrera de seis y rezar",d:"Muro humano.",r:[{p:.8,txt:"Barrera de seis. Le pegó a la barrera. Rebote. Afuera."},{p:.2,gc:1,txt:"Barrera de seis y la pasó por arriba de los seis. Gol."}]},
+ {l:"Barrera de tres, marcar el rebote",d:"Confianza en el arquero.",r:[{p:.65,txt:"Tres en la barrera. Tiró, el arquero la sacó, y el rebote lo ganó tu 5."},{p:.35,gc:1,txt:"Tres en la barrera. Tiró al hueco. Gol."}]}]},
+{id:"n19",usa:["9"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Tu 9 tiene amarilla y el central rival lo provoca: le dice cosas de la madre.",ops:[
+ {l:"Que le responda con un gol",d:"El mejor insulto.",r:[{p:.4,gf:1,txt:"No dijo nada. A los 3 minutos metió el gol y fue a festejárselo en la cara. Amarilla por eso, pero gol."},{p:.6,txt:"No dijo nada y no metió el gol. Se fue callado."}]},
+ {l:"Que le responda ahora",d:"Cara a cara.",r:[{p:.5,atk:1.05,txt:"Le respondió. El central se calló. Y ahora te tiene miedo."},{p:.5,rojo:true,saca:"9",atk:.85,def:.88,txt:"Le respondió con la frente. Segunda amarilla. Se va el 9."}]}]},
+{id:"n20",usa:["1"],tipo:"ARQ",t:"Sos el 1",sit:"Minuto {m}. Córner en contra, pelota al segundo palo, vos estás en el primero.",ops:[
+ {l:"Volar al segundo palo",d:"A todo o nada.",r:[{p:.5,txt:"Volaste y la sacaste con la punta de los dedos. Foto de tapa."},{p:.5,gc:1,txt:"Volaste y no llegaste. Gol. Igual la foto queda linda."}]},
+ {l:"Quedarte y confiar en la marca",d:"Que el 6 la saque.",r:[{p:.65,txt:"Te quedaste. El 6 la sacó de cabeza. Gracias, 6."},{p:.35,gc:1,txt:"Te quedaste. El 6 se durmió. Gol."}]}]},
 // ---------- ARQUERO (texto) ----------
 {id:"salircorner",usa:["1"],tipo:"ARQ",t:"Sos el 1",sit:"Minuto {m}. Córner en contra. Hay doce tipos en el área. ¿Salís a descolgar?",ops:[
  {l:"Salí con todo",tag:"plata",d:"La sacás de una o te pasan por arriba.",r:[{p:.6,txt:"Saliste, gritaste 'MÍA' y la sacaste con dos puños. El área se abrió como el Mar Rojo."},{p:.4,gc:1,txt:"Saliste y te pasaron por arriba. Gol de cabeza con el arco vacío. 'Mía', dijiste."}]},
@@ -459,17 +682,17 @@ function nuevaCopa(seed){
   const seedStr=seed||String(Math.floor(Math.random()*1e9));
   rnd=mulberry32(hashStr(seedStr));
   const pool=shuffle(EQUIPOS);
-  const candidatos=pool.slice(0,4);      // las 4 tiradas: 3 con derecho a rechazo, la 4ª es plata o mierda
-  const otros=pool.slice(4,35);          // los otros 31 del cuadro, 100% random, sin escalar
+  const candidatos=pool.slice(0,5);      // 3 tiradas con rechazo (+1 si acertás la trivia) y la última es plata o mierda
+  const otros=pool.slice(5,36);          // los otros 31 del cuadro, 100% random, sin escalar
   const rivales=[]; const equipo=null;
   // situaciones: barajadas una vez por copa, se consumen sin repetir
   const bolsa={PT:shuffle(SITUACIONES.filter(s=>s.tipo==="PT"&&s.id!=="saque")),ST:shuffle(SITUACIONES.filter(s=>s.tipo==="ST")),ET:shuffle(SITUACIONES.filter(s=>s.tipo==="ET")),ARQ:shuffle(SITUACIONES.filter(s=>s.tipo==="ARQ")),CAM:shuffle(SITUACIONES.filter(s=>s.tipo==="CAM"))};
-  G={seed:seedStr,eq:equipo,candidatos,otros,llaves:[],tirada:0,rechazados:[],rivales,ronda:0,resultados:[],decisiones:[],plata:0,mierda:0,carry:[],perm:{atk:1,def:1},bolsa,campeon:false};
+  G={seed:seedStr,eq:equipo,candidatos,otros,llaves:[],tirada:0,maxRechazos:3,triviaHecha:false,lesiones:0,rechazados:[],rivales,ronda:0,resultados:[],decisiones:[],plata:0,mierda:0,carry:[],perm:{atk:1,def:1},bolsa,campeon:false};
   location.hash="s="+encodeURIComponent(seedStr);
 }
 
-/* ============ SORTEO: 3 tiradas con rechazo, la 4ª es PLATA O MIERDA ============ */
-const LBL=["Primera tirada","Segunda tirada","Tercera tirada · la última con derecho a decir que no","Cuarta tirada"];
+/* ============ SORTEO: 3 tiradas con rechazo (+1 por trivia), la última es PLATA O MIERDA ============ */
+const ORD=["Primera","Segunda","Tercera","Cuarta","Quinta"];
 function veredicto(e){
   if(e.s>=4.5)return "Un grande de verdad. Si rechazás esto, no te quejes después.";
   if(e.s>=4)return "Equipo serio. Con esto se puede pelear.";
@@ -479,16 +702,15 @@ function veredicto(e){
 }
 function sorteo(){
   show('sorteo');
-  const t=G.tirada, e=G.candidatos[t], pom=t===3;
-  $('#tiradaLbl').textContent=LBL[t]; $('#tiradaLbl').className='tirada'+(pom?' pom':'');
+  const t=G.tirada, e=G.candidatos[t], pom=t>=G.maxRechazos, ultima=t===G.maxRechazos-1;
+  $('#tiradaLbl').textContent=ORD[t]+" tirada"+(ultima?" · la última con derecho a decir que no":"")+(pom?" · plata o mierda":"");
+  $('#tiradaLbl').className='tirada'+(pom?' pom':'');
   $('#veredicto').textContent=""; $('#sorteoBtns').innerHTML=""; $('#det').textContent="";
   $('#rechazados').innerHTML=G.rechazados.length?'<div class="eyebrow">Rechazaste</div>'+G.rechazados.map(r=>`<span>${r.n} ${stars(r.s)}</span>`).join(""):"";
-  const nom=$('#nom');
-  if(pom){ nom.outerHTML='<div class="pomtitle" id="nom"><span class="p">Plata</span> o <span class="m">Mierda</span></div>'; $('#det').textContent="Dijiste que no tres veces. Ahora toca lo que toca."; }
-  else nom.className='nom girando';
+  const nom=$('#nom'); nom.className='nom'; nom.textContent='…';
   const girar=()=>{
-    const n=$('#nom'); let i=0; const total=pom?28:18;
-    const iv=setInterval(()=>{ const x=EQUIPOS[Math.floor(Math.random()*EQUIPOS.length)]; n.className='nom girando'; n.textContent=x.n; if(++i>=total){clearInterval(iv);parar()} }, pom?90:70);
+    const n=$('#nom'); let i=0; const total=pom?30:18;
+    const iv=setInterval(()=>{ const x=EQUIPOS[Math.floor(Math.random()*EQUIPOS.length)]; n.className='nom girando'; n.textContent=x.n; if(++i>=total){clearInterval(iv);parar()} }, pom?85:70);
   };
   const parar=()=>{
     const n=$('#nom'); n.className='nom'; n.textContent=e.n;
@@ -496,11 +718,40 @@ function sorteo(){
     $('#veredicto').textContent=veredicto(e);
     const b=$('#sorteoBtns');
     if(pom){ b.innerHTML=`<button class="btn" id="bQuedo">Te tocó ${e.n}. A bancársela.</button>`; }
-    else b.innerHTML=`<button class="btn" id="bQuedo">Me lo quedo: ${e.n}<small>Vas a la copa con esto.</small></button><button class="btn sec" id="bOtra2">Otra oportunidad<small>${t===2?"Ojo: la próxima es PLATA O MIERDA. No hay vuelta.":"Te quedan "+(2-t)+" rechazos más antes del plata o mierda."}</small></button>`;
+    else{ const quedan=G.maxRechazos-1-t;
+      b.innerHTML=`<button class="btn" id="bQuedo">Me lo quedo: ${e.n}<small>Vas a la copa con esto.</small></button><button class="btn sec" id="bOtra2">Otra oportunidad<small>${ultima?(G.triviaHecha?"Ojo: la próxima es PLATA O MIERDA. No hay vuelta.":"Ojo: la próxima es PLATA O MIERDA... salvo que sepas de fútbol."):"Te quedan "+quedan+" rechazo"+(quedan===1?"":"s")+" más antes del plata o mierda."}</small></button>`; }
     $('#bQuedo').onclick=()=>{G.eq=e;armarCuadro();renderCuadro()};
-    const o=$('#bOtra2'); if(o)o.onclick=()=>{G.rechazados.push(e);G.tirada++;sorteo()};
+    const o=$('#bOtra2'); if(o)o.onclick=()=>{G.rechazados.push(e);G.tirada++; if(ultima&&!G.triviaHecha)trivia(); else sorteo();};
   };
-  if(pom) setTimeout(girar,900); else girar();
+  if(pom){ epico(()=>{ $('#sorteoBtns').innerHTML='<button class="btn" id="bTirar">Tirar</button>'; $('#bTirar').onclick=()=>{$('#sorteoBtns').innerHTML="";girar()}; }); }
+  else girar();
+}
+/* entrada épica: PLATA / O / MIERDA golpean desde atrás de la cámara */
+function epico(done){
+  const d=document.createElement('div'); d.className='epic'; d.innerHTML='<div class="w p">Plata</div><div class="w">o</div><div class="w m">Mierda</div>';
+  document.body.appendChild(d);
+  const ws=d.querySelectorAll('.w'); const vib=(ms)=>{try{navigator.vibrate&&navigator.vibrate(ms)}catch(e){}};
+  const hit=(i)=>{ws[i].classList.add('hit'); d.classList.remove('shake'); void d.offsetWidth; d.classList.add('shake'); vib(i===2?160:80)};
+  setTimeout(()=>hit(0),150); setTimeout(()=>hit(1),650); setTimeout(()=>hit(2),1150);
+  setTimeout(()=>{d.classList.remove('shake');d.classList.add('zoom')},1900);
+  setTimeout(()=>{d.remove();done()},2600);
+}
+/* trivia: acertás y tenés una tirada más antes del plata o mierda */
+function trivia(){
+  G.triviaHecha=true;
+  const q=TRIVIA[Math.floor(rnd()*TRIVIA.length)];
+  const ops=shuffle([q[1],q[2],q[3],q[4]]);
+  $('#tiradaLbl').textContent="Última chance · ¿sabés de fútbol?"; $('#tiradaLbl').className='tirada pom';
+  $('#nom').className='nom'; $('#nom').textContent='';
+  $('#det').innerHTML=`<b style="color:var(--ink);font-size:17px">${q[0]}</b>`; $('#veredicto').textContent="Si acertás, tenés una tirada más antes del plata o mierda. Si no, toca lo que toca.";
+  $('#sorteoBtns').innerHTML=ops.map(o=>`<button class="btn sec" data-o="${o.replace(/"/g,'&quot;')}">${o}</button>`).join("");
+  $('#rechazados').innerHTML="";
+  $('#sorteoBtns').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    const ok=b.dataset.o===q[1];
+    if(ok){G.maxRechazos=4;}
+    $('#sorteoBtns').innerHTML=`<p class="veredicto" style="color:${ok?'var(--plata)':'var(--mierda)'};font-weight:700">${ok?"Correcto. Una tirada más. Aprovechala.":"No. Era "+q[1]+". Toca lo que toca."}</p><button class="btn" id="bSigue">${ok?"Tirar de nuevo":"Plata o mierda"}</button>`;
+    $('#bSigue').onclick=sorteo;
+  });
 }
 
 /* ============ CUADRO DE 32: se simula todo lo que no jugás vos ============ */
@@ -636,8 +887,10 @@ function decision(a){
     if(!(M.gA<M.gB)||M.fuera.has("1"))return reanudar();
     s=pick(SITUACIONES.filter(x=>x.tipo==="LATE")); }
   else{ const bag=G.bolsa[a.tipo];
-    const ok=x=>!(x.usa||[]).some(n=>M.fuera.has(n)) && !(x.id==="tiempo"&&!(M.gA>M.gB)) && !(x.id==="c6"&&!(M.gA>M.gB)) && !(x.id==="c10b"&&!(M.gA<M.gB));
+    const ok=x=>!(x.usa||[]).some(n=>M.fuera.has(n)) && !(x.id==="tiempo"&&!(M.gA>M.gB)) && !(x.id==="c6"&&!(M.gA>M.gB)) && !(x.id==="c10b"&&!(M.gA<M.gB)) && !(x.id==="n17"&&!(M.gA>M.gB))
+      && !(x.cat==="lesion" && (M.lesionHoy || G.lesiones>=2 || (G.ronda===0&&rnd()<.75) || rnd()<.5));
     const i=bag.findIndex(ok); s=i>=0?bag.splice(i,1)[0]:null;
+    if(s&&s.cat==="lesion"){M.lesionHoy=true;G.lesiones=(G.lesiones||0)+1}
     if(!s){const all=SITUACIONES.filter(x=>x.tipo===a.tipo&&ok(x));s=all.length?pick(all):null}
     if(!s)return reanudar(); }
   const marc=M.gA>M.gB?`Vas ganando ${M.gA}-${M.gB}.`:M.gA<M.gB?`Vas perdiendo ${M.gA}-${M.gB}.`:`Empate ${M.gA}-${M.gB}.`;
@@ -795,6 +1048,7 @@ function camino(){
 /* ============ TARJETA ============ */
 function tarjeta(plata){
   show('final');
+  try{new Image().src='https://hits.sh/andresarbit.github.io/plata-o-mierda/copas-'+(plata?'plata':'mierda')+'.svg?'+Date.now()}catch(e){}
   const c=$('#card');c.className='card '+(plata?'plata':'mierda');
   const ronda=G.resultados.length-1;
   const hasta=plata?"Saliste campeón":`Te fuiste en ${RONDAS[ronda]}`;
@@ -809,9 +1063,9 @@ function tarjeta(plata){
 $('#bRandom').onclick=()=>{leerCfg();nuevaCopa($('#cSeed').value.trim());sorteo()};
 $('#buscar').oninput=(e)=>renderLista(e.target.value);
 $('#bJugar').onclick=empezarPartido;
-$('#bOtra').onclick=()=>{location.hash="";show('portada')};
+$('#bOtra').onclick=()=>{location.hash="";$('#cSeed').value="";show('portada')};
 $('#bMisma').onclick=()=>{$('#cSeed').value=G.seed;leerCfg();nuevaCopa(G.seed);sorteo()};
 $('#bCopiar').onclick=async()=>{try{await navigator.clipboard.writeText(G.resumen);$('#bCopiar').textContent="Copiado. Mandalo."}catch(e){prompt("Copiá esto:",G.resumen)}};
 // link compartido: #s=semilla&t=idEquipo
-(function(){const h=new URLSearchParams(location.hash.slice(1));if(h.get('s')){$('#cSeed').value=h.get('s');leerCfg();nuevaCopa(h.get('s'));sorteo()}})();
+(function(){const h=new URLSearchParams(location.hash.slice(1));if(h.get('s')){leerCfg();nuevaCopa(h.get('s'));$('#cSeed').value="";sorteo()}})();
 </script>
