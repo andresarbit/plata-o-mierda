@@ -71,7 +71,7 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .r .k{font-family:"Anton",sans-serif;font-size:15px;color:var(--ink2)}
 .r .res{font-variant-numeric:tabular-nums;color:var(--ink2)}
 .llavesWrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px -18px 0;padding:0 18px 10px}
-.llaves{display:grid;grid-template-columns:repeat(5,138px) 110px;column-gap:22px;width:max-content}
+.llaves{display:grid;grid-template-columns:repeat(4,138px) 110px;column-gap:22px;width:max-content}
 .lh{font-family:"Anton",sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);align-self:end;padding-bottom:4px}
 .lm{position:relative;display:flex;align-items:center;padding:2px 0}
 .lm .box{width:100%;background:var(--bg2);border-left:2px solid var(--line);border-radius:3px;overflow:hidden}
@@ -671,7 +671,8 @@ const weighted=(rs)=>{let x=rnd(),acc=0;for(const r of rs){acc+=r.p;if(x<acc)ret
 const shuffle=(a)=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 
 /* ============ ESTADO ============ */
-const RONDAS=["16avos","8vos","4tos","Semifinal","Final"];
+const RONDAS=["8vos","4tos","Semifinal","Final"];
+const N_EQ=16; // equipos en la copa
 const CFG={dur:13,decPorTiempo:2,goles:2.2};
 let G=null; // juego
 const $=(s)=>document.querySelector(s);
@@ -683,7 +684,7 @@ function nuevaCopa(seed){
   rnd=mulberry32(hashStr(seedStr));
   const pool=shuffle(EQUIPOS);
   const candidatos=pool.slice(0,5);      // 3 tiradas con rechazo (+1 si acertás la trivia) y la última es plata o mierda
-  const otros=pool.slice(5,36);          // los otros 31 del cuadro, 100% random, sin escalar
+  const otros=pool.slice(5,5+15);        // los otros 15 del cuadro, 100% random, sin escalar
   const rivales=[]; const equipo=null;
   // situaciones: barajadas una vez por copa, se consumen sin repetir
   const bolsa={PT:shuffle(SITUACIONES.filter(s=>s.tipo==="PT"&&s.id!=="saque")),ST:shuffle(SITUACIONES.filter(s=>s.tipo==="ST")),ET:shuffle(SITUACIONES.filter(s=>s.tipo==="ET")),ARQ:shuffle(SITUACIONES.filter(s=>s.tipo==="ARQ")),CAM:shuffle(SITUACIONES.filter(s=>s.tipo==="CAM"))};
@@ -758,9 +759,9 @@ function trivia(){
 
 /* ============ CUADRO DE 32: se simula todo lo que no jugás vos ============ */
 function armarCuadro(){
-  const slots=G.otros.slice(); const mi=Math.floor(rnd()*32); slots.splice(mi,0,G.eq);
+  const slots=G.otros.slice(); const mi=Math.floor(rnd()*N_EQ); slots.splice(mi,0,G.eq);
   let cur=slots; G.llaves=[]; G.rivales=[];
-  for(let r=0;r<5;r++){
+  for(let r=0;r<RONDAS.length;r++){
     const ms=[];
     for(let i=0;i<cur.length;i+=2){
       const a=cur[i],b=cur[i+1],m={a,b};
@@ -786,19 +787,19 @@ function leerCfg(){CFG.dur=+$('#cDur').value||13;CFG.decPorTiempo=Math.min(4,Mat
 
 function renderBracket(el){
   const r=G.ronda; el.innerHTML="";
-  const ROWS=32; const wrap=document.createElement('div'); wrap.className='llavesWrap';
+  const ROWS=N_EQ; const wrap=document.createElement('div'); wrap.className='llavesWrap';
   const g=document.createElement('div'); g.className='llaves'; g.style.gridTemplateRows='24px repeat('+ROWS+',20px)';
   RONDAS.forEach((nombre,i)=>{
     const h=document.createElement('div');h.className='lh';h.style.gridColumn=String(i+1);h.style.gridRow='1';h.textContent=nombre;g.appendChild(h);
     const span=Math.pow(2,i+1), n=G.llaves[i].length;
     for(let j=0;j<n;j++){
       const m=G.llaves[i][j];
-      const d=document.createElement('div'); d.className='lm'+(m.mio?' mio':'')+(j%2===0&&i<4?' par':'')+(i>r?' futuro':'');
+      const d=document.createElement('div'); d.className='lm'+(m.mio?' mio':'')+(j%2===0&&i<RONDAS.length-1?' par':'')+(i>r?' futuro':'');
       d.style.gridColumn=String(i+1); d.style.gridRow=(2+j*span)+' / span '+span;
       if(i>r){ d.innerHTML='<div class="box"><div class="tm"><span>—</span></div><div class="tm"><span>—</span></div></div>'; }
       else{
         let ga,gb,cls='';
-        if(m.mio){ const res=G.resultados[i]; if(res){const mm=res.txt.match(/^(\d+)-(\d+)/); ga=mm?mm[1]:'';gb=mm?mm[2]:''; if(/pen/.test(res.txt)){ga+='*';gb+='*'} cls=res.win?' win':' lose';} else {ga='';gb='';cls=' now';} }
+        if(m.mio){ const res=G.resultados[i]; if(res){const mm=(res.cuadro||res.txt).match(/^(\d+)-(\d+)/); ga=mm?mm[1]:'';gb=mm?mm[2]:''; if(/pen/.test(res.txt)){ga+='*';gb+='*'} cls=res.win?' win':' lose';} else {ga='';gb='';cls=' now';} }
         else { ga=m.ga; gb=m.gb; if(m.pen){ga+='*';gb+='*'} }
         const w=(t)=>m.w&&m.w.id===t.id&&(!m.mio||G.resultados[i])&&!(m.mio&&G.resultados[i]&&!G.resultados[i].win)?' gano':'';
         const yo=(t)=>t.id===G.eq.id?' yo':'';
@@ -808,9 +809,9 @@ function renderBracket(el){
     }
   });
   // campeón
-  const ch=document.createElement('div'); ch.className='lm campeon'; ch.style.gridColumn='6'; ch.style.gridRow='2 / span 32';
+  const ch=document.createElement('div'); ch.className='lm campeon'; ch.style.gridColumn=String(RONDAS.length+1); ch.style.gridRow='2 / span '+N_EQ;
   ch.innerHTML='<div class="box"><div class="tm"><span>'+(G.campeon?G.eq.n:'¿?')+'</span></div></div>';
-  const hh=document.createElement('div');hh.className='lh';hh.style.gridColumn='6';hh.style.gridRow='1';hh.textContent='Campeón';g.appendChild(hh);
+  const hh=document.createElement('div');hh.className='lh';hh.style.gridColumn=String(RONDAS.length+1);hh.style.gridRow='1';hh.textContent='Campeón';g.appendChild(hh);
   g.appendChild(ch);
   wrap.appendChild(g); el.appendChild(wrap);
   const so=document.createElement('div'); so.className='sorteoResumen';
@@ -821,7 +822,7 @@ function renderCuadro(){
   show('cuadro');
   const r=G.ronda;
   $('#cuadroEyebrow').textContent=(r===0?G.eq.pais+" · "+G.eq.liga+" · ":G.eq.n+" · ")+stars(G.eq.s);
-  $('#cuadroTitulo').textContent=r===0?"Te tocó "+G.eq.n:(r<5?RONDAS[r]+" vs "+G.rivales[r].n:"Campeón");
+  $('#cuadroTitulo').textContent=r===0?"Te tocó "+G.eq.n:(r<RONDAS.length?RONDAS[r]+" vs "+G.rivales[r].n:"Campeón");
   renderBracket($('#bracket'));
   const cb=$('#carryBox');cb.innerHTML="";
   for(const c of G.carry){const d=document.createElement('div');d.className='carry';d.innerHTML='<b>Te lo bancás:</b> '+c.txt;cb.appendChild(d)}
@@ -1016,13 +1017,13 @@ function finPartido(){
   ronda(0);
 }
 function cerrar(win,txt){
-  const m=G.llaves[G.ronda].find(x=>x.mio); if(m&&m.a.id!==G.eq.id){ txt=txt.replace(/^(\d+)-(\d+)/,'$2-$1').replace(/\((\d+)-(\d+) pen\.\)/,'($2-$1 pen.)'); }
-  G.resultados.push({win,txt,riv:M.riv.n});
+  const m=G.llaves[G.ronda].find(x=>x.mio); let cuadro=txt; if(m&&m.a.id!==G.eq.id){ cuadro=txt.replace(/^(\d+)-(\d+)/,'$2-$1').replace(/\((\d+)-(\d+) pen\.\)/,'($2-$1 pen.)'); }
+  G.resultados.push({win,txt,cuadro,riv:M.riv.n});
   const sh=$('#sheet');sh.style.display="block";
-  sh.innerHTML=`<div class="eyebrow">Final del partido</div><h2>${win?"Ganaste "+txt:"Perdiste "+txt}</h2><p class="sit">${win?(G.ronda===4?"CAMPEÓN. Plata.":pick(["Seguís en la copa. Mañana otra vez.","A la siguiente ronda. No te agrandes.","Pasaste. Nadie se acuerda cómo."])):pick(["Se terminó. Así, sin más.","A casa. Vos tomaste las decisiones.","Eliminado. Mierda, pero la tuya."])}</p><button class="btn" id="bSeguir">${win?(G.ronda===4?"Ver la tarjeta":"Seguir"):"Ver la tarjeta"}</button>`;
+  sh.innerHTML=`<div class="eyebrow">Final del partido</div><h2>${win?"Ganaste "+txt:"Perdiste "+txt}</h2><p class="sit">${win?(G.ronda===RONDAS.length-1?"CAMPEÓN. Plata.":pick(["Seguís en la copa. Mañana otra vez.","A la siguiente ronda. No te agrandes.","Pasaste. Nadie se acuerda cómo."])):pick(["Se terminó. Así, sin más.","A casa. Vos tomaste las decisiones.","Eliminado. Mierda, pero la tuya."])}</p><button class="btn" id="bSeguir">${win?(G.ronda===4?"Ver la tarjeta":"Seguir"):"Ver la tarjeta"}</button>`;
   $('#bSeguir').onclick=()=>{
     if(!win)return tarjeta(false);
-    if(G.ronda===4){G.campeon=true;return tarjeta(true)}
+    if(G.ronda===RONDAS.length-1){G.campeon=true;return tarjeta(true)}
     G.ronda++; G.carry=G.carry.filter(c=>c.perm); camino();
   };
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});

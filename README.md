@@ -1,6 +1,6 @@
 # Plata o Mierda
 
-Juego web de fútbol: te toca un equipo (tres chances de rechazarlo; a la cuarta, plata o mierda), jugás una copa de 32 a pura decisión. Campeón es plata. Lo demás, mierda.
+Juego web de fútbol: te toca un equipo (tres chances de rechazarlo; a la cuarta, plata o mierda), jugás una copa de 16 a pura decisión. Campeón es plata. Lo demás, mierda.
 
 Se juega en el navegador, sin instalar nada: **https://andresarbit.github.io/plata-o-mierda/**
 
