@@ -747,7 +747,7 @@ const SFX=(()=>{
   };
   const play=(name)=>{ if(muted)return; try{ S[name]&&S[name](); }catch(e){} };
   const toggle=()=>{ muted=!muted; localStorage.setItem('pom_mute',muted?'1':'0'); if(!muted)ac(); return muted; };
-  return { play, toggle, get muted(){return muted}, unlock:()=>{ac()} };
+  return { play, toggle, get muted(){return muted}, unlock:()=>{ac()}, _dbg:async(n)=>{await playClip(n,.001); return bufs[n]?Math.round(bufs[n].duration*100)/100:null} };
 })();
 
 /* el resultado es plata o mierda; la decision, no */
