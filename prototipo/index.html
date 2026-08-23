@@ -27,6 +27,7 @@ button:focus-visible{outline:2px solid var(--plata);outline-offset:2px}
 .tag.plata{background:var(--plata);color:#1a1400} .tag.mierda{background:var(--mierda);color:#1a0f05} .tag.medio{background:var(--ink2);color:var(--bg)}
 .screen{display:none;flex:1;flex-direction:column;padding:20px 18px 32px}
 .screen.on{display:flex}
+.mute{position:fixed;top:10px;right:10px;z-index:60;width:40px;height:40px;border-radius:50%;background:var(--bg3);color:var(--ink);font-size:18px;border:1px solid var(--line);opacity:.85}
 /* portada */
 .hero{margin:40px 0 24px}
 .hero h1{font-size:clamp(64px,19vw,96px);text-transform:uppercase;margin:0}
@@ -193,6 +194,7 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 
 <!-- PORTADA -->
 <img src="https://hits.sh/andresarbit.github.io/plata-o-mierda.svg" alt="" width="1" height="1" style="position:absolute;opacity:0;pointer-events:none">
+<button id="bMute" class="mute" aria-label="Sonido">🔊</button>
 <section class="screen on" id="portada">
   <div class="hero">
     <div class="eyebrow">Versión de prueba · 0.1</div>
@@ -710,6 +712,41 @@ const SITUACIONES = [
 const escudo=(e,sz)=>{const u=ESCUDOS[e.id]; const w=sz||64, h=Math.round(w*1.125); if(!u)return escudoGen(e,sz);
  return `<span class="escudo escudoReal" style="width:${w}px;height:${h}px"><img src="${/thesportsdb/.test(u)?u+"/small":u}" alt="" width="${w}" height="${h}" loading="lazy" decoding="async" onerror="this.parentNode.outerHTML=escudoGen(EQUIPOS[${e.id}],${w})"></span>`};
 
+/* ============ SFX sintetizados (Web Audio). SFX.play('gol') etc. Mute persistente. ============ */
+const SFX=(()=>{
+  let ctx=null, master=null, muted=localStorage.getItem('pom_mute')==='1';
+  const ac=()=>{ if(!ctx){ const C=window.AudioContext||window.webkitAudioContext; if(!C)return null; ctx=new C(); master=ctx.createGain(); master.gain.value=.9; master.connect(ctx.destination);} if(ctx.state==='suspended')ctx.resume(); return ctx; };
+  const noiseBuf=(c,sec)=>{ const b=c.createBuffer(1,Math.ceil(c.sampleRate*sec),c.sampleRate); const d=b.getChannelData(0); let last=0; for(let i=0;i<d.length;i++){ const w=Math.random()*2-1; last=(last+.02*w)/1.02; d[i]=w*.5+last*2.5; } return b; };
+  const env=(g,t,a,d,s,r,peak)=>{ const p=peak||1; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(p,t+a); g.gain.linearRampToValueAtTime(p*s,t+a+d); g.gain.setValueAtTime(p*s,t+a+d); g.gain.exponentialRampToValueAtTime(.0001,t+a+d+r); };
+  const S={
+    // multitud: capas de ruido filtrado + "voces" detonadas
+    crowd(c,t,dur,vol,pitch){ const n=c.createBufferSource(); n.buffer=noiseBuf(c,dur+1); const bp=c.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=pitch||900; bp.Q.value=.6; const g=c.createGain(); env(g,t,.25,dur*.4,.7,dur*.6,vol); n.connect(bp); bp.connect(g); g.connect(master); n.start(t); n.stop(t+dur+1.2);
+      for(let i=0;i<14;i++){ const o=c.createOscillator(); o.type='sawtooth'; const f=(pitch||900)*(.35+Math.random()*.5); o.frequency.setValueAtTime(f,t); o.frequency.linearRampToValueAtTime(f*(1.05+Math.random()*.15),t+dur*.5); o.frequency.linearRampToValueAtTime(f*.9,t+dur); const lp=c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=1200; const g2=c.createGain(); env(g2,t+Math.random()*.15,.2,dur*.4,.5,dur*.5,vol*.035); o.connect(lp); lp.connect(g2); g2.connect(master); o.start(t); o.stop(t+dur+1); } },
+    gol(){ const c=ac(); if(!c)return; const t=c.currentTime; S.crowd(c,t,2.4,.9,700); S.drum(c,t+.05,.7); },
+    golcontra(){ const c=ac(); if(!c)return; const t=c.currentTime; S.crowd(c,t,1.2,.35,450); /* "nooo" bajando */ const o=c.createOscillator(); o.type='sawtooth'; o.frequency.setValueAtTime(320,t); o.frequency.exponentialRampToValueAtTime(160,t+1.1); const lp=c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=900; const g=c.createGain(); env(g,t,.1,.5,.6,.6,.12); o.connect(lp); lp.connect(g); g.connect(master); o.start(t); o.stop(t+1.4); },
+    uuh(){ const c=ac(); if(!c)return; const t=c.currentTime; for(let i=0;i<16;i++){ const o=c.createOscillator(); o.type='sawtooth'; const f=260+Math.random()*120; o.frequency.setValueAtTime(f,t); o.frequency.exponentialRampToValueAtTime(f*.55,t+1.3); const bp=c.createBiquadFilter(); bp.type='bandpass'; bp.frequency.setValueAtTime(700,t); bp.frequency.exponentialRampToValueAtTime(300,t+1.3); bp.Q.value=2; const g=c.createGain(); env(g,t+Math.random()*.08,.15,.5,.7,.7,.045); o.connect(bp); bp.connect(g); g.connect(master); o.start(t); o.stop(t+1.6);} S.crowd(c,t,1.3,.3,400); },
+    caja(){ const c=ac(); if(!c)return; const t=c.currentTime; /* ka-ching: click + campanita con armónicos */ const cl=c.createBufferSource(); cl.buffer=noiseBuf(c,.08); const hp=c.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=2500; const g0=c.createGain(); env(g0,t,.005,.03,.3,.05,.5); cl.connect(hp); hp.connect(g0); g0.connect(master); cl.start(t);
+      [2637,3951,5274,7902].forEach((f,i)=>{ const o=c.createOscillator(); o.type='sine'; o.frequency.value=f; const g=c.createGain(); env(g,t+.07+i*.012,.005,.25,.25,1.1,.22/(i+1)); o.connect(g); g.connect(master); o.start(t); o.stop(t+1.6); });
+      const o2=c.createOscillator(); o2.type='square'; o2.frequency.value=1318; const g2=c.createGain(); env(g2,t+.22,.005,.12,.2,.5,.08); o2.connect(g2); g2.connect(master); o2.start(t); o2.stop(t+1); },
+    pedo(){ const c=ac(); if(!c)return; const t=c.currentTime; const o=c.createOscillator(); o.type='sawtooth'; o.frequency.setValueAtTime(95,t); o.frequency.linearRampToValueAtTime(70,t+.5); const lfo=c.createOscillator(); lfo.type='square'; lfo.frequency.setValueAtTime(28,t); lfo.frequency.linearRampToValueAtTime(14,t+.5); const lg=c.createGain(); lg.gain.value=35; lfo.connect(lg); lg.connect(o.frequency); const lp=c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=500; lp.Q.value=4; const g=c.createGain(); env(g,t,.02,.2,.7,.3,.55); o.connect(lp); lp.connect(g); g.connect(master); o.start(t); lfo.start(t); o.stop(t+.7); lfo.stop(t+.7);
+      const n=c.createBufferSource(); n.buffer=noiseBuf(c,.6); const bp=c.createBiquadFilter(); bp.type='lowpass'; bp.frequency.value=350; const g2=c.createGain(); env(g2,t,.02,.2,.5,.3,.25); n.connect(bp); bp.connect(g2); g2.connect(master); n.start(t); },
+    patada(){ const c=ac(); if(!c)return; const t=c.currentTime; const n=c.createBufferSource(); n.buffer=noiseBuf(c,.25); const lp=c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.setValueAtTime(2200,t); lp.frequency.exponentialRampToValueAtTime(300,t+.12); const g=c.createGain(); env(g,t,.003,.05,.3,.12,1); n.connect(lp); lp.connect(g); g.connect(master); n.start(t);
+      const o=c.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(160,t); o.frequency.exponentialRampToValueAtTime(50,t+.12); const g2=c.createGain(); env(g2,t,.002,.06,.2,.1,.9); o.connect(g2); g2.connect(master); o.start(t); o.stop(t+.3); },
+    atajada(){ const c=ac(); if(!c)return; const t=c.currentTime; const n=c.createBufferSource(); n.buffer=noiseBuf(c,.3); const lp=c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.setValueAtTime(900,t); lp.frequency.exponentialRampToValueAtTime(200,t+.2); const g=c.createGain(); env(g,t,.005,.08,.3,.18,.8); n.connect(lp); lp.connect(g); g.connect(master); n.start(t); S.crowd(c,t+.1,1.2,.5,800); },
+    silbato(n){ const c=ac(); if(!c)return; const t=c.currentTime; const reps=n||1; for(let k=0;k<reps;k++){ const t0=t+k*.28; const o=c.createOscillator(); o.type='square'; o.frequency.value=2650; const o2=c.createOscillator(); o2.type='square'; o2.frequency.value=2650*1.18; const lfo=c.createOscillator(); lfo.frequency.value=38; const lg=c.createGain(); lg.gain.value=120; lfo.connect(lg); lg.connect(o.frequency); lg.connect(o2.frequency); const g=c.createGain(); env(g,t0,.01,.05,.8,reps>1?.12:.35,.18); o.connect(g); o2.connect(g); g.connect(master); o.start(t0); o2.start(t0); lfo.start(t0); o.stop(t0+.7); o2.stop(t0+.7); lfo.stop(t0+.7); } },
+    moneda(){ const c=ac(); if(!c)return; const t=c.currentTime; /* ping metálico tipo PS2 */ [3520,5280,7040].forEach((f,i)=>{ const o=c.createOscillator(); o.type='sine'; o.frequency.value=f; const vib=c.createOscillator(); vib.frequency.value=9; const vg=c.createGain(); vg.gain.value=f*.006; vib.connect(vg); vg.connect(o.frequency); const g=c.createGain(); env(g,t,.003,.3,.35,1.4,.3/(i+1)); o.connect(g); g.connect(master); o.start(t); vib.start(t); o.stop(t+2); vib.stop(t+2); }); },
+    monedaCae(){ const c=ac(); if(!c)return; const t=c.currentTime; [0,.09,.16].forEach((d,i)=>{ const o=c.createOscillator(); o.type='triangle'; o.frequency.value=2800-i*300; const g=c.createGain(); env(g,t+d,.002,.03,.2,.12,.25-i*.06); o.connect(g); g.connect(master); o.start(t+d); o.stop(t+d+.3); }); },
+    tick(){ const c=ac(); if(!c)return; const t=c.currentTime; const o=c.createOscillator(); o.type='square'; o.frequency.value=1800; const g=c.createGain(); env(g,t,.001,.015,.1,.03,.12); o.connect(g); g.connect(master); o.start(t); o.stop(t+.06); },
+    tock(){ const c=ac(); if(!c)return; const t=c.currentTime; const o=c.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(420,t); o.frequency.exponentialRampToValueAtTime(120,t+.12); const g=c.createGain(); env(g,t,.002,.08,.2,.15,.6); o.connect(g); g.connect(master); o.start(t); o.stop(t+.35); },
+    drum(c0,t0,vol){ const c=c0||ac(); if(!c)return; const t=t0||c.currentTime; const o=c.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(150,t); o.frequency.exponentialRampToValueAtTime(38,t+.35); const g=c.createGain(); env(g,t,.003,.2,.3,.4,vol||1); o.connect(g); g.connect(master); o.start(t); o.stop(t+.8); const n=c.createBufferSource(); n.buffer=noiseBuf(c,.15); const lp=c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=400; const g2=c.createGain(); env(g2,t,.002,.05,.2,.1,(vol||1)*.5); n.connect(lp); lp.connect(g2); g2.connect(master); n.start(t); },
+    bombo(){ S.drum(null,null,1.2); },
+    campeon(){ const c=ac(); if(!c)return; const t=c.currentTime; S.crowd(c,t,4,1,650); [0,.45,.9,1.2,1.5,1.65,1.8].forEach(d=>S.drum(c,t+d,.9)); },
+  };
+  const play=(name)=>{ if(muted)return; try{ S[name]&&S[name](); }catch(e){} };
+  const toggle=()=>{ muted=!muted; localStorage.setItem('pom_mute',muted?'1':'0'); if(!muted)ac(); return muted; };
+  return { play, toggle, get muted(){return muted}, unlock:()=>{ac()} };
+})();
+
 /* el resultado es plata o mierda; la decision, no */
 function valor(r){ if(r.gc||r.rojo||(r.atk&&r.atk<1)||(r.def&&r.def<1))return "mierda"; if(r.gf||(r.atk&&r.atk>1)||(r.def&&r.def>1))return "plata"; return "" }
 
@@ -767,7 +804,7 @@ function sorteo(sinGiro){
   const nom=$('#nom'); nom.className='nom'; nom.innerHTML='…';
   const girar=()=>{
     const n=$('#nom'); let i=0; const total=pom?30:18;
-    const iv=setInterval(()=>{ const x=EQUIPOS[Math.floor(Math.random()*EQUIPOS.length)]; n.className='nom girando'; n.innerHTML=escudo(x,88)+x.n; if(++i>=total){clearInterval(iv);parar()} }, pom?85:70);
+    const iv=setInterval(()=>{ const x=EQUIPOS[Math.floor(Math.random()*EQUIPOS.length)]; n.className='nom girando'; n.innerHTML=escudo(x,88)+x.n; SFX.play('tick'); if(++i>=total){clearInterval(iv);SFX.play('tock');parar()} }, pom?85:70);
   };
   const parar=()=>{
     const n=$('#nom'); n.className='nom'; n.innerHTML=escudo(e,88)+e.n;
@@ -790,7 +827,7 @@ function epico(done){
   const d=document.createElement('div'); d.className='epic'; d.innerHTML='<div class="w p">Plata</div><div class="w">o</div><div class="w m">Mierda</div>';
   document.body.appendChild(d);
   const ws=d.querySelectorAll('.w'); const vib=(ms)=>{try{navigator.vibrate&&navigator.vibrate(ms)}catch(e){}};
-  const hit=(i)=>{ws[i].classList.add('hit'); d.classList.remove('shake'); void d.offsetWidth; d.classList.add('shake'); vib(i===2?160:80)};
+  const hit=(i)=>{ws[i].classList.add('hit'); d.classList.remove('shake'); void d.offsetWidth; d.classList.add('shake'); vib(i===2?160:80); SFX.play('bombo')};
   setTimeout(()=>hit(0),150); setTimeout(()=>hit(1),650); setTimeout(()=>hit(2),1150);
   setTimeout(()=>{d.classList.remove('shake');d.classList.add('zoom')},1900);
   setTimeout(()=>{d.remove();done()},2600);
@@ -807,7 +844,7 @@ function trivia(){
   $('#rechazados').innerHTML="";
   $('#sorteoBtns').querySelectorAll('button').forEach(b=>b.onclick=()=>{
     const ok=b.dataset.o===q[1];
-    if(ok){G.maxRechazos=4;}
+    if(ok){G.maxRechazos=4;} SFX.play(ok?'caja':'pedo');
     const t=G.tirada, e=G.candidatos[t]; const seraPom=(t+1)>=G.maxRechazos;
     $('#nom').innerHTML=`<div class="display" style="font-size:clamp(44px,14vw,72px);color:${ok?'var(--verde)':'var(--rojo)'}">${ok?"CORRECTO":"INCORRECTO"}</div>`;
     $('#det').innerHTML=ok?"Tenés una tirada más antes del plata o mierda.":"Era <b>"+q[1]+"</b>.";
@@ -906,6 +943,7 @@ function revelarPizarra(){
   if(GANA[mio.k]===riv.k){ M.atk*=1.12; M.def*=1.08; txt=RIVTXT[riv.k]+" Tu pizarra les cayó justo: "+({presion:"los ahogaste en su área.",esperar:"los esperaste y los agarraste de contra.",clasico:"los pasaste con dos toques."})[mio.k]; cls='dec'; }
   else if(GANA[riv.k]===mio.k){ M.atk*=.9; M.def*=.92; txt=RIVTXT[riv.k]+" Te leyeron la pizarra: "+({presion:"tu presión se estrelló contra un muro y te salieron de contra.",esperar:"te tuvieron la pelota todo el partido y vos mirando.",clasico:"no llegás a nada, te pasan la pelota por al lado."})[mio.k]; cls='dec'; }
   else txt=RIVTXT[riv.k]+" Mismo plan que el tuyo. Se define en las decisiones.";
+  if(cls==='dec')SFX.play(GANA[mio.k]===riv.k?'caja':'pedo');
   ev(0,"<b>"+mio.n+".</b> "+txt+(cls==='dec'?` <span class="tag ${GANA[mio.k]===riv.k?'plata':'mierda'}">${GANA[mio.k]===riv.k?'plata':'mierda'}</span>`:""),cls);
   G.decisiones.push({ronda:RONDAS[G.ronda],min:0,op:"Pizarra: "+mio.n,tag:GANA[mio.k]===riv.k?"plata":(GANA[riv.k]===mio.k?"mierda":""),txt});
   if(GANA[mio.k]===riv.k)G.plata++; else if(GANA[riv.k]===mio.k)G.mierda++;
@@ -954,8 +992,8 @@ function correr(){
     // goles de fondo
     const perMin=CFG.goles/90;
     const contra=M.def>1.1?1.12:1; const pa=perMin*M.p*M.atk*contra, pb=perMin*(1-M.p)/M.def;
-    if(rnd()<pa){M.gA++;ev(M.min,M.def>1.1&&M.atk<1?pick(["Gol de contra. Tres toques y el 7 solo contra el arquero.","Gol. Te metieron atrás y saliste de contra. A la bolsa.","Gol de contra. Robo en tu área, pelotazo, y el 9 la picó."]):pick(["Gol. Centro atrás y el 9 la empujó.","Gol. Pelotazo, peinada, y el 7 definió cruzado.","Gol. Se armó sola, de esas que nadie dibuja.","Gol. Tiro de afuera, se desvió, entró.","Gol. Garra y corazón: la peleó el 9 contra dos y la metió."]),'goal')}
-    else if(rnd()<pb){M.gB++;ev(M.min,pick(["Gol de ellos. Te picaron la espalda.","Gol de ellos. Córner y cabezazo. Marcaba nadie.","Gol de ellos. Tiro libre al ángulo. Imposible.","Gol de ellos. Error en la salida. Regalado."]),'goal contra')}
+    if(rnd()<pa){M.gA++;SFX.play('gol');ev(M.min,M.def>1.1&&M.atk<1?pick(["Gol de contra. Tres toques y el 7 solo contra el arquero.","Gol. Te metieron atrás y saliste de contra. A la bolsa.","Gol de contra. Robo en tu área, pelotazo, y el 9 la picó."]):pick(["Gol. Centro atrás y el 9 la empujó.","Gol. Pelotazo, peinada, y el 7 definió cruzado.","Gol. Se armó sola, de esas que nadie dibuja.","Gol. Tiro de afuera, se desvió, entró.","Gol. Garra y corazón: la peleó el 9 contra dos y la metió."]),'goal')}
+    else if(rnd()<pb){M.gB++;SFX.play('golcontra');ev(M.min,pick(["Gol de ellos. Te picaron la espalda.","Gol de ellos. Córner y cabezazo. Marcaba nadie.","Gol de ellos. Tiro libre al ángulo. Imposible.","Gol de ellos. Error en la salida. Regalado."]),'goal contra')}
     marcador();
     const a=M.agenda[0];
     if(a&&M.min>=a.min){M.agenda.shift();decision(a)}
@@ -964,6 +1002,7 @@ function correr(){
 }
 function decision(a){
   M.pausa=true;$('#clock').classList.add('pause');
+  if(a.tipo==="ET")SFX.play('silbato');
   if(a.tipo==="ARCO"){ // tiro decisivo o atajada decisiva, según quién esté peor
     const soyArquero=(M.gA>M.gB)?true:(M.gA<M.gB)?false:rnd()<.5;
     return arco(soyArquero?"atajar":"patear",(res)=>{reanudar()});
@@ -989,8 +1028,10 @@ function decision(a){
     const o=s.ops[+b.dataset.i];const r=weighted(o.r);
     const v=valor(r); if(v==="plata")G.plata++;else if(v==="mierda")G.mierda++;
     ev(M.min,`<b>${o.l}.</b> ${r.txt.replace(/\{m\}/g,M.min)}`+(v?` <span class="tag ${v}">${v}</span>`:""),'dec'+(r.rojo?' rojo':''));
-    if(r.gf){M.gA+=r.gf;ev(M.min,"GOL. "+M.gA+"-"+M.gB,'goal')}
-    if(r.gc){M.gB+=r.gc;ev(M.min,"Gol de ellos. "+M.gA+"-"+M.gB,'goal contra')}
+    if(r.gf){M.gA+=r.gf;SFX.play('gol');ev(M.min,"GOL. "+M.gA+"-"+M.gB,'goal')}
+    else if(r.gc){M.gB+=r.gc;SFX.play('golcontra');ev(M.min,"Gol de ellos. "+M.gA+"-"+M.gB,'goal contra')}
+    else if(r.rojo){SFX.play('uuh')}
+    else if(v==="plata")SFX.play('caja'); else if(v==="mierda")SFX.play('pedo');
     if(r.atk)M.atk*=r.atk;if(r.def)M.def*=r.def;if(r.rojo)M.rojos++;if(r.saca)M.fuera.add(r.saca);
     G.decisiones.push({ronda:RONDAS[G.ronda],min:M.min,op:o.l,tag:o.tag,txt:r.txt,gf:r.gf,gc:r.gc,rojo:r.rojo});
     marcador();sh.style.display="none";reanudar();
@@ -1010,10 +1051,12 @@ function moneda(){
   const elegir=(lado)=>{
     sh.querySelectorAll('.linea button').forEach(b=>b.disabled=true);
     const sale=rnd()<.5?"plata":"mierda"; const gano=sale===lado;
+    SFX.play('moneda'); setTimeout(()=>SFX.play('monedaCae'),1450);
     const coin=$('#coin'); coin.classList.add('girando'); let k=0; const alt=setInterval(()=>{coin.classList.toggle('sale-mierda',k%2===0);coin.classList.toggle('sale-plata',k%2===1);k++},102);
     setTimeout(()=>{clearInterval(alt);coin.classList.remove('girando','sale-plata','sale-mierda');coin.classList.add('sale-'+sale)},1500);
     setTimeout(()=>{
       ev(0,`Pediste ${lado}. Salió <b>${sale}</b>. ${gano?"Ganaste la moneda.":"Perdiste la moneda. Eligen ellos."}`,'dec');
+      SFX.play('silbato');
       if(gano){ sh.style.display="none"; decision({min:0,id:"saque"}); }
       else{
         const ellos=rnd()<.5;
@@ -1041,6 +1084,7 @@ function ruedaVAR(){
     const i=Math.floor(rnd()*n); const res=VAR_SECT[i];
     const ang=360*5+(360-(i*step+step/2)); // el puntero está arriba
     const w=$('#var'); w.style.transition='transform 2.6s cubic-bezier(.15,.8,.2,1)'; w.style.transform=`rotate(${ang}deg)`;
+    (function ticks(k){ if(k>28)return; SFX.play('tick'); setTimeout(()=>ticks(k+1), 40+k*k*.35); })(0);
     setTimeout(()=>{
       let txt,v;
       if(res.t==="GOL"){M.gA++;txt="El VAR confirmó. GOL. La pantallita está de tu lado.";v="plata";ev(M.min,"<b>Rueda del VAR.</b> "+txt+` <span class="tag plata">plata</span>`,'goal')}
@@ -1090,7 +1134,7 @@ function arco(modo,cb,ctx){
   sh.querySelectorAll('.cell').forEach(b=>b.onclick=()=>{
     sh.querySelectorAll('.cell').forEach(x=>x.onclick=null);
     const r=+b.dataset.r,c=+b.dataset.c;b.classList.add('pick');
-    let gol,txt;
+    let gol,txt; SFX.play('patada');
     if(modo==="patear"){
       const k=keeperAI();gk.style.left=colPos(k.c);gk.style.bottom=rowBottom(k.r);
       setTimeout(()=>{gk.classList.add('stretch');
@@ -1112,6 +1156,7 @@ function arco(modo,cb,ctx){
     }
     function fin(){
       setTimeout(()=>{
+        if(gol)SFX.play(modo==="patear"?'gol':'golcontra'); else SFX.play(modo==="patear"?'golcontra':'atajada');
         if(modo==="patear"){ if(gol&&!pen)M.gA++; ev(M.min,"<b>"+lbl+".</b> "+txt+` <span class="tag ${gol?'plata':'mierda'}">${gol?'plata':'mierda'}</span>`,gol?'goal':'dec'); if(gol)G.plata++;else G.mierda++; G.decisiones.push({ronda:RONDAS[G.ronda],min:M.min,op:lbl,tag:gol?"plata":"mierda",txt,gf:gol&&!pen?1:0}) }
         else{ if(gol&&!pen)M.gB++; ev(M.min,"<b>"+lbl+".</b> "+txt+` <span class="tag ${gol?'mierda':'plata'}">${gol?'mierda':'plata'}</span>`,gol?'goal contra':'dec'); if(gol)G.mierda++;else G.plata++; G.decisiones.push({ronda:RONDAS[G.ronda],min:M.min,op:lbl,tag:gol?"mierda":"plata",txt,gc:gol&&!pen?1:0}) }
         marcador();sh.style.display="none";cb({gol});
@@ -1123,7 +1168,7 @@ function arco(modo,cb,ctx){
 
 /* ============ FIN DE PARTIDO / PENALES ============ */
 function finPartido(){
-  if(M.terminado)return;M.terminado=true;clearInterval(timer);
+  if(M.terminado)return;M.terminado=true;clearInterval(timer);SFX.play('silbato'); setTimeout(()=>SFX.play('silbato'),300); setTimeout(()=>SFX.play('silbato'),600);
   if(M.gA!==M.gB)return cerrar(M.gA>M.gB,`${M.gA}-${M.gB}`);
   ev(90,"Final. Empate. Penales. No se juega la tanda entera: 4-4 y queda el último. Plata o mierda.",'sys');
   M.pausa=true;M.enPenales=true;
@@ -1175,7 +1220,7 @@ function camino(){
 
 /* ============ TARJETA ============ */
 function tarjeta(plata){
-  show('final');
+  show('final'); SFX.play(plata?'campeon':'pedo');
   try{new Image().src='https://hits.sh/andresarbit.github.io/plata-o-mierda/copas-'+(plata?'plata':'mierda')+'.svg?'+Date.now()}catch(e){}
   const c=$('#card');c.className='card '+(plata?'plata':'mierda');
   const ronda=G.resultados.length-1;
@@ -1227,6 +1272,8 @@ $('#buscar').oninput=(e)=>renderLista(e.target.value);
 $('#bJugar').onclick=empezarPartido;
 $('#bOtra').onclick=()=>{location.hash="";$('#cSeed').value="";show('portada')};
 $('#bMisma').onclick=()=>{$('#cSeed').value=G.seed;leerCfg();nuevaCopa(G.seed);sorteo()};
+$('#bMute').textContent=SFX.muted?'🔇':'🔊'; $('#bMute').onclick=()=>{const m=SFX.toggle();$('#bMute').textContent=m?'🔇':'🔊';if(!m)SFX.play('tick')};
+document.addEventListener('pointerdown',()=>SFX.unlock(),{once:true});
 $('#bImagen').onclick=async()=>{
   const b=$('#bImagen'); b.textContent="Armando la tarjeta…";
   try{ const blob=await tarjetaJPG(); const file=new File([blob],'plata-o-mierda.jpg',{type:'image/jpeg'});
