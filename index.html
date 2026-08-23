@@ -37,7 +37,12 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .team{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;width:100%;padding:11px 6px;background:none;color:var(--ink);border-bottom:1px solid var(--line);border-radius:0;text-align:left;font-size:15px}
 .team .sw{width:22px;height:22px;border-radius:50%;border:2px solid var(--line)}
 .team small{display:block;color:var(--ink2);font-size:12.5px}
-.stars{font-variant-numeric:tabular-nums;color:var(--plata);font-size:13px;white-space:nowrap}
+.stars{color:var(--plata);font-size:13px;white-space:nowrap;letter-spacing:.04em;display:inline-block}
+.stars i{font-style:normal;position:relative;display:inline-block}
+.stars i.e{color:var(--line)}
+.stars i.h{color:var(--line)}
+.stars i.h b{position:absolute;left:0;top:0;width:50%;overflow:hidden;color:var(--plata);font-weight:400}
+.escudo{display:block;margin:0 auto 8px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.45))}
 /* sorteo */
 #sorteo{justify-content:center;text-align:center}
 .tirada{font-family:"Anton",sans-serif;font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2)}
@@ -112,6 +117,8 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .board .top{display:flex;justify-content:space-between;align-items:center}
 .score{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin-top:6px}
 .score .t{font-size:14px;font-weight:700;line-height:1.15}
+.score .t .escudo{margin:0 0 4px;display:block}
+.score .t.r .escudo{margin-left:auto}
 .score .t small{display:block;font-weight:400;color:var(--ink2);font-size:12px}
 .score .t.r{text-align:right}
 .score .n{font-family:"Anton",sans-serif;font-size:30px;font-variant-numeric:tabular-nums;letter-spacing:.04em}
@@ -677,12 +684,17 @@ const CFG={dur:13,decPorTiempo:2,goles:2.2};
 let G=null; // juego
 const $=(s)=>document.querySelector(s);
 const show=(id)=>{document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$('#'+id).classList.add('on');window.scrollTo(0,0)};
-const stars=(s)=>"★".repeat(Math.floor(s))+(s%1?"½":"")+" "+s.toFixed(1);
+const stars=(s)=>{let h='<span class="stars" aria-label="'+s+' estrellas">';for(let i=1;i<=5;i++){h+=s>=i?'<i class="f">★</i>':(s>=i-.5?'<i class="h"><b>★</b>★</i>':'<i class="e">★</i>')}return h+'</span>'};
+const escudo=(e,sz)=>{const ini=e.n.replace(/\(.*?\)/g,'').split(/\s+/).filter(w=>w&&!/^(de|del|la|el|los|las|y|fc|cf|sc|ac|club|united|city|de)$/i.test(w)).map(w=>w[0].toUpperCase()).slice(0,3).join('')||e.n.slice(0,2).toUpperCase();
+ const light=(c)=>{const n=parseInt(c.slice(1),16);return ((n>>16&255)*.299+(n>>8&255)*.587+(n&255)*.114)>150};
+ const txt=light(e.c1)&&light(e.c2)?'#222':(light(e.c1)?e.c1:'#fff');
+ return `<svg class="escudo" viewBox="0 0 64 72" width="${sz||64}" height="${(sz||64)*1.125}" aria-hidden="true"><defs><clipPath id="sh"><path d="M32 2 L60 10 V36 C60 54 46 66 32 70 C18 66 4 54 4 36 V10 Z"/></clipPath></defs><g clip-path="url(#sh)"><rect x="0" y="0" width="64" height="72" fill="${e.c1}"/><rect x="32" y="0" width="32" height="72" fill="${e.c2}"/><rect x="0" y="48" width="64" height="24" fill="rgba(0,0,0,.18)"/></g><path d="M32 2 L60 10 V36 C60 54 46 66 32 70 C18 66 4 54 4 36 V10 Z" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2.5"/><path d="M32 5 L57 12 V36 C57 52 45 63 32 67 C19 63 7 52 7 36 V12 Z" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="1"/><text x="32" y="42" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="${ini.length>2?20:26}" fill="${txt}" stroke="rgba(0,0,0,.45)" stroke-width="1" paint-order="stroke">${ini}</text></svg>`};
 
 function nuevaCopa(seed){
   const seedStr=seed||String(Math.floor(Math.random()*1e9));
   rnd=mulberry32(hashStr(seedStr));
-  const pool=shuffle(EQUIPOS);
+  const PESO={"Argentina":2.6,"España":2,"Inglaterra":2,"Italia":2,"Francia":2,"Brasil":2,"Uruguay":2,"Chile":2,"Colombia":2,"México":2,"Paraguay":2,"Ecuador":2,"Perú":2,"Bolivia":2,"Venezuela":2,"Alemania":1.5,"Portugal":1.5,"Países Bajos":1.5,"Estados Unidos":1.3};
+  const pool=EQUIPOS.map(e=>({e,k:Math.pow(rnd(),1/(PESO[e.pais]||1))})).sort((a,b)=>b.k-a.k).map(x=>x.e); // barajado ponderado: más chance a ligas conocidas
   const candidatos=pool.slice(0,5);      // 3 tiradas con rechazo (+1 si acertás la trivia) y la última es plata o mierda
   const otros=pool.slice(5,5+15);        // los otros 15 del cuadro, 100% random, sin escalar
   const rivales=[]; const equipo=null;
@@ -708,13 +720,13 @@ function sorteo(sinGiro){
   $('#tiradaLbl').className='tirada'+(pom?' pom':'');
   $('#veredicto').textContent=""; $('#sorteoBtns').innerHTML=""; $('#det').textContent="";
   $('#rechazados').innerHTML=G.rechazados.length?'<div class="eyebrow">Rechazaste</div>'+G.rechazados.map(r=>`<span>${r.n} ${stars(r.s)}</span>`).join(""):"";
-  const nom=$('#nom'); nom.className='nom'; nom.textContent='…';
+  const nom=$('#nom'); nom.className='nom'; nom.innerHTML='…';
   const girar=()=>{
     const n=$('#nom'); let i=0; const total=pom?30:18;
-    const iv=setInterval(()=>{ const x=EQUIPOS[Math.floor(Math.random()*EQUIPOS.length)]; n.className='nom girando'; n.textContent=x.n; if(++i>=total){clearInterval(iv);parar()} }, pom?85:70);
+    const iv=setInterval(()=>{ const x=EQUIPOS[Math.floor(Math.random()*EQUIPOS.length)]; n.className='nom girando'; n.innerHTML=escudo(x,88)+x.n; if(++i>=total){clearInterval(iv);parar()} }, pom?85:70);
   };
   const parar=()=>{
-    const n=$('#nom'); n.className='nom'; n.textContent=e.n;
+    const n=$('#nom'); n.className='nom'; n.innerHTML=escudo(e,88)+e.n;
     $('#det').innerHTML=`${e.pais} · ${e.liga} · <span class="stars">${stars(e.s)}</span>`;
     $('#veredicto').textContent=veredicto(e);
     const b=$('#sorteoBtns');
@@ -752,8 +764,13 @@ function trivia(){
   $('#sorteoBtns').querySelectorAll('button').forEach(b=>b.onclick=()=>{
     const ok=b.dataset.o===q[1];
     if(ok){G.maxRechazos=4;}
-    $('#sorteoBtns').innerHTML=`<p class="veredicto" style="color:${ok?'var(--plata)':'var(--mierda)'};font-weight:700">${ok?"Correcto. Tenés una tirada más antes del plata o mierda.":"No. Era "+q[1]+". Seguís con lo que tenías."}</p><button class="btn" id="bSigue">Volver a la tirada</button>`;
-    $('#bSigue').onclick=()=>sorteo(true);
+    const t=G.tirada, e=G.candidatos[t]; const seraPom=(t+1)>=G.maxRechazos;
+    $('#nom').innerHTML=`<div class="display" style="font-size:clamp(44px,14vw,72px);color:${ok?'var(--verde)':'var(--rojo)'}">${ok?"CORRECTO":"INCORRECTO"}</div>`;
+    $('#det').innerHTML=ok?"Tenés una tirada más antes del plata o mierda.":"Era <b>"+q[1]+"</b>.";
+    $('#veredicto').textContent="";
+    $('#sorteoBtns').innerHTML=`<button class="btn" id="bSigue">${seraPom?"Tirar al plata o mierda":"Tirar de nuevo"}<small>Rechazás a ${e.n}.</small></button><button class="btn sec" id="bQuedo2">Me lo quedo: ${e.n}</button>`;
+    $('#bSigue').onclick=()=>{G.rechazados.push(e);G.tirada++;sorteo()};
+    $('#bQuedo2').onclick=()=>{G.eq=e;armarCuadro();renderCuadro()};
   });
 }
 
@@ -821,7 +838,7 @@ function renderBracket(el){
 function renderCuadro(){
   show('cuadro');
   const r=G.ronda;
-  $('#cuadroEyebrow').textContent=(r===0?G.eq.pais+" · "+G.eq.liga+" · ":G.eq.n+" · ")+stars(G.eq.s);
+  $('#cuadroEyebrow').innerHTML=(r===0?G.eq.pais+" · "+G.eq.liga+" · ":G.eq.n+" · ")+stars(G.eq.s);
   $('#cuadroTitulo').textContent=r===0?"Te tocó "+G.eq.n:(r<RONDAS.length?RONDAS[r]+" vs "+G.rivales[r].n:"Campeón");
   renderBracket($('#bracket'));
   const cb=$('#carryBox');cb.innerHTML="";
@@ -849,8 +866,8 @@ function empezarPartido(){
   M.agenda.sort((a,b)=>a.min-b.min);
   show('partido');
   $('#ronda').textContent=RONDAS[G.ronda]+" · semilla "+G.seed;
-  $('#tA').innerHTML=G.eq.n+"<small>"+stars(G.eq.s)+"</small>";
-  $('#tB').innerHTML=M.riv.n+"<small>"+stars(M.riv.s)+" · "+M.riv.pais+"</small>";
+  $('#tA').innerHTML=escudo(G.eq,30)+G.eq.n+"<small>"+stars(G.eq.s)+"</small>";
+  $('#tB').innerHTML=escudo(M.riv,30)+M.riv.n+"<small>"+stars(M.riv.s)+" · "+M.riv.pais+"</small>";
   $('#tl').innerHTML="";$('#sheet').style.display="none";
   marcador();
   ev(0,`${G.eq.n} vs ${M.riv.n}. ${RONDAS[G.ronda]}. ${M.riv.pais}, ${M.riv.liga}. ${diff>=1?"Sos más. Ojo.":diff<=-1?"Ellos son más. Mucho más. Acá es donde se juega Plata o Mierda.":"Partido parejo. Se define en las decisiones."} ${garra>.08?"Los tuyos salieron con el cuchillo entre los dientes.":garra<-.08?"Los tuyos salieron dormidos. Se nota desde el túnel.":""}`,'sys');
