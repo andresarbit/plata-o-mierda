@@ -71,10 +71,6 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 @media (prefers-reduced-motion:reduce){.epic .w{opacity:1;transform:none;animation:none}.epic.shake,.epic.zoom{animation:none}}
 /* cuadro */
 .bracket{display:grid;gap:8px;margin:16px 0}
-.r{display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center;padding:10px 12px;background:var(--bg2);border-left:4px solid var(--line);font-size:14px}
-.r.win{border-left-color:var(--verde)} .r.lose{border-left-color:var(--rojo)} .r.now{border-left-color:var(--plata)}
-.r .k{font-family:"Anton",sans-serif;font-size:15px;color:var(--ink2)}
-.r .res{font-variant-numeric:tabular-nums;color:var(--ink2)}
 .llavesWrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px -18px 0;padding:0 18px 10px}
 .llaves{display:grid;grid-template-columns:repeat(4,138px) 110px;column-gap:22px;width:max-content}
 .lh{font-family:"Anton",sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);align-self:end;padding-bottom:4px}
@@ -116,12 +112,12 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .board{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 18px 10px}
 .board .top{display:flex;justify-content:space-between;align-items:center}
 .score{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin-top:6px}
-.score .t{font-size:14px;font-weight:700;line-height:1.15}
+.score .t{font-size:13px;font-weight:700;line-height:1.15;min-width:0}
 .score .t .escudo{margin:0 0 4px;display:block}
 .score .t.r .escudo{margin-left:auto}
 .score .t small{display:block;font-weight:400;color:var(--ink2);font-size:12px}
-.score .t.r{text-align:right}
-.score .n{font-family:"Anton",sans-serif;font-size:30px;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.score .t.r{text-align:right;justify-self:end}
+.score .n{white-space:nowrap;font-family:"Anton",sans-serif;font-size:30px;font-variant-numeric:tabular-nums;letter-spacing:.04em}
 .clock{font-family:"Anton",sans-serif;font-size:56px;line-height:1;font-variant-numeric:tabular-nums;text-align:center;margin:4px 0 2px;letter-spacing:.02em}
 .clock.pause{color:var(--plata)}
 .bar{height:3px;background:var(--line);margin-top:10px;border-radius:2px;overflow:hidden}
@@ -153,6 +149,11 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .coin.sale-plata .face.plata{display:flex}.coin.sale-plata .face.mierda{display:none}
 .coin.sale-mierda .face.plata{display:none}.coin.sale-mierda .face.mierda{display:flex}
 @media (prefers-reduced-motion:reduce){.coin.girando{animation:none}}
+/* rueda del VAR */
+.varwrap{position:relative;width:200px;height:200px;margin:14px auto 6px}
+.var{width:100%;height:100%;border-radius:50%;position:relative;box-shadow:0 0 0 4px #eee,0 6px 18px rgba(0,0,0,.5);overflow:hidden}
+.var span{position:absolute;left:50%;top:50%;width:90px;margin-left:-45px;margin-top:-8px;text-align:center;font-family:"Anton",sans-serif;font-size:12px;letter-spacing:.1em;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.7);transform-origin:center center}
+.varptr{position:absolute;left:50%;top:-8px;margin-left:-10px;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:18px solid #fff;z-index:2;filter:drop-shadow(0 2px 2px rgba(0,0,0,.6))}
 /* arco */
 .arco{margin:12px 0 4px;background:linear-gradient(var(--pasto),var(--pasto2));padding:14px 10px 6px;border-radius:8px;position:relative}
 .red{position:relative;border:4px solid #eee;border-bottom:0;border-radius:3px 3px 0 0;background:
@@ -228,7 +229,10 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
   <h2 class="display" id="cuadroTitulo" style="font-size:34px;margin:4px 0 0"></h2>
   <div class="bracket" id="bracket"></div>
   <div id="carryBox"></div>
-  <button class="btn" id="bJugar">Salir a la cancha</button>
+  <div class="eyebrow" style="margin-top:18px">La pizarra · ¿cómo salís?</div>
+  <p class="kicker" style="color:var(--ink2);font-size:14px;margin:4px 0 2px">No sabés cómo van a salir ellos. Elegí y a la cancha.</p>
+  <div id="pizarra"></div>
+  <button class="btn" id="bJugar" style="display:none">Salir a la cancha</button>
 </section>
 
 <!-- PARTIDO -->
@@ -843,7 +847,28 @@ function renderCuadro(){
   renderBracket($('#bracket'));
   const cb=$('#carryBox');cb.innerHTML="";
   for(const c of G.carry){const d=document.createElement('div');d.className='carry';d.innerHTML='<b>Te lo bancás:</b> '+c.txt;cb.appendChild(d)}
-  $('#bJugar').textContent=r===0?"Salir a la cancha":"Salir a la cancha · "+RONDAS[r];
+  const pz=$('#pizarra'); pz.innerHTML=ESQUEMAS.map((q,i)=>`<button class="btn ${i?'sec':''}" data-i="${i}">${q.n}<small>${q.d}</small></button>`).join("");
+  pz.querySelectorAll('button').forEach(b=>b.onclick=()=>{G.esquema=ESQUEMAS[+b.dataset.i];empezarPartido()});
+}
+
+/* ============ LA PIZARRA (piedra, papel o tijera táctico) ============ */
+// presión le gana a esperar (los ahogás en su área), esperar le gana a clásico (te comen de contra), clásico le gana a presión (los pasás con dos toques)
+const ESQUEMAS=[
+ {k:"presion",n:"4-3-3, presión alta",d:"A ahogarlos arriba. Si salen a esperar, los aplastás. Si juegan simple, te pasan.",atk:1.15,def:.92},
+ {k:"clasico",n:"4-4-2 de toda la vida",d:"Ordenados, dos toques y arriba. Le gana a la presión, sufre contra los que esperan.",atk:1.03,def:1.03},
+ {k:"esperar",n:"5-3-2, a esperar y de contra",d:"Bloque bajo y pelotazo. Le gana al 4-4-2. Contra la presión, sufrís.",atk:.9,def:1.15},
+];
+const GANA={presion:"esperar",esperar:"clasico",clasico:"presion"};
+function revelarPizarra(){
+  const mio=G.esquema||ESQUEMAS[1]; const riv=pick(ESQUEMAS); M.atk*=mio.atk; M.def*=mio.def;
+  const RIVTXT={presion:"Ellos salieron a presionarte arriba.",clasico:"Ellos salieron con un 4-4-2 clásico.",esperar:"Ellos se metieron atrás con cinco."};
+  let txt,cls='sys';
+  if(GANA[mio.k]===riv.k){ M.atk*=1.12; M.def*=1.08; txt=RIVTXT[riv.k]+" Tu pizarra les cayó justo: "+({presion:"los ahogaste en su área.",esperar:"los esperaste y los agarraste de contra.",clasico:"los pasaste con dos toques."})[mio.k]; cls='dec'; }
+  else if(GANA[riv.k]===mio.k){ M.atk*=.9; M.def*=.92; txt=RIVTXT[riv.k]+" Te leyeron la pizarra: "+({presion:"tu presión se estrelló contra un muro y te salieron de contra.",esperar:"te tuvieron la pelota todo el partido y vos mirando.",clasico:"no llegás a nada, te pasan la pelota por al lado."})[mio.k]; cls='dec'; }
+  else txt=RIVTXT[riv.k]+" Mismo plan que el tuyo. Se define en las decisiones.";
+  ev(0,"<b>"+mio.n+".</b> "+txt+(cls==='dec'?` <span class="tag ${GANA[mio.k]===riv.k?'plata':'mierda'}">${GANA[mio.k]===riv.k?'plata':'mierda'}</span>`:""),cls);
+  G.decisiones.push({ronda:RONDAS[G.ronda],min:0,op:"Pizarra: "+mio.n,tag:GANA[mio.k]===riv.k?"plata":(GANA[riv.k]===mio.k?"mierda":""),txt});
+  if(GANA[mio.k]===riv.k)G.plata++; else if(GANA[riv.k]===mio.k)G.mierda++;
 }
 
 /* ============ PARTIDO ============ */
@@ -861,17 +886,19 @@ function empezarPartido(){
   slots(6,43,n).forEach(m=>M.agenda.push({min:m,tipo:rnd()<.25?"ARQ":"PT"}));
   M.agenda.push({min:45,tipo:"ET"});
   slots(50,82,n).forEach(m=>M.agenda.push({min:m,tipo:rnd()<.3?"ARQ":"ST"}));
+  if(rnd()<.5)M.agenda.push({min:52+Math.floor(rnd()*28),tipo:"VAR"});
   M.agenda.push({min:83+Math.floor(rnd()*3),tipo:"LATE"});
   M.agenda.push({min:87+Math.floor(rnd()*2),tipo:"ARCO"});
   M.agenda.sort((a,b)=>a.min-b.min);
   show('partido');
   $('#ronda').textContent=RONDAS[G.ronda]+" · semilla "+G.seed;
-  $('#tA').innerHTML=escudo(G.eq,30)+G.eq.n+"<small>"+stars(G.eq.s)+"</small>";
-  $('#tB').innerHTML=escudo(M.riv,30)+M.riv.n+"<small>"+stars(M.riv.s)+" · "+M.riv.pais+"</small>";
+  $('#tA').innerHTML=escudo(G.eq,26)+G.eq.n+"<small>"+stars(G.eq.s)+"</small>";
+  $('#tB').innerHTML=escudo(M.riv,26)+M.riv.n+"<small>"+stars(M.riv.s)+" · "+M.riv.pais+"</small>";
   $('#tl').innerHTML="";$('#sheet').style.display="none";
   marcador();
   ev(0,`${G.eq.n} vs ${M.riv.n}. ${RONDAS[G.ronda]}. ${M.riv.pais}, ${M.riv.liga}. ${diff>=1?"Sos más. Ojo.":diff<=-1?"Ellos son más. Mucho más. Acá es donde se juega Plata o Mierda.":"Partido parejo. Se define en las decisiones."} ${garra>.08?"Los tuyos salieron con el cuchillo entre los dientes.":garra<-.08?"Los tuyos salieron dormidos. Se nota desde el túnel.":""}`,'sys');
   for(const c of G.carry)ev(0,c.txt,'sys');
+  revelarPizarra();
   M.pausa=true;$('#clock').classList.add('pause');
   moneda();
   correr();
@@ -903,6 +930,7 @@ function decision(a){
   }
   let s;
   if(a.id){s=SITUACIONES.find(x=>x.id===a.id)}
+  else if(a.tipo==="VAR"){ return ruedaVAR(); }
   else if(a.tipo==="LATE"){ // el arquero sube al córner: sólo al final y perdiendo
     if(!(M.gA<M.gB)||M.fuera.has("1"))return reanudar();
     s=pick(SITUACIONES.filter(x=>x.tipo==="LATE")); }
@@ -956,6 +984,34 @@ function moneda(){
     },1500);
   };
   $('#cPlata').onclick=()=>elegir("plata"); $('#cMierda').onclick=()=>elegir("mierda");
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+
+/* ============ LA RUEDA DEL VAR ============ */
+const VAR_SECT=[{t:"GOL",c:"#2e8b57"},{t:"ANULADO",c:"#7a2a2a"},{t:"PENAL",c:"#b8921e"},{t:"GOL",c:"#2e8b57"},{t:"AMARILLA",c:"#8a6a10"},{t:"ANULADO",c:"#7a2a2a"}];
+function ruedaVAR(){
+  const sh=$('#sheet');sh.style.display="block";
+  const n=VAR_SECT.length, step=360/n;
+  const grad='conic-gradient('+VAR_SECT.map((x,i)=>`${x.c} ${i*step}deg ${(i+1)*step}deg`).join(',')+')';
+  sh.innerHTML=`<div class="eyebrow">Minuto ${M.min} · la rueda del VAR</div><p class="sit">${pick(["Metiste un gol con la mano de Dios versión 2026. El árbitro va a la pantallita.","Gol tuyo, pero el línea levantó la bandera después de festejar. Lo revisan.","La metiste de cabeza y el 9 de ellos dice que hubo falta. VAR."])} Girá la rueda.</p>
+  <div class="varwrap"><div class="varptr"></div><div class="var" id="var" style="background:${grad}">${VAR_SECT.map((x,i)=>`<span style="transform:rotate(${i*step+step/2}deg) translateY(-68px)">${x.t}</span>`).join("")}</div></div>
+  <div class="linea"><button id="bGirar">Girar</button></div>`;
+  $('#bGirar').onclick=()=>{
+    $('#bGirar').disabled=true;
+    const i=Math.floor(rnd()*n); const res=VAR_SECT[i];
+    const ang=360*5+(360-(i*step+step/2)); // el puntero está arriba
+    const w=$('#var'); w.style.transition='transform 2.6s cubic-bezier(.15,.8,.2,1)'; w.style.transform=`rotate(${ang}deg)`;
+    setTimeout(()=>{
+      let txt,v;
+      if(res.t==="GOL"){M.gA++;txt="El VAR confirmó. GOL. La pantallita está de tu lado.";v="plata";ev(M.min,"<b>Rueda del VAR.</b> "+txt+` <span class="tag plata">plata</span>`,'goal')}
+      else if(res.t==="PENAL"){const g=rnd()<.75;if(g)M.gA++;txt="No fue gol, pero hubo penal antes. "+(g?"El 9 la clavó. Gol.":"El 9 la tiró a la tribuna. Increíble.");v=g?"plata":"mierda";ev(M.min,"<b>Rueda del VAR.</b> "+txt+` <span class="tag ${v}">${v}</span>`,g?'goal':'dec')}
+      else if(res.t==="AMARILLA"){M.atk*=.95;txt="Anulado, y amarilla al 9 por protestar. Doble mierda.";v="mierda";ev(M.min,"<b>Rueda del VAR.</b> "+txt+` <span class="tag mierda">mierda</span>`,'dec')}
+      else {txt="Anulado. Tres minutos mirando la pantalla para nada.";v="mierda";ev(M.min,"<b>Rueda del VAR.</b> "+txt+` <span class="tag mierda">mierda</span>`,'dec')}
+      if(v==="plata")G.plata++;else G.mierda++;
+      G.decisiones.push({ronda:RONDAS[G.ronda],min:M.min,op:"Rueda del VAR",tag:v,txt,gf:res.t==="GOL"?1:0});
+      marcador();sh.style.display="none";reanudar();
+    },2900);
+  };
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
 
