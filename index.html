@@ -692,6 +692,133 @@ const SITUACIONES = [
 {id:"et18",tipo:"ET",t:"Entretiempo: el cambio",sit:"{marcador} El arquero te pide sacar al 4: 'no me deja ver nada, se para mal'.",ops:[
  {l:"Sacás al 4",d:"El arquero sabe lo que ve.",r:[{p:.55,def:1.1,saca:"4",txt:"Sacaste al 4. El arquero vio todo. Y atajó todo."},{p:.45,def:.9,saca:"4",txt:"Sacaste al 4 y el que entró se para peor. El arquero ahora pide que lo saquen a él."}]},
  {l:"Le decís al 4 que se corra un metro",d:"Ajuste fino.",r:[{p:.6,def:1.05,txt:"Se corrió un metro. Alcanzó. El arquero dejó de quejarse."},{p:.4,gc:1,txt:"Se corrió un metro, justo para dejar pasar la pelota del gol. Increíble."}]}]},
+// ---------- TIRO LIBRE (10) ----------
+{id:"tl1",usa:["10","9"],tipo:"PT",t:"Tiro libre",sit:"Minuto {m}. Tiro libre frontal, 22 metros. Barrera de cinco.",ops:[
+ {l:"Por arriba de la barrera",d:"El clásico. Comba y a rezar.",r:[{p:.22,gf:1,txt:"Comba perfecta por arriba de la barrera. El arquero voló y aplaudió. Gol."},{p:.78,txt:"Por arriba de la barrera y también por arriba del travesaño. Un poquito de más."}]},
+ {l:"Rastrón por abajo, que salten",d:"Los de la barrera siempre saltan.",r:[{p:.3,gf:1,txt:"Saltaron todos como corderos y la pelota pasó por abajo. Gol de pillo."},{p:.7,txt:"No saltó ninguno. La pelota murió en las canillas del 4."}]}]},
+{id:"tl2",usa:["10","7"],tipo:"PT",t:"Tiro libre",sit:"Minuto {m}. Tiro libre al borde del área, escorado a la derecha.",ops:[
+ {l:"Jugada ensayada: pared corta",d:"La practicaron toda la semana.",r:[{p:.38,gf:1,txt:"Pared corta, el 7 la puso atrás y el que llegaba la reventó. Gol de pizarrón."},{p:.62,txt:"Pared corta y el árbitro cobró offside del que llegaba. Toda la semana al pedo."}]},
+ {l:"Centro al segundo palo",d:"A buscar la cabeza del 4.",r:[{p:.26,gf:1,txt:"Centro al segundo palo, cabezazo del 4 y adentro. Los centrales también son gente."},{p:.74,txt:"Centro pasado, se fue afuera sin que nadie la tocara."}]}]},
+{id:"tl3",usa:["9"],tipo:"ST",t:"Tiro libre",sit:"Minuto {m}. Falta lejana, casi en la mitad. Tu 9 pide que la tiren larga.",ops:[
+ {l:"Pelotazo al área, todos arriba",d:"Sube hasta el arquero.",r:[{p:.28,gf:1,txt:"Pelotazo, se armó un lío en el área y alguien la empujó. Gol sucio, gol al fin."},{p:.5,txt:"Pelotazo, la sacaron de cabeza. A empezar de nuevo."},{p:.22,gc:1,txt:"Pelotazo, contra, y con todos arriba te la clavaron. Gol de ellos."}]},
+ {l:"Jugarla corta y armar",d:"Sin apuro.",r:[{p:.15,gf:1,txt:"Corta, armaron, y a los diez pases llegó el gol. Fútbol."},{p:.85,atk:1.04,txt:"Corta, la tuvieron, la perdieron. Pero se acomodó el equipo."}]}]},
+{id:"tl4",usa:["10"],tipo:"ST",t:"Tiro libre",sit:"Minuto {m}. Tiro libre casi desde el córner. ¿Centro o al arco?",ops:[
+ {l:"Directo al arco, que sorprenda",d:"Nadie se lo espera desde ahí.",r:[{p:.14,gf:1,txt:"La tiró directa desde el banderín y se metió en el ángulo. Golazo insólito."},{p:.86,txt:"Directo al arco desde el banderín. El arquero la agarró sin moverse."}]},
+ {l:"Centro pasado al segundo palo",d:"Lo de siempre.",r:[{p:.24,gf:1,txt:"Centro pasado, cabezazo cruzado y gol."},{p:.76,txt:"Centro pasado, cabezazo afuera. Nada."}]}]},
+{id:"tl5",usa:["9","10"],tipo:"PT",t:"Tiro libre",sit:"Minuto {m}. Falta peligrosa. El 9 y el 10 se paran los dos sobre la pelota.",ops:[
+ {l:"Que amaguen los dos",d:"Confundir al arquero.",r:[{p:.3,gf:1,txt:"Amagó el 9, la tocó el 10 y la clavó al palo. El arquero quedó pintado."},{p:.7,txt:"Amagaron los dos, se chocaron entre ellos y la pelota quedó ahí. Papelón."}]},
+ {l:"Que patee el que tiene mejor pierna",d:"Sin espectáculo.",r:[{p:.25,gf:1,txt:"Sin vueltas, comba al palo del arquero. Gol."},{p:.75,txt:"Sin vueltas, sin gol. Barrera."}]}]},
+{id:"tl6",usa:["2"],tipo:"ST",t:"Tiro libre",sit:"Minuto {m}. Tiro libre en contra al borde del área. ¿Quién se para en la barrera?",ops:[
+ {l:"El 2, que es el más alto",d:"Muro.",r:[{p:.75,txt:"El 2 saltó y la sacó con el pecho. Se quedó sin aire pero la sacó."},{p:.25,gc:1,txt:"El 2 saltó y la pelota le pasó por abajo. Gol. Nunca hay que saltar."}]},
+ {l:"Nadie salta, todos firmes",d:"Instrucción del arquero.",r:[{p:.7,txt:"Nadie saltó. Le pegó a la barrera y rebotó a la tribuna."},{p:.3,gc:1,txt:"Nadie saltó y la puso por arriba de todos. Gol. Alguien tendría que haber saltado."}]}]},
+{id:"tl7",usa:["7"],tipo:"PT",t:"Tiro libre",sit:"Minuto {m}. El 7 quiere pegarle de tres dedos desde la izquierda.",ops:[
+ {l:"Que le pegue de tres dedos",d:"Si le sale, es cuadro.",r:[{p:.2,gf:1,txt:"De tres dedos, comba imposible, ángulo. Eso se cuelga en un museo."},{p:.8,txt:"De tres dedos y le salió un centro sin destinatario. Igual quedó lindo el intento."}]},
+ {l:"Que la ponga al área y listo",d:"Sin fantasía.",r:[{p:.22,gf:1,txt:"Centro al área, peinada y gol. Simple."},{p:.78,txt:"Centro al área, despeje. Simple y sin gol."}]}]},
+{id:"tl8",usa:["10","5"],tipo:"ST",t:"Tiro libre",sit:"Minuto {m}. Tiro libre a favor y quedan cinco minutos. Vas perdiendo por uno.",ops:[
+ {l:"Que suba todo el mundo, hasta el 1",d:"Última bala.",r:[{p:.3,gf:1,txt:"Subieron todos. Centro, rebote, y el 5 la metió con la rodilla. Delirio."},{p:.4,txt:"Subieron todos, la sacaron y no llegaron a nada. Se acaba el tiempo."},{p:.3,gc:1,txt:"Subieron todos y te la clavaron en el arco vacío. Ahora perdés por dos."}]},
+ {l:"Jugarla y buscar el centro después",d:"Con cabeza.",r:[{p:.2,gf:1,txt:"La jugaron, centro medido, cabezazo, gol. Todavía hay partido."},{p:.8,txt:"La jugaron, tocaron, tocaron, y se les fue el tiempo tocando."}]}]},
+{id:"tl9",usa:["9"],tipo:"PT",t:"Tiro libre",sit:"Minuto {m}. Le hicieron falta al 9 y quedó dolorido. Igual quiere patearla él.",ops:[
+ {l:"Que patee él, está caliente",d:"Bronca pura.",r:[{p:.3,gf:1,txt:"Le pegó con toda la bronca. Reventó la red. Se fue a festejar al que lo pegó."},{p:.7,txt:"Le pegó con toda la bronca y la mandó a la mitad de la tribuna."}]},
+ {l:"Que la patee otro y él se recupere",d:"Cabeza fría.",r:[{p:.24,gf:1,txt:"La pateó otro, con frialdad, y entró junto al palo."},{p:.76,txt:"La pateó otro. Barrera. El 9 lo miró con ganas de matarlo."}]}]},
+{id:"tl10",usa:["1"],tipo:"ARQ",t:"Sos el 1",sit:"Minuto {m}. Tiro libre peligrosísimo, 20 metros. ¿Cómo armás la barrera?",ops:[
+ {l:"Barrera al palo del arquero, cubro el otro",d:"Lo de manual.",r:[{p:.7,txt:"Barrera bien puesta. Le pegó al lado tuyo y la sacaste. De manual."},{p:.3,gc:1,txt:"Barrera bien puesta y la puso donde no llegabas ni con escalera."}]},
+ {l:"Poner un tapón acostado atrás de la barrera",d:"El truco nuevo.",r:[{p:.68,txt:"El tapón acostado tapó el rastrón. Le pegó justo ahí. Genio."},{p:.32,gc:1,txt:"El tapón acostado no sirvió para nada: la puso por arriba. Gol."}]}]},
+
+// ---------- DEFENSA (10) ----------
+{id:"df1",usa:["4","5"],tipo:"PT",t:"Atrás",sit:"Minuto {m}. El 9 de ellos se para entre tus dos centrales y pide la pelota de espaldas.",ops:[
+ {l:"Que lo agarre el 4 y no lo suelte",d:"Marca personal, cuerpo a cuerpo.",r:[{p:.65,def:1.1,txt:"El 4 no lo soltó ni para tomar agua. El 9 de ellos desapareció."},{p:.35,gc:1,txt:"Lo agarró tanto que se lo sacó de encima con un giro. Quedó solo. Gol."}]},
+ {l:"Que le den la espalda y esperen el pase",d:"Cortar el circuito.",r:[{p:.6,def:1.05,txt:"Le cortaron el pase tres veces. El 9 de ellos empezó a bajar a buscarla de bronca."},{p:.4,txt:"Le dieron la espalda, la recibió cómodo y armó. Suerte que no definió."}]}]},
+{id:"df2",usa:["3"],tipo:"ST",t:"Atrás",sit:"Minuto {m}. Contra de ellos por tu izquierda. El 3 llega justo.",ops:[
+ {l:"Que barra sin dudar",d:"Todo o nada.",r:[{p:.6,txt:"Barrida perfecta, la sacó al lateral y se levantó como si nada. Ovación."},{p:.4,rojo:true,saca:"3",def:.85,atk:.85,txt:"Barrida a destiempo. Roja. Diez jugadores."}]},
+ {l:"Que lo acompañe hasta la raya",d:"Sin arriesgar.",r:[{p:.65,txt:"Lo acompañó hasta la raya y el otro terminó tirando un centro para nadie."},{p:.35,gc:1,txt:"Lo acompañó y el otro sacó un zurdazo cruzado. Gol."}]}]},
+{id:"df3",usa:["5"],tipo:"PT",t:"Atrás",sit:"Minuto {m}. Ellos la tienen y tocan de memoria. Tu 5 pregunta si va a presionar.",ops:[
+ {l:"Que salga a apretar al que la tiene",d:"Romperles el ritmo.",r:[{p:.55,atk:1.1,txt:"Salió a apretar y les robó dos pelotas en la mitad. Se rompió el jueguito."},{p:.45,def:.9,txt:"Salió a apretar y le tiraron la pared. Quedó vendido y el equipo abierto."}]},
+ {l:"Que espere y tape el pase de gol",d:"Paciencia.",r:[{p:.7,def:1.08,txt:"Esperó, tapó el pase filtrado y los obligó a tirar de afuera. Trabajo sucio bien hecho."},{p:.3,txt:"Esperó tanto que les regaló la mitad de la cancha. Igual no la metieron."}]}]},
+{id:"df4",usa:["1","4"],tipo:"ST",t:"Atrás",sit:"Minuto {m}. Centro llovido al área chica. El arquero y el 4 van los dos.",ops:[
+ {l:"Que salga el arquero, es su área",d:"Autoridad del 1.",r:[{p:.68,txt:"Salió el arquero, gritó, la agarró con las dos manos y se la puso en el pecho."},{p:.32,gc:1,txt:"Salió el arquero, chocó con el 4 y la pelota entró sola. Gol tonto."}]},
+ {l:"Que despeje el 4 de cabeza",d:"Al bombo de la tribuna.",r:[{p:.72,txt:"El 4 la mandó a la tribuna. Feo, seguro, perfecto."},{p:.28,gc:1,txt:"El 4 la peinó para atrás y se le metió al arquero. Gol en contra."}]}]},
+{id:"df5",usa:["2","5"],tipo:"PT",t:"Atrás",sit:"Minuto {m}. Ellos meten dos contra uno por tu derecha.",ops:[
+ {l:"Que el 5 salga a cubrir",d:"Deja el medio pero tapa el hueco.",r:[{p:.6,def:1.05,txt:"El 5 salió a cubrir y entre los dos la sacaron. Bien leído."},{p:.4,txt:"El 5 salió a cubrir y le tiraron el cambio de frente. Ahora sufren por el otro lado."}]},
+ {l:"Que el 2 los aguante solo",d:"Retroceder y demorar.",r:[{p:.5,txt:"El 2 los aguantó retrocediendo hasta que llegó ayuda. Un fenómeno."},{p:.5,gc:1,txt:"El 2 no los aguantó. Pase y gol. Dos contra uno es dos contra uno."}]}]},
+{id:"df6",usa:["4"],tipo:"ST",t:"Atrás",sit:"Minuto {m}. El 9 de ellos está picando la espalda de la defensa cada vez que pueden.",ops:[
+ {l:"Adelantar la línea y dejarlo en offside",d:"Riesgo calculado.",r:[{p:.55,def:1.1,txt:"Lo dejaron en offside cinco veces seguidas. El línea ya lo mira mal a él."},{p:.45,gc:1,txt:"Una sola vez salió mal. Una sola. Gol."}]},
+ {l:"Que el 4 se quede de líbero",d:"Cubrir la espalda.",r:[{p:.7,def:1.08,atk:.95,txt:"El 4 de líbero limpió todo lo que picaba atrás. El equipo juega más atrás, pero seguro."},{p:.3,txt:"El 4 de líbero se durmió una vez, pero el arquero lo salvó."}]}]},
+{id:"df7",usa:["2","3"],tipo:"PT",t:"Atrás",sit:"Minuto {m}. Córner en contra. ¿Marca en zona o al hombre?",ops:[
+ {l:"Zona, todos en la línea del área chica",d:"Como se hace ahora.",r:[{p:.7,txt:"Zona. Salió el 4 de frente y la despejó lejos."},{p:.3,gc:1,txt:"Zona. Entró uno de atrás sin que nadie lo tomara. Gol de cabeza."}]},
+ {l:"Al hombre, cada uno con el suyo",d:"Como se hacía antes.",r:[{p:.65,txt:"Al hombre. Se agarraron de la camiseta todos y no la tocó nadie. Zafaron."},{p:.35,gc:1,txt:"Al hombre, y el 4 de ellos se le escapó al que lo marcaba. Gol."}]}]},
+{id:"df8",usa:["1"],tipo:"ARQ",t:"Sos el 1",sit:"Minuto {m}. Salen jugando desde el fondo y presionan con tres. ¿Qué hacés?",ops:[
+ {l:"Salir jugando igual, tenés huevos",d:"Confianza total.",r:[{p:.55,atk:1.08,txt:"Saliste jugando entre tres. La rompiste. Ahora atacan ellos corriendo para atrás."},{p:.45,gc:1,txt:"Saliste jugando y te la robaron en el borde del área. Gol. Culpa tuya."}]},
+ {l:"Reventarla al córner",d:"A la mierda con el estilo.",r:[{p:1,def:1.05,atk:.97,txt:"La reventaste. Córner en contra, pero por lo menos no fue gol."}]}]},
+{id:"df9",usa:["5","8"],tipo:"ST",t:"Atrás",sit:"Minuto {m}. Vas ganando por uno y ellos empujan. Faltan quince.",ops:[
+ {l:"Meter el bus: todos atrás de la pelota",d:"Cerrar con llave.",r:[{p:.75,def:1.2,atk:.75,txt:"Todos atrás de la pelota. No pasa ni el aire. Feo, pero efectivo."},{p:.25,gc:1,txt:"Todos atrás y la pelota igual entró de rebote. La mala suerte del que se mete."}]},
+ {l:"Seguir peleando la pelota en el medio",d:"No regalar la cancha.",r:[{p:.55,atk:1.05,txt:"Siguieron peleándola en el medio. Ellos nunca se acomodaron."},{p:.45,gc:1,txt:"Siguieron peleándola y en una pérdida en el medio te contragolpearon. Empate."}]}]},
+{id:"df10",usa:["4","6"],tipo:"PT",t:"Atrás",sit:"Minuto {m}. El 10 de ellos se está tirando en cada roce y el árbitro le cobra todo.",ops:[
+ {l:"Marcarlo sin tocarlo",d:"A un metro, sin contacto.",r:[{p:.7,def:1.06,txt:"Lo marcaron a un metro. No pudo tirarse. Se le acabó el cuento."},{p:.3,txt:"Lo marcaron a un metro y aprovechó el espacio para armar. Ahora juega."}]},
+ {l:"Meterle un planchazo de entrada",d:"Que sepa dónde está.",r:[{p:.45,atk:1.08,txt:"Le metieron uno de entrada. Amarilla. El 10 de ellos no volvió a pedirla."},{p:.55,rojo:true,saca:"4",def:.85,atk:.85,txt:"Le metieron uno de entrada y el árbitro sacó roja directa. Diez."}]}]},
+
+// ---------- ATAQUE (10) ----------
+{id:"at1",usa:["9","7"],tipo:"ST",t:"Adelante",sit:"Minuto {m}. Contra tuya con tres arriba y el arquero adelantado.",ops:[
+ {l:"Que la pique por arriba del arquero",d:"Elegante o ridículo.",r:[{p:.42,gf:1,txt:"La picó suavecita por arriba del arquero. Entró despacio. Obra de arte."},{p:.58,txt:"La picó y se fue por arriba del travesaño. La tribuna se agarró la cabeza."}]},
+ {l:"Que la reviente al arco",d:"Fuerza bruta.",r:[{p:.5,gf:1,txt:"La reventó. El arquero ni la vio. Gol."},{p:.5,txt:"La reventó tanto que se fue a la mitad de la tribuna. Fuerza sin puntería."}]}]},
+{id:"at2",usa:["11","9"],tipo:"PT",t:"Adelante",sit:"Minuto {m}. El 11 desbordó por la izquierda y levanta la cabeza.",ops:[
+ {l:"Centro al primer palo",d:"El 9 va a estar ahí.",r:[{p:.35,gf:1,txt:"Centro al primer palo, el 9 se anticipó al central y la peinó adentro. Gol."},{p:.65,txt:"Centro al primer palo y el central se anticipó al 9. Al córner."}]},
+ {l:"Pase atrás al que llega de segunda línea",d:"El 8 viene lanzado.",r:[{p:.32,gf:1,txt:"Pase atrás y el 8 la agarró de primera. Adentro. Golazo de segunda línea."},{p:.68,txt:"Pase atrás y el 8 la agarró mal parado. Le pegó al banderín del córner."}]}]},
+{id:"at3",usa:["10"],tipo:"ST",t:"Adelante",sit:"Minuto {m}. Tu 10 la agarró en la medialuna con espacio para pegarle.",ops:[
+ {l:"Que le pegue de primera",d:"Sin pensar.",r:[{p:.3,gf:1,txt:"Le pegó de primera al ángulo. De esos que salen una vez al año. Salió hoy."},{p:.7,txt:"Le pegó de primera y la mandó a la tribuna. Una vez al año, y no era hoy."}]},
+ {l:"Que la acomode y busque el pase",d:"Con cabeza.",r:[{p:.35,gf:1,txt:"La acomodó, esperó, y metió el pase justo para el 9. Gol servido en bandeja."},{p:.65,txt:"La acomodó tanto que le llegaron tres encima y la perdió."}]}]},
+{id:"at4",usa:["9"],tipo:"PT",t:"Adelante",sit:"Minuto {m}. Centro al área, el 9 la puede bajar de pecho o cabecear directo.",ops:[
+ {l:"Cabezazo directo al arco",d:"Frontazo.",r:[{p:.3,gf:1,txt:"Frontazo abajo, cruzado. El arquero se estiró y no llegó. Gol."},{p:.7,txt:"Frontazo al medio. El arquero la abrazó sin moverse."}]},
+ {l:"Bajarla de pecho y definir",d:"Un toque más.",r:[{p:.36,gf:1,txt:"La bajó de pecho, se acomodó y la puso abajo. Gol de crack."},{p:.64,txt:"La bajó de pecho y para cuando se acomodó ya tenía al central encima."}]}]},
+{id:"at5",usa:["7","2"],tipo:"ST",t:"Adelante",sit:"Minuto {m}. El 7 encara al lateral por afuera. El 2 sube por afuera también.",ops:[
+ {l:"Que se la deje al 2 y siga",d:"Sobrepique.",r:[{p:.4,gf:1,txt:"Sobrepique perfecto, el 2 llegó al fondo y la puso atrás. Gol."},{p:.6,txt:"Sobrepique y el 2 llegó tarde. Se fue al lateral."}]},
+ {l:"Que encare y tire el centro él",d:"Uno contra uno.",r:[{p:.34,gf:1,txt:"Lo encaró, lo pasó y metió el centro que terminó en gol."},{p:.66,txt:"Lo encaró, lo pasó, tiró el centro y no había nadie en el área. Clásico."}]}]},
+{id:"at6",usa:["8","9"],tipo:"PT",t:"Adelante",sit:"Minuto {m}. El 8 viene manejando la pelota y el 9 le pide el pase filtrado.",ops:[
+ {l:"Pase filtrado entre los centrales",d:"Si le pega justo, es gol.",r:[{p:.38,gf:1,txt:"Pase filtrado entre los dos centrales. El 9 quedó solo y la definió. Gol."},{p:.62,txt:"Pase filtrado un toque fuerte. La agarró el arquero. Casi."}]},
+ {l:"Abrirla a la banda",d:"Lo seguro.",r:[{p:.2,gf:1,txt:"La abrió, centro, cabezazo, gol. Lo seguro también entra."},{p:.8,atk:1.03,txt:"La abrió, tiraron el centro, despejaron. Pero el equipo está llegando."}]}]},
+{id:"at7",usa:["9","10"],tipo:"ST",t:"Adelante",sit:"Minuto {m}. Rebote en el área, la pelota queda muerta en la puerta del área chica.",ops:[
+ {l:"Que se tire de palomita",d:"A todo o nada.",r:[{p:.45,gf:1,txt:"Palomita. Cabezazo abajo. Gol y la cara llena de pasto."},{p:.55,txt:"Palomita y se comió el pasto. La pelota siguió de largo."}]},
+ {l:"Que la acomode con el pie",d:"Un toque más.",r:[{p:.35,gf:1,txt:"La acomodó y la empujó tranquilo. Gol."},{p:.65,txt:"La acomodó y para cuando iba a patearla ya le habían puesto el pie."}]}]},
+{id:"at8",usa:["11"],tipo:"PT",t:"Adelante",sit:"Minuto {m}. El 11 quedó mano a mano con el lateral, con toda la banda para él.",ops:[
+ {l:"Que lo encare hasta cansarlo",d:"Uno contra uno todo el partido.",r:[{p:.5,atk:1.12,txt:"Lo encaró tantas veces que el lateral pidió el cambio. Ahora entra uno peor."},{p:.5,atk:.95,txt:"Lo encaró tantas veces que el lateral le tomó el tiempo. Ya sabe para dónde va."}]},
+ {l:"Que la juegue simple y se mueva",d:"Sin gambeta.",r:[{p:.6,atk:1.05,txt:"Simple y en movimiento. Los desarmó sin gambetear a nadie."},{p:.4,txt:"Simple y sin peligro. La banda quedó desaprovechada."}]}]},
+{id:"at9",usa:["9"],tipo:"ST",t:"Adelante",sit:"Minuto {m}. Penal a favor. El 9 pide la pelota, pero erró el último que pateó.",ops:[
+ {l:"Que patee igual, hay que bancarlo",d:"Confianza.",r:[{p:.7,gf:1,txt:"Pateó y la clavó abajo, al palo. Se sacó el peso de encima. Gol."},{p:.3,txt:"Pateó y la mandó al mismo lugar que la vez pasada: afuera. La cabeza es jodida."}]},
+ {l:"Que patee otro, no está para esto",d:"Cabeza fría.",r:[{p:.75,gf:1,txt:"Pateó otro, sin historia, gol. El 9 aplaudió con cara de nada."},{p:.25,txt:"Pateó otro y la atajó el arquero. Ahora el 9 lo mira con ganas de matarlo."}]}]},
+{id:"at10",usa:["7","11"],tipo:"PT",t:"Adelante",sit:"Minuto {m}. El DT grita que cambien de banda al 7 y al 11.",ops:[
+ {l:"Que se cambien de lado",d:"A pie cambiado, para adentro.",r:[{p:.55,atk:1.15,txt:"Se cambiaron de lado. Ahora encaran para adentro y patean con la buena. Los desarmaron."},{p:.45,atk:.95,txt:"Se cambiaron de lado y quedaron los dos incómodos. Menos centros, menos todo."}]},
+ {l:"Que se queden donde están",d:"Cada uno en su banda.",r:[{p:1,txt:"Cada uno en su banda, tirando centros como toda la vida."}]}]},
+
+// ---------- ENTRETIEMPO (10 nuevas) ----------
+{id:"et19",tipo:"ET",t:"Entretiempo: la charla",sit:"{marcador} Tenés el dato de que el arquero de ellos está con la mano lastimada.",ops:[
+ {l:"Que le tiren todo al arco desde afuera",d:"A castigar la mano.",r:[{p:.6,atk:1.15,txt:"Le tiraron de todos lados. A la tercera se le escapó una y quedó de rebote."},{p:.4,atk:.95,txt:"Le tiraron de todos lados y las atajó todas con la otra mano. Era mentira el dato."}]},
+ {l:"Seguir buscando el gol como venían",d:"Sin obsesionarse.",r:[{p:1,atk:1.04,txt:"Siguieron como venían. Sin obsesión, sin cambio."}]}]},
+{id:"et20",tipo:"ET",t:"Entretiempo: el vestuario",sit:"{marcador} Dos jugadores se están gritando en el vestuario y hay que separarlos.",ops:[
+ {l:"Dejar que se saquen las ganas",d:"Que se digan todo.",r:[{p:.55,atk:1.12,def:1.05,txt:"Se dijeron de todo, se abrazaron y salieron a comerse la cancha."},{p:.45,atk:.9,def:.9,txt:"Se dijeron de todo y salieron sin mirarse. El equipo son dos equipos."}]},
+ {l:"Cortarlo en seco y hablar vos",d:"Autoridad.",r:[{p:.7,def:1.08,txt:"Cortaste en seco. Salieron callados y ordenados."},{p:.3,atk:.95,txt:"Cortaste en seco y quedó todo tapado. Van a explotar en el segundo tiempo."}]}]},
+{id:"et21",tipo:"ET",t:"Entretiempo: el análisis",sit:"{marcador} El ayudante te muestra que el lateral de ellos no vuelve nunca.",ops:[
+ {l:"Todos los ataques por esa banda",d:"Insistir ahí.",r:[{p:.65,atk:1.18,txt:"Fueron todos por ahí. El lateral de ellos terminó pidiendo el cambio a los 20."},{p:.35,atk:1.02,def:.95,txt:"Fueron todos por ahí y ellos taparon con dos. Ahora está libre el otro lado, pero nadie va."}]},
+ {l:"Repartir el juego por las dos bandas",d:"Sin cantarla.",r:[{p:1,atk:1.08,txt:"Repartieron por las dos. Menos evidente, igual de peligroso."}]}]},
+{id:"et22",tipo:"ET",t:"Entretiempo: la charla",sit:"{marcador} El 9 te dice que si no le llega una pelota más se va a la ducha.",ops:[
+ {l:"Prometerle que le van a llegar",d:"Cambiar el circuito para él.",r:[{p:.6,atk:1.12,txt:"Le llegaron tres en diez minutos. Se le fue la cara de orto y apareció el goleador."},{p:.4,atk:.92,txt:"Le prometiste y no le llegó ninguna. Ahora sí está para irse a la ducha."}]},
+ {l:"Mandarlo a correr como todos",d:"Acá nadie es más que nadie.",r:[{p:.5,def:1.1,txt:"Lo mandaste a correr. Corrió. Y de tanto correr recuperó dos pelotas."},{p:.5,atk:.9,txt:"Lo mandaste a correr y corrió sin ganas. Un 9 enojado no sirve para nada."}]}]},
+{id:"et23",tipo:"ET",t:"Entretiempo: el clima",sit:"{marcador} Empezó a llover fuerte y la cancha se va a poner pesada.",ops:[
+ {l:"Cambiar a juego directo y pelota parada",d:"Adaptarse.",r:[{p:.7,atk:1.1,def:1.05,txt:"Juego directo bajo la lluvia. Ellos siguieron intentando jugar y se ahogaron en el barro."},{p:.3,atk:.95,txt:"Juego directo y la pelota se frenaba en cada charco. Nadie llegó a nada."}]},
+ {l:"Seguir jugando igual",d:"El plan no se toca.",r:[{p:.45,atk:1.05,txt:"Siguieron igual y la pelota picaba raro, pero a favor: dos rebotes terminaron en jugada de gol."},{p:.55,atk:.9,txt:"Siguieron igual y no la pudieron manejar. La cancha estaba imposible."}]}]},
+{id:"et24",tipo:"ET",t:"Entretiempo: el cambio",sit:"{marcador} El 2 y el 3 están los dos amonestados. Podés cambiar uno solo.",ops:[
+ {l:"Sacar al 2",d:"El que más sube y más riesgo corre.",r:[{p:1,def:1.05,saca:"2",txt:"Sacaste al 2. Menos ataque por esa banda, pero uno menos para que lo echen."}]},
+ {l:"Sacar al 3",d:"El que la está pasando peor.",r:[{p:1,def:1.05,saca:"3",txt:"Sacaste al 3. El que entró está fresco y sin amarilla."}]}]},
+{id:"et25",tipo:"ET",t:"Entretiempo: la charla",sit:"{marcador} El árbitro les cobró todo en contra y el plantel está caliente con él.",ops:[
+ {l:"Usar la bronca como combustible",d:"'Que se la banquen'.",r:[{p:.6,atk:1.15,def:.95,txt:"Salieron con la bronca hasta las orejas. Se comieron la cancha."},{p:.4,rojo:true,def:.88,atk:.88,txt:"Salieron con la bronca hasta las orejas y a los cinco minutos uno se fue expulsado por protestar."}]},
+ {l:"Bajar la pelota al piso, olvidarse del árbitro",d:"Cabeza fría.",r:[{p:.75,def:1.08,atk:1.03,txt:"Se olvidaron del árbitro. Jugaron. El árbitro también se calmó."},{p:.25,txt:"Se olvidaron del árbitro pero el árbitro no se olvidó de ellos. Siguen cobrando en contra."}]}]},
+{id:"et26",tipo:"ET",t:"Entretiempo: la charla",sit:"{marcador} La hinchada visitante los está superando en cantidad de gente y ruido.",ops:[
+ {l:"Pedirles que vayan a arengar a la popular",d:"Enchufar a la gente.",r:[{p:.65,atk:1.12,txt:"Fueron a la popular a arengar. El estadio se prendió fuego. Salieron con doce."},{p:.35,txt:"Fueron a arengar y la gente les respondió con silbidos. Peor el remedio."}]},
+ {l:"Que se concentren en el partido",d:"Ignorar la tribuna.",r:[{p:1,def:1.05,txt:"Se concentraron en el partido. La tribuna es ruido, la cancha es cancha."}]}]},
+{id:"et27",tipo:"ET",t:"Entretiempo: el cuerpo técnico",sit:"{marcador} El preparador dice que el rival va a caer físicamente a los 70.",ops:[
+ {l:"Guardar energía y explotar al final",d:"Ritmo bajo hasta los 70.",r:[{p:.6,atk:.9,def:1.1,txt:"Bajaron el ritmo. A los 70 los pasaron por arriba: ellos no daban más y ustedes enteros."},{p:.4,gc:1,txt:"Bajaron el ritmo y les regalaron el partido. A los 70 ya perdían."}]},
+ {l:"Ir a matarlos ahora que están vivos",d:"Todo de una.",r:[{p:.5,atk:1.18,def:.92,txt:"Fueron a matarlos de entrada. Los agarraron desprevenidos."},{p:.5,atk:.85,txt:"Fueron a matarlos y se quedaron sin nafta antes que ellos. Al revés de todo."}]}]},
+{id:"et28",tipo:"ET",t:"Entretiempo: el pizarrón",sit:"{marcador} El ayudante propone marcar en zona el córner, el DT prefiere al hombre.",ops:[
+ {l:"Zona, como dice el ayudante",d:"Lo moderno.",r:[{p:.6,def:1.1,txt:"Zona. Salieron de frente a la pelota y despejaron los tres córners."},{p:.4,gc:1,txt:"Zona. Entró uno de atrás sin marca y la clavó de cabeza."}]},
+ {l:"Al hombre, como toda la vida",d:"Lo de antes.",r:[{p:.6,def:1.08,txt:"Al hombre. Se agarraron, se pisaron, y no la tocó ninguno de ellos."},{p:.4,gc:1,txt:"Al hombre y el que marcaba al 9 se distrajo dos segundos. Gol."}]}]},
 // ---------- ARQUERO (texto) ----------
 {id:"salircorner",usa:["1"],tipo:"ARQ",t:"Sos el 1",sit:"Minuto {m}. Córner en contra. Hay doce tipos en el área. ¿Salís a descolgar?",ops:[
  {l:"Salí con todo",tag:"plata",d:"La sacás de una o te pasan por arriba.",r:[{p:.6,txt:"Saliste, gritaste 'MÍA' y la sacaste con dos puños. El área se abrió como el Mar Rojo."},{p:.4,gc:1,txt:"Saliste y te pasaron por arriba. Gol de cabeza con el arco vacío. 'Mía', dijiste."}]},
@@ -946,16 +1073,26 @@ function renderCuadro(){
   renderBracket($('#bracket'));
   const cb=$('#carryBox');cb.innerHTML="";
   for(const c of G.carry){const d=document.createElement('div');d.className='carry';d.innerHTML='<b>Te lo bancás:</b> '+c.txt;cb.appendChild(d)}
-  const pz=$('#pizarra'); pz.innerHTML=ESQUEMAS.map((q,i)=>`<button class="btn ${i?'sec':''}" data-i="${i}">${q.n}<small>${q.d}</small></button>`).join("");
-  pz.querySelectorAll('button').forEach(b=>b.onclick=()=>{G.esquema=ESQUEMAS[+b.dataset.i];empezarPartido()});
+  // tres esquemas al azar, uno de cada estilo cuando se puede
+  const porK={presion:[],clasico:[],esperar:[]}; ESQUEMAS.forEach(e=>porK[e.k].push(e));
+  const tres=shuffle(["presion","clasico","esperar"]).map(k=>pick(porK[k]));
+  const pz=$('#pizarra'); pz.innerHTML=tres.map((q,i)=>`<button class="btn ${i?'sec':''}" data-i="${i}">${q.n}<small>${q.d}</small></button>`).join("");
+  pz.querySelectorAll('button').forEach(b=>b.onclick=()=>{G.esquema=tres[+b.dataset.i];empezarPartido()});
 }
 
 /* ============ LA PIZARRA (piedra, papel o tijera táctico) ============ */
 // presión le gana a esperar (los ahogás en su área), esperar le gana a clásico (te comen de contra), clásico le gana a presión (los pasás con dos toques)
 const ESQUEMAS=[
- {k:"presion",n:"4-3-3, presión alta",d:"A ahogarlos arriba. Si salen a esperar, los aplastás. Si juegan simple, te pasan.",atk:1.15,def:.92},
- {k:"clasico",n:"4-4-2 de toda la vida",d:"Ordenados, dos toques y arriba. Le gana a la presión, sufre contra los que esperan.",atk:1.03,def:1.03},
- {k:"esperar",n:"5-3-2, a esperar y de contra",d:"Bloque bajo y pelotazo. Le gana al 4-4-2. Contra la presión, sufrís.",atk:.9,def:1.15},
+ {k:"presion",n:"4-3-3, presión alta",d:"A ahogarlos arriba. Si salen a esperar, los aplastás.",atk:1.15,def:.92},
+ {k:"presion",n:"3-4-3, todos arriba",d:"Tres delanteros y a la carga. El que se asusta, pierde.",atk:1.22,def:.85},
+ {k:"presion",n:"3-5-2 con carrileros",d:"Los carrileros no paran de correr. Ancho y agresivo.",atk:1.12,def:.95},
+ {k:"clasico",n:"4-4-2 de toda la vida",d:"Ordenados, dos toques y arriba. Lo que jugó tu viejo.",atk:1.03,def:1.03},
+ {k:"clasico",n:"4-2-3-1 con el 10 libre",d:"Dos de contención y el 10 haciendo lo que quiere.",atk:1.08,def:1.0},
+ {k:"clasico",n:"4-4-2 rombo",d:"Sin extremos, todo por el medio. El 5 abajo, el 10 arriba.",atk:1.05,def:1.02},
+ {k:"clasico",n:"4-3-1-2 sin extremos",d:"Dos puntas juntas y los laterales que hagan la banda.",atk:1.06,def:1.0},
+ {k:"esperar",n:"5-3-2, a esperar y de contra",d:"Bloque bajo y pelotazo. Que vengan ellos.",atk:.9,def:1.15},
+ {k:"esperar",n:"4-1-4-1, un 5 solo atrás",d:"Bloque medio, líneas juntas, sin espacios.",atk:.95,def:1.12},
+ {k:"esperar",n:"5-4-1, el bunker",d:"Nueve atrás de la pelota y a aguantar. Feo pero sirve.",atk:.82,def:1.25},
 ];
 const GANA={presion:"esperar",esperar:"clasico",clasico:"presion"};
 function revelarPizarra(){
@@ -976,8 +1113,8 @@ let M=null,timer=null;
 function empezarPartido(){
   const riv=G.rivales[G.ronda];
   const diff=G.eq.s-riv.s;
-  const garra=(rnd()-.5)*.3; // el día: entre -0.15 y +0.15, no se ve, se siente
-  const p=Math.min(.82,Math.max(.18,.5+.07*diff+garra));
+  const garra=(rnd()-.5)*.28; // el día: no se ve, se siente
+  const p=Math.min(.84,Math.max(.2,.535+.07*diff+garra));
   M={riv,p,min:0,gA:0,gB:0,atk:G.perm.atk,def:G.perm.def,eventos:[],pausa:false,terminado:false,agenda:[],rojos:0,fuera:new Set(),garra};
   for(const c of G.carry){if(c.atk)M.atk*=c.atk;if(c.def)M.def*=c.def}
   // agenda de decisiones: 'saque' al min 1, N por tiempo, entretiempo al 45, tiro decisivo (arco) cerca del 88
@@ -1013,7 +1150,7 @@ function correr(){
     M.min++;
     // goles de fondo
     const perMin=CFG.goles/90;
-    const contra=M.def>1.1?1.12:1; const pa=perMin*M.p*M.atk*contra, pb=perMin*(1-M.p)/M.def;
+    const contra=M.def>1.1?1.12:1; const pa=perMin*M.p*Math.pow(M.atk,1.45)*contra, pb=perMin*(1-M.p)/Math.pow(M.def,1.45);
     if(rnd()<pa){M.gA++;SFX.play('gol');ev(M.min,M.def>1.1&&M.atk<1?pick(["Gol de contra. Tres toques y el 7 solo contra el arquero.","Gol. Te metieron atrás y saliste de contra. A la bolsa.","Gol de contra. Robo en tu área, pelotazo, y el 9 la picó."]):pick(["Gol. Centro atrás y el 9 la empujó.","Gol. Pelotazo, peinada, y el 7 definió cruzado.","Gol. Se armó sola, de esas que nadie dibuja.","Gol. Tiro de afuera, se desvió, entró.","Gol. Garra y corazón: la peleó el 9 contra dos y la metió."]),'goal')}
     else if(rnd()<pb){M.gB++;SFX.play('golcontra');ev(M.min,pick(["Gol de ellos. Te picaron la espalda.","Gol de ellos. Córner y cabezazo. Marcaba nadie.","Gol de ellos. Tiro libre al ángulo. Imposible.","Gol de ellos. Error en la salida. Regalado."]),'goal contra')}
     marcador();
