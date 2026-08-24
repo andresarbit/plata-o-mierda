@@ -1114,7 +1114,7 @@ function empezarPartido(){
   const riv=G.rivales[G.ronda];
   const diff=G.eq.s-riv.s;
   const garra=(rnd()-.5)*.28; // el día: no se ve, se siente
-  const p=Math.min(.84,Math.max(.2,.535+.07*diff+garra));
+  const p=Math.min(.86,Math.max(.22,.565+.07*diff+garra));
   M={riv,p,min:0,gA:0,gB:0,atk:G.perm.atk,def:G.perm.def,eventos:[],pausa:false,terminado:false,agenda:[],rojos:0,fuera:new Set(),garra};
   for(const c of G.carry){if(c.atk)M.atk*=c.atk;if(c.def)M.def*=c.def}
   // agenda de decisiones: 'saque' al min 1, N por tiempo, entretiempo al 45, tiro decisivo (arco) cerca del 88
