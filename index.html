@@ -486,7 +486,7 @@ const SITUACIONES = [
  {l:"El arco de la popular",tag:"mierda",d:"Elegís cancha. Nada pasa ahora; en el segundo tiempo la gente empuja.",r:[{p:1,atk:1.08,txt:"Elegiste el arco de la popular para el segundo tiempo. Todavía no se nota. Va a notarse."}]}]},
 {id:"escapa9",usa:["2", "1"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Se escapa el 9 de ellos, solo, a 30 metros del arco. Tu 2 llega de atrás.",ops:[
  {l:"Jugar limpio y confiar en el arquero",tag:"plata",d:"Mano a mano.",r:[{p:.55,txt:"Mano a mano y tu 1 se agrandó: la tapó con el pecho. La gente delira."},{p:.45,gc:1,txt:"La picó por arriba del arquero. Gol. Vos elegiste confiar."}]},
- {l:"Hacharlo de atrás",tag:"mierda",d:"Roja segura. Jugás con diez el resto del partido.",r:[{p:1,rojo:true,saca:"2",def:.85,atk:.85,txt:"Lo hachaste de atrás. Roja directa. Jugás con diez, pero el gol no fue."}]}]},
+ {l:"Hacharlo de atrás",tag:"mierda",d:"Roja segura. Jugás con diez el resto del partido.",r:[{p:1,rojo:true,saca:"2",def:.9,atk:.9,txt:"Lo hachaste de atrás. Roja directa. Jugás con diez, pero el gol no fue."}]}]},
 {id:"arquerocorner",usa:["1"],tipo:"LATE",t:"Último minuto",sit:"Minuto {m}. Vas perdiendo. Córner a favor. Tu arquero levanta la mano: quiere subir.",ops:[
  {l:"Que suba",tag:"plata",d:"Si la empalma de cabeza, es historia. Si la pierden, es un arco vacío.",r:[{p:.2,gf:1,txt:"¡GOL DEL ARQUERO! De cabeza, al ángulo. Esto lo contás toda la vida."},{p:.55,txt:"Subió, la cabeceó afuera, volvió corriendo como loco. Susto y nada más."},{p:.25,gc:1,txt:"La despejaron, contra de 70 metros, arco vacío. Gol. Vos dejaste que subiera."}]},
  {l:"Que se quede",tag:"mierda",d:"Córner normal.",r:[{p:.12,gf:1,txt:"Centro al primer palo, peinada, y el 2 la empujó. Gol de córner como la gente."},{p:.88,txt:"Córner, despeje, y a seguir. Nada."}]}]},
@@ -494,7 +494,7 @@ const SITUACIONES = [
  {l:"Que encare",tag:"plata",d:"Se los come o te contraatacan.",r:[{p:.35,gf:1,txt:"Se comió a los tres, enganchó y la puso contra el palo. Golazo. El 10 es el 10."},{p:.35,txt:"Encaró, lo frenaron con falta. Tiro libre, nada. Pero la gente lo aplaudió."},{p:.3,gc:1,txt:"Se la robaron a la salida, contra en tres toques, gol. El 10 se agarró la cabeza."}]},
  {l:"Pelotazo a dividir",tag:"mierda",d:"No pasa nada. Literalmente nada.",r:[{p:1,txt:"Pelotazo a dividir. La gente silba. El partido sigue igual."}]}]},
 {id:"cinco",usa:["5"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Tu 5 ya tiene amarilla y el 8 de ellos lo encara otra vez.",ops:[
- {l:"Que vaya al piso",tag:"plata",d:"La recupera o se va.",r:[{p:.5,txt:"Fue al piso, limpio, y salió jugando. El 5 es un animal."},{p:.5,rojo:true,saca:"5",def:.85,atk:.85,txt:"Segunda amarilla. Se va el 5 puteando al línea. Diez jugadores."}]},
+ {l:"Que vaya al piso",tag:"plata",d:"La recupera o se va.",r:[{p:.5,txt:"Fue al piso, limpio, y salió jugando. El 5 es un animal."},{p:.5,rojo:true,saca:"5",def:.9,atk:.9,txt:"Segunda amarilla. Se va el 5 puteando al línea. Diez jugadores."}]},
  {l:"Que acompañe",tag:"mierda",d:"Lo pasan y tiran al arco.",r:[{p:.7,txt:"Lo pasó, tiró, y tu 1 la sacó al córner. Zafaste."},{p:.3,gc:1,txt:"Lo pasó como a un cono y la clavó. Gol. El 5 miraba."}]}]},
 {id:"var",usa:[],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Penal dudoso a favor. El árbitro va al VAR. Tu capitán puede ir a 'charlar'.",ops:[
  {l:"Que lo apriete",tag:"plata",d:"Convencerlo o calentarlo.",r:[{p:.5,gf:1,txt:"Lo apretó, el árbitro confirmó, y el 9 la puso abajo. Gol."},{p:.3,txt:"Lo apretó de más. Lo anuló. 'Era gol', dice el capitán. No era."},{p:.2,txt:"Amarilla al capitán por hablar y el penal anulado. Doble mierda."}]},
@@ -503,7 +503,7 @@ const SITUACIONES = [
  {l:"El 9, que está caliente",tag:"plata",d:"Más potencia, menos puntería.",r:[{p:.28,gf:1,txt:"Le pegó con el alma. Ángulo. El 9 se sacó la camiseta: amarilla y no le importó."},{p:.72,txt:"Le pegó con el alma. Tribuna. El 10 lo mira."}]},
  {l:"El 10, que es el que sabe",tag:"mierda",d:"Lo de siempre.",r:[{p:.2,gf:1,txt:"Por arriba de la barrera, colocada. Gol del que sabe."},{p:.8,txt:"Barrera. Rebote. Nada."}]}]},
 {id:"patada",usa:["2"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. El 4 de ellos te pegó una patada en la primera jugada. Tu 2 te mira.",ops:[
- {l:"Devolvésela",tag:"plata",d:"El equipo se enciende o el 2 se va.",r:[{p:.6,atk:1.15,txt:"Se la devolvió con todo. Amarilla. El equipo entendió el mensaje: ahora se juega."},{p:.4,rojo:true,saca:"2",def:.85,atk:.85,txt:"Se la devolvió con todo. Roja. Diez jugadores y el 4 de ellos riéndose."}]},
+ {l:"Devolvésela",tag:"plata",d:"El equipo se enciende o el 2 se va.",r:[{p:.6,atk:1.15,txt:"Se la devolvió con todo. Amarilla. El equipo entendió el mensaje: ahora se juega."},{p:.4,rojo:true,saca:"2",def:.9,atk:.9,txt:"Se la devolvió con todo. Roja. Diez jugadores y el 4 de ellos riéndose."}]},
  {l:"Tragarse el sapo",tag:"mierda",d:"Nada cambia. El 4 sigue pegando.",r:[{p:1,def:.95,txt:"Se tragó el sapo. El 4 de ellos sigue pegando. Tus delanteros juegan con miedo."}]}]},
 {id:"salida",usa:["1", "2"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Tu arquero la tiene en la mano. Presionan arriba.",ops:[
  {l:"Salida corta con el 2",tag:"plata",d:"Si sale, jugada de gol. Si no, te la roban en tu área.",r:[{p:.35,gf:1,txt:"Salió corta, tres pases, y te encontraron mal parados a ellos. Gol de pizarrón."},{p:.4,txt:"Salió corta, la tuvieron, la perdieron. Nada."},{p:.25,gc:1,txt:"Te la robaron en tu área. Gol. El 2 no levantó la cabeza por un rato."}]},
@@ -515,14 +515,14 @@ const SITUACIONES = [
  {l:"Línea alta, achicamos todos",tag:"plata",d:"Los dejás en offside o te pican la espalda.",r:[{p:.5,atk:1.12,txt:"Los dejaste en offside cuatro veces. Ellos se desesperan y vos recuperás arriba."},{p:.5,gc:1,txt:"Te picaron la espalda una vez. Una sola. Gol."}]},
  {l:"Nos quedamos atrás, que vengan",tag:"mierda",d:"Defendés en tu área.",r:[{p:.8,def:1.08,atk:.92,txt:"Bloque bajo. Todos atrás. Aburrido, pero el arco está cerrado."},{p:.2,gc:1,txt:"Tanto centro, tanto centro, que uno entró. Gol de cabeza."}]}]},
 {id:"golanulado",usa:[],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Te anularon un gol por un offside de medio hombro. Tus jugadores rodean al árbitro.",ops:[
- {l:"Que lo rodeen y lo griten",tag:"plata",d:"Presión al juez. Quizás te cobre el próximo.",r:[{p:.5,atk:1.1,txt:"Lo gritaron todos. El árbitro quedó tocado: el próximo dudoso es tuyo."},{p:.5,rojo:true,def:.88,atk:.88,txt:"Lo gritaron todos y uno lo tocó. Roja. Vos los mandaste."}]},
+ {l:"Que lo rodeen y lo griten",tag:"plata",d:"Presión al juez. Quizás te cobre el próximo.",r:[{p:.5,atk:1.1,txt:"Lo gritaron todos. El árbitro quedó tocado: el próximo dudoso es tuyo."},{p:.5,rojo:true,def:.92,atk:.92,txt:"Lo gritaron todos y uno lo tocó. Roja. Vos los mandaste."}]},
  {l:"Que se calmen y sigan",tag:"mierda",d:"Nada cambia.",r:[{p:1,txt:"Se calmaron. El partido sigue. Ese gol no lo devuelve nadie."}]}]},
 // ---------- SEGUNDO TIEMPO ----------
 {id:"manoamano",usa:["9", "7"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Tu 9 quedó mano a mano. Tiene al 7 al lado, solo.",ops:[
  {l:"Que defina él",tag:"plata",d:"Gol o papelón.",r:[{p:.5,gf:1,txt:"Definió cruzada, abajo. Gol. El 7 ni se enojó."},{p:.5,txt:"La tiró afuera con el arco vacío. El 7 lo mira. Vos también."}]},
  {l:"Que se la dé al 7",tag:"mierda",d:"Pase seguro, arco vacío. Casi.",r:[{p:.7,gf:1,txt:"Se la dio al 7, que la empujó. Gol de los que no se festejan mucho. Pero vale."},{p:.3,txt:"Se la dio al 7 y el 7 se la comió. Increíble."}]}]},
 {id:"contra",usa:["5", "2"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Contra de ellos, tres contra dos. Tu 5 puede cortarla con la mano.",ops:[
- {l:"Mano y a bancársela",tag:"mierda",d:"Roja, tiro libre. Pero la contra no fue.",r:[{p:1,rojo:true,saca:"5",def:.85,atk:.85,txt:"Mano. Roja. Tiro libre que pegó en la barrera. Diez jugadores, gol salvado."}]},
+ {l:"Mano y a bancársela",tag:"mierda",d:"Roja, tiro libre. Pero la contra no fue.",r:[{p:1,rojo:true,saca:"5",def:.9,atk:.9,txt:"Mano. Roja. Tiro libre que pegó en la barrera. Diez jugadores, gol salvado."}]},
  {l:"Que corran y confiar",tag:"plata",d:"O la sacan o entra.",r:[{p:.45,txt:"Tres contra dos, pero el 2 leyó el pase y la sacó. Aplausos."},{p:.55,gc:1,txt:"Tres contra dos. Pase, gol. Tal cual lo viste venir."}]}]},
 {id:"tiempo",usa:["1"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Vas ganando. Tu arquero quiere hacer tiempo en cada saque.",ops:[
  {l:"Que haga tiempo",tag:"mierda",d:"Amarilla segura, reloj a tu favor.",r:[{p:.75,def:1.12,atk:.85,txt:"Hizo tiempo, amarilla, silbidos. Pero el reloj es tuyo."},{p:.25,gc:1,txt:"Tanto hacer tiempo que el equipo se durmió. Gol de ellos. Se despertaron tarde."}]},
@@ -576,7 +576,7 @@ const SITUACIONES = [
  {l:"Que el 7 aguante",d:"Cansado, pero sabe.",r:[{p:.5,atk:1.05,txt:"Aguantó. Caminando, pero con una pelota filtrada dejó solo al 9."},{p:.5,atk:.9,txt:"No aguantó. Se quedó parado y te atacaron por su banda todo el segundo tiempo."}]}]},
 {id:"c5",usa:["5","8"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. El 5 tiene amarilla y cada pelota dividida es un susto. El 8 espera en el banco.",ops:[
  {l:"Sacás al 5, entra el 8",d:"Perdés marca, ganás pelota.",r:[{p:.6,atk:1.1,def:.92,saca:"5",txt:"Entró el 8 y el equipo empezó a tener la pelota. Atrás, un poquito más abierto."},{p:.4,def:.85,saca:"5",txt:"Entró el 8 y nadie recupera. El medio es una autopista."}]},
- {l:"Que el 5 se cuide",d:"Un tipo con amarilla marcando de lejos.",r:[{p:.6,def:.95,txt:"Se cuidó. Marcó de lejos. Entraron dos pelotas que antes no entraban."},{p:.4,rojo:true,saca:"5",def:.85,atk:.85,txt:"No se cuidó. Segunda amarilla. Se va."}]}]},
+ {l:"Que el 5 se cuide",d:"Un tipo con amarilla marcando de lejos.",r:[{p:.6,def:.95,txt:"Se cuidó. Marcó de lejos. Entraron dos pelotas que antes no entraban."},{p:.4,rojo:true,saca:"5",def:.9,atk:.9,txt:"No se cuidó. Segunda amarilla. Se va."}]}]},
 {id:"c3",usa:["3","4"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. El 3 la está pasando mal con el 7 de ellos. Tenés al 4 en el banco, que es central.",ops:[
  {l:"Sacás al 3, el 4 de lateral",d:"Un central de lateral: marca, no pasa.",r:[{p:.7,def:1.12,atk:.95,saca:"3",txt:"El 4 de lateral. No pasó más nadie por ahí. Tampoco vos."},{p:.3,def:.9,saca:"3",txt:"El 4 de lateral. Lento. Lo pasaron igual, pero ahora de a dos."}]},
  {l:"Lo bancás, le mandás ayuda",d:"El 11 baja a ayudar.",r:[{p:.6,def:1.05,atk:.92,txt:"El 11 bajó a ayudar. Se cerró la banda, pero perdiste al 11 arriba."},{p:.4,gc:1,txt:"El 11 bajó, no llegó, y el 7 de ellos metió el centro del gol."}]}]},
@@ -594,7 +594,7 @@ const SITUACIONES = [
  {l:"Seguís igual, a buscar el segundo",d:"El que no ataca, sufre.",r:[{p:.45,atk:1.1,txt:"Seguiste igual. Te quedó espacio para la contra: dos mano a mano."},{p:.55,def:.92,txt:"Seguiste igual y ellos se adelantaron. Ahora vivís en tu área."}]}]},
 {id:"c11",usa:["11"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. El 11 se peleó con el DT en la línea. Quiere salir él mismo.",ops:[
  {l:"Lo sacás y que no vuelva",d:"Nadie es más grande que el equipo.",r:[{p:.55,atk:1.05,def:1.05,saca:"11",txt:"Lo sacaste. El equipo lo entendió: acá manda el DT. Salieron más juntos."},{p:.45,atk:.9,saca:"11",txt:"Lo sacaste y perdiste al único que desbordaba. El DT tenía razón. Igual perdiste eso."}]},
- {l:"Lo calmás y sigue",d:"Tragarse el orgullo.",r:[{p:.5,atk:1.1,txt:"Siguió, caliente. Y caliente juega mejor: dos centros de gol."},{p:.5,rojo:true,saca:"11",atk:.88,def:.88,txt:"Siguió caliente y a los cinco minutos le pegó a uno. Roja."}]}]},
+ {l:"Lo calmás y sigue",d:"Tragarse el orgullo.",r:[{p:.5,atk:1.1,txt:"Siguió, caliente. Y caliente juega mejor: dos centros de gol."},{p:.5,rojo:true,saca:"11",atk:.92,def:.92,txt:"Siguió caliente y a los cinco minutos le pegó a uno. Roja."}]}]},
 {id:"c4",cat:"lesion",usa:["4"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. El 4 pide el cambio con la mano en el muslo. El médico dice que puede seguir.",ops:[
  {l:"Lo sacás igual",d:"No vale la pena arriesgarlo.",r:[{p:1,def:.94,saca:"4",txt:"Lo sacaste. Entró el pibe de la reserva atrás. Se lo ve chiquito al lado del 9 de ellos."}]},
  {l:"Que siga, que el médico sabe",d:"Si dice que puede, puede.",r:[{p:.6,txt:"Siguió. Rengueando, pero ganó todas por arriba."},{p:.4,def:.82,saca:"4",txt:"Siguió diez minutos y se rompió. Ahora jugás con diez hasta que entre el cambio. El médico no sabía."}]}]},
@@ -645,7 +645,7 @@ const SITUACIONES = [
  {l:"Que suba",d:"Cabezazo asegurado.",r:[{p:.3,gf:1,txt:"Subió el 6 y la clavó de cabeza. Gol del central."},{p:.5,txt:"Subió, cabeceó afuera, volvió corriendo. Nada."},{p:.2,gc:1,txt:"Subió, la sacaron, contra, y el fondo era un desierto. Gol."}]},
  {l:"Que se quede atrás",d:"Seguridad.",r:[{p:.1,gf:1,txt:"Se quedó, y sin él igual alguien la peinó. Gol."},{p:.9,txt:"Se quedó. Córner, despeje, nada."}]}]},
 {id:"n15",usa:["8"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. El 8 de ellos te está pegando a todos. Tu 8 quiere 'hablarle'.",ops:[
- {l:"Que le hable",d:"Cara a cara.",r:[{p:.6,atk:1.05,def:1.05,txt:"Le habló. El otro se calmó. Se juega al fútbol de nuevo."},{p:.4,rojo:true,saca:"8",atk:.88,def:.88,txt:"Le habló, se empujaron, el árbitro vio al tuyo. Roja."}]},
+ {l:"Que le hable",d:"Cara a cara.",r:[{p:.6,atk:1.05,def:1.05,txt:"Le habló. El otro se calmó. Se juega al fútbol de nuevo."},{p:.4,rojo:true,saca:"8",atk:.92,def:.92,txt:"Le habló, se empujaron, el árbitro vio al tuyo. Roja."}]},
  {l:"Que siga jugando",d:"Aguantar las patadas.",r:[{p:.7,txt:"Aguantó las patadas. Moretones, pero once en la cancha."},{p:.3,atk:.92,txt:"Aguantó hasta que le dolió. Ahora juega con miedo."}]}]},
 {id:"n16",usa:["11"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Tu 11 quedó solo contra el arquero, pero el línea levantó la bandera. No sabés si es offside.",ops:[
  {l:"Que siga y defina",d:"Hasta que pite, se juega.",r:[{p:.45,gf:1,txt:"Siguió, definió, y el VAR dijo que estaba habilitado. Gol."},{p:.55,txt:"Siguió, definió, y estaba offside por un pie. Se anuló."}]},
@@ -658,7 +658,7 @@ const SITUACIONES = [
  {l:"Barrera de tres, marcar el rebote",d:"Confianza en el arquero.",r:[{p:.65,txt:"Tres en la barrera. Tiró, el arquero la sacó, y el rebote lo ganó tu 5."},{p:.35,gc:1,txt:"Tres en la barrera. Tiró al hueco. Gol."}]}]},
 {id:"n19",usa:["9"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Tu 9 tiene amarilla y el central rival lo provoca: le dice cosas de la madre.",ops:[
  {l:"Que le responda con un gol",d:"El mejor insulto.",r:[{p:.4,gf:1,txt:"No dijo nada. A los 3 minutos metió el gol y fue a festejárselo en la cara. Amarilla por eso, pero gol."},{p:.6,txt:"No dijo nada y no metió el gol. Se fue callado."}]},
- {l:"Que le responda ahora",d:"Cara a cara.",r:[{p:.5,atk:1.05,txt:"Le respondió. El central se calló. Y ahora te tiene miedo."},{p:.5,rojo:true,saca:"9",atk:.85,def:.88,txt:"Le respondió con la frente. Segunda amarilla. Se va el 9."}]}]},
+ {l:"Que le responda ahora",d:"Cara a cara.",r:[{p:.5,atk:1.05,txt:"Le respondió. El central se calló. Y ahora te tiene miedo."},{p:.5,rojo:true,saca:"9",atk:.9,def:.92,txt:"Le respondió con la frente. Segunda amarilla. Se va el 9."}]}]},
 {id:"n20",usa:["1"],tipo:"ARQ",t:"Sos el 1",sit:"Minuto {m}. Córner en contra, pelota al segundo palo, vos estás en el primero.",ops:[
  {l:"Volar al segundo palo",d:"A todo o nada.",r:[{p:.5,txt:"Volaste y la sacaste con la punta de los dedos. Foto de tapa."},{p:.5,gc:1,txt:"Volaste y no llegaste. Gol. Igual la foto queda linda."}]},
  {l:"Quedarte y confiar en la marca",d:"Que el 6 la saque.",r:[{p:.65,txt:"Te quedaste. El 6 la sacó de cabeza. Gracias, 6."},{p:.35,gc:1,txt:"Te quedaste. El 6 se durmió. Gol."}]}]},
@@ -729,7 +729,7 @@ const SITUACIONES = [
  {l:"Que lo agarre el 4 y no lo suelte",d:"Marca personal, cuerpo a cuerpo.",r:[{p:.65,def:1.1,txt:"El 4 no lo soltó ni para tomar agua. El 9 de ellos desapareció."},{p:.35,gc:1,txt:"Lo agarró tanto que se lo sacó de encima con un giro. Quedó solo. Gol."}]},
  {l:"Que le den la espalda y esperen el pase",d:"Cortar el circuito.",r:[{p:.6,def:1.05,txt:"Le cortaron el pase tres veces. El 9 de ellos empezó a bajar a buscarla de bronca."},{p:.4,txt:"Le dieron la espalda, la recibió cómodo y armó. Suerte que no definió."}]}]},
 {id:"df2",usa:["3"],tipo:"ST",t:"Atrás",sit:"Minuto {m}. Contra de ellos por tu izquierda. El 3 llega justo.",ops:[
- {l:"Que barra sin dudar",d:"Todo o nada.",r:[{p:.6,txt:"Barrida perfecta, la sacó al lateral y se levantó como si nada. Ovación."},{p:.4,rojo:true,saca:"3",def:.85,atk:.85,txt:"Barrida a destiempo. Roja. Diez jugadores."}]},
+ {l:"Que barra sin dudar",d:"Todo o nada.",r:[{p:.6,txt:"Barrida perfecta, la sacó al lateral y se levantó como si nada. Ovación."},{p:.4,rojo:true,saca:"3",def:.9,atk:.9,txt:"Barrida a destiempo. Roja. Diez jugadores."}]},
  {l:"Que lo acompañe hasta la raya",d:"Sin arriesgar.",r:[{p:.65,txt:"Lo acompañó hasta la raya y el otro terminó tirando un centro para nadie."},{p:.35,gc:1,txt:"Lo acompañó y el otro sacó un zurdazo cruzado. Gol."}]}]},
 {id:"df3",usa:["5"],tipo:"PT",t:"Atrás",sit:"Minuto {m}. Ellos la tienen y tocan de memoria. Tu 5 pregunta si va a presionar.",ops:[
  {l:"Que salga a apretar al que la tiene",d:"Romperles el ritmo.",r:[{p:.55,atk:1.1,txt:"Salió a apretar y les robó dos pelotas en la mitad. Se rompió el jueguito."},{p:.45,def:.9,txt:"Salió a apretar y le tiraron la pared. Quedó vendido y el equipo abierto."}]},
@@ -754,7 +754,7 @@ const SITUACIONES = [
  {l:"Seguir peleando la pelota en el medio",d:"No regalar la cancha.",r:[{p:.55,atk:1.05,txt:"Siguieron peleándola en el medio. Ellos nunca se acomodaron."},{p:.45,gc:1,txt:"Siguieron peleándola y en una pérdida en el medio te contragolpearon. Empate."}]}]},
 {id:"df10",usa:["4","6"],tipo:"PT",t:"Atrás",sit:"Minuto {m}. El 10 de ellos se está tirando en cada roce y el árbitro le cobra todo.",ops:[
  {l:"Marcarlo sin tocarlo",d:"A un metro, sin contacto.",r:[{p:.7,def:1.06,txt:"Lo marcaron a un metro. No pudo tirarse. Se le acabó el cuento."},{p:.3,txt:"Lo marcaron a un metro y aprovechó el espacio para armar. Ahora juega."}]},
- {l:"Meterle un planchazo de entrada",d:"Que sepa dónde está.",r:[{p:.45,atk:1.08,txt:"Le metieron uno de entrada. Amarilla. El 10 de ellos no volvió a pedirla."},{p:.55,rojo:true,saca:"4",def:.85,atk:.85,txt:"Le metieron uno de entrada y el árbitro sacó roja directa. Diez."}]}]},
+ {l:"Meterle un planchazo de entrada",d:"Que sepa dónde está.",r:[{p:.45,atk:1.08,txt:"Le metieron uno de entrada. Amarilla. El 10 de ellos no volvió a pedirla."},{p:.55,rojo:true,saca:"4",def:.9,atk:.9,txt:"Le metieron uno de entrada y el árbitro sacó roja directa. Diez."}]}]},
 
 // ---------- ATAQUE (10) ----------
 {id:"at1",usa:["9","7"],tipo:"ST",t:"Adelante",sit:"Minuto {m}. Contra tuya con tres arriba y el arquero adelantado.",ops:[
@@ -808,7 +808,7 @@ const SITUACIONES = [
  {l:"Sacar al 2",d:"El que más sube y más riesgo corre.",r:[{p:1,def:1.05,saca:"2",txt:"Sacaste al 2. Menos ataque por esa banda, pero uno menos para que lo echen."}]},
  {l:"Sacar al 3",d:"El que la está pasando peor.",r:[{p:1,def:1.05,saca:"3",txt:"Sacaste al 3. El que entró está fresco y sin amarilla."}]}]},
 {id:"et25",tipo:"ET",t:"Entretiempo: la charla",sit:"{marcador} El árbitro les cobró todo en contra y el plantel está caliente con él.",ops:[
- {l:"Usar la bronca como combustible",d:"'Que se la banquen'.",r:[{p:.6,atk:1.15,def:.95,txt:"Salieron con la bronca hasta las orejas. Se comieron la cancha."},{p:.4,rojo:true,def:.88,atk:.88,txt:"Salieron con la bronca hasta las orejas y a los cinco minutos uno se fue expulsado por protestar."}]},
+ {l:"Usar la bronca como combustible",d:"'Que se la banquen'.",r:[{p:.6,atk:1.15,def:.95,txt:"Salieron con la bronca hasta las orejas. Se comieron la cancha."},{p:.4,rojo:true,def:.92,atk:.92,txt:"Salieron con la bronca hasta las orejas y a los cinco minutos uno se fue expulsado por protestar."}]},
  {l:"Bajar la pelota al piso, olvidarse del árbitro",d:"Cabeza fría.",r:[{p:.75,def:1.08,atk:1.03,txt:"Se olvidaron del árbitro. Jugaron. El árbitro también se calmó."},{p:.25,txt:"Se olvidaron del árbitro pero el árbitro no se olvidó de ellos. Siguen cobrando en contra."}]}]},
 {id:"et26",tipo:"ET",t:"Entretiempo: la charla",sit:"{marcador} La hinchada visitante los está superando en cantidad de gente y ruido.",ops:[
  {l:"Pedirles que vayan a arengar a la popular",d:"Enchufar a la gente.",r:[{p:.65,atk:1.12,txt:"Fueron a la popular a arengar. El estadio se prendió fuego. Salieron con doce."},{p:.35,txt:"Fueron a arengar y la gente les respondió con silbidos. Peor el remedio."}]},
@@ -1114,7 +1114,7 @@ function empezarPartido(){
   const riv=G.rivales[G.ronda];
   const diff=G.eq.s-riv.s;
   const garra=(rnd()-.5)*.28; // el día: no se ve, se siente
-  const p=Math.min(.86,Math.max(.22,.565+.07*diff+garra));
+  const p=Math.min(.88,Math.max(.24,.63+.07*diff+garra));
   M={riv,p,min:0,gA:0,gB:0,atk:G.perm.atk,def:G.perm.def,eventos:[],pausa:false,terminado:false,agenda:[],rojos:0,fuera:new Set(),garra};
   for(const c of G.carry){if(c.atk)M.atk*=c.atk;if(c.def)M.def*=c.def}
   // agenda de decisiones: 'saque' al min 1, N por tiempo, entretiempo al 45, tiro decisivo (arco) cerca del 88
@@ -1150,7 +1150,9 @@ function correr(){
     M.min++;
     // goles de fondo
     const perMin=CFG.goles/90;
-    const contra=M.def>1.1?1.12:1; const pa=perMin*M.p*Math.pow(M.atk,1.45)*contra, pb=perMin*(1-M.p)/Math.pow(M.def,1.45);
+    const contra=M.def>1.1?1.12:1;
+    const A=Math.max(.82,M.atk), D=Math.max(.82,M.def);
+    const pa=perMin*M.p*Math.pow(A,A>=1?1.5:.7)*contra, pb=perMin*(1-M.p)/Math.pow(D,D>=1?1.5:.7);
     if(rnd()<pa){M.gA++;SFX.play('gol');ev(M.min,M.def>1.1&&M.atk<1?pick(["Gol de contra. Tres toques y el 7 solo contra el arquero.","Gol. Te metieron atrás y saliste de contra. A la bolsa.","Gol de contra. Robo en tu área, pelotazo, y el 9 la picó."]):pick(["Gol. Centro atrás y el 9 la empujó.","Gol. Pelotazo, peinada, y el 7 definió cruzado.","Gol. Se armó sola, de esas que nadie dibuja.","Gol. Tiro de afuera, se desvió, entró.","Gol. Garra y corazón: la peleó el 9 contra dos y la metió."]),'goal')}
     else if(rnd()<pb){M.gB++;SFX.play('golcontra');ev(M.min,pick(["Gol de ellos. Te picaron la espalda.","Gol de ellos. Córner y cabezazo. Marcaba nadie.","Gol de ellos. Tiro libre al ángulo. Imposible.","Gol de ellos. Error en la salida. Regalado."]),'goal contra')}
     marcador();
