@@ -159,11 +159,15 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .coin.sale-plata .face.plata{display:flex}.coin.sale-plata .face.mierda{display:none}
 .coin.sale-mierda .face.plata{display:none}.coin.sale-mierda .face.mierda{display:flex}
 @media (prefers-reduced-motion:reduce){.coin.girando{animation:none}}
+/* fotos de ambiente */
+.foto{width:100%;border-radius:8px;margin:8px 0 10px;background:#0b0f0c center/cover no-repeat;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.foto.cancha{aspect-ratio:720/300;background-image:url(img/pizarra-cancha.jpg);background-position:center 55%}
+.foto.vestuario{aspect-ratio:720/260;background-image:url(img/vestuario-charla.jpg);background-position:center 45%}
+.foto.sala{aspect-ratio:720/170;background-image:url(img/var-sala.jpg)}
 /* rueda del VAR */
-.varwrap{position:relative;width:200px;height:200px;margin:14px auto 6px}
-.var{width:100%;height:100%;border-radius:50%;position:relative;box-shadow:0 0 0 4px #eee,0 6px 18px rgba(0,0,0,.5);overflow:hidden}
-.var span{position:absolute;left:50%;top:50%;width:90px;margin-left:-45px;margin-top:-8px;text-align:center;font-family:"Anton",sans-serif;font-size:12px;letter-spacing:.1em;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.7);transform-origin:center center}
-.varptr{position:absolute;left:50%;top:-8px;margin-left:-10px;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:18px solid #fff;z-index:2;filter:drop-shadow(0 2px 2px rgba(0,0,0,.6))}
+.varwrap{position:relative;width:min(268px,74vw);aspect-ratio:1;margin:10px auto 6px}
+.var{width:100%;height:100%;border-radius:50%;background:url(img/var-rueda.png) center/contain no-repeat;filter:drop-shadow(0 10px 22px rgba(0,0,0,.65))}
+.varptr{position:absolute;left:50%;top:-13px;margin-left:-13px;width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:26px solid #f0c64a;z-index:2;filter:drop-shadow(0 3px 3px rgba(0,0,0,.7))}
 /* arco */
 .arcoFoto{position:relative;margin:10px 0 6px;border-radius:8px;overflow:hidden;background:#000 center/cover no-repeat;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 .arcoFoto.arco-patear{background-image:url(img/arco-patear.jpg);aspect-ratio:720/310}
@@ -253,6 +257,7 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
   <div id="carryBox"></div>
   <div class="eyebrow" style="margin-top:18px">La pizarra · ¿cómo salís?</div>
   <p class="kicker" style="color:var(--ink2);font-size:14px;margin:4px 0 2px">No sabés cómo van a salir ellos. Elegí y a la cancha.</p>
+  <div class="foto cancha"></div>
   <div id="pizarra"></div>
   <button class="btn" id="bJugar" style="display:none">Salir a la cancha</button>
 </section>
@@ -1184,7 +1189,8 @@ function decision(a){
   const marc=M.gA>M.gB?`Vas ganando ${M.gA}-${M.gB}.`:M.gA<M.gB?`Vas perdiendo ${M.gA}-${M.gB}.`:`Empate ${M.gA}-${M.gB}.`;
   const sit=s.sit.replace("{m}",M.min).replace("{marcador}",marc);
   const sh=$('#sheet');sh.style.display="block";
-  sh.innerHTML=`<div class="eyebrow">${s.t}</div><p class="sit">${sit}</p>`+s.ops.map((o,i)=>`<button class="btn ${i?'sec':''}" data-i="${i}">${o.l}<small>${o.d}</small></button>`).join("");
+  const amb=s.tipo==="ET"?'<div class="foto vestuario"></div>':"";
+  sh.innerHTML=`<div class="eyebrow">${s.t}</div><p class="sit">${sit}</p>${amb}`+s.ops.map((o,i)=>`<button class="btn ${i?'sec':''}" data-i="${i}">${o.l}<small>${o.d}</small></button>`).join("");
   sh.querySelectorAll('button').forEach(b=>b.onclick=()=>{
     const o=s.ops[+b.dataset.i];const r=weighted(o.r);
     const v=valor(r); if(v==="plata")G.plata++;else if(v==="mierda")G.mierda++;
@@ -1232,28 +1238,33 @@ function moneda(){
 }
 
 /* ============ LA RUEDA DEL VAR ============ */
-const VAR_SECT=[{t:"GOL",c:"#2e8b57"},{t:"ANULADO",c:"#7a2a2a"},{t:"PENAL",c:"#b8921e"},{t:"GOL",c:"#2e8b57"},{t:"AMARILLA",c:"#8a6a10"},{t:"ANULADO",c:"#7a2a2a"}];
+const VAR_SECT=["GOL","NO ES GOL","PENAL","NO ES PENAL","AMARILLA","ROJA"];  // orden horario de la foto, GOL arriba
 function ruedaVAR(){
   const sh=$('#sheet');sh.style.display="block";
   const n=VAR_SECT.length, step=360/n;
-  const grad='conic-gradient('+VAR_SECT.map((x,i)=>`${x.c} ${i*step}deg ${(i+1)*step}deg`).join(',')+')';
-  sh.innerHTML=`<div class="eyebrow">Minuto ${M.min} · la rueda del VAR</div><p class="sit">${pick(["Metiste un gol con la mano de Dios versión 2026. El árbitro va a la pantallita.","Gol tuyo, pero el línea levantó la bandera después de festejar. Lo revisan.","La metiste de cabeza y el 9 de ellos dice que hubo falta. VAR."])} Girá la rueda.</p>
-  <div class="varwrap"><div class="varptr"></div><div class="var" id="var" style="background:${grad}">${VAR_SECT.map((x,i)=>`<span style="transform:rotate(${i*step+step/2}deg) translateY(-68px)">${x.t}</span>`).join("")}</div></div>
+  sh.innerHTML=`<div class="eyebrow">Minuto ${M.min} · la rueda del VAR</div><p class="sit">${pick(["Jugada polémica en el área. El árbitro se va a la pantallita.","Se armó el tumulto y el árbitro dibuja la pantallita con las manos.","Todos gritan. El árbitro corre hasta el monitor al costado de la cancha."])} Girá y bancate lo que salga.</p>
+  <div class="foto sala"></div>
+  <div class="varwrap"><div class="varptr"></div><div class="var" id="var"></div></div>
   <div class="linea"><button id="bGirar">Girar</button></div>`;
   $('#bGirar').onclick=()=>{
     $('#bGirar').disabled=true;
-    const i=Math.floor(rnd()*n); const res=VAR_SECT[i];
-    const ang=360*5+(360-(i*step+step/2)); // el puntero está arriba
+    const i=Math.floor(rnd()*n), res=VAR_SECT[i];
+    const ang=360*5+(360-i*step);   // el sector i está centrado en i*step, el puntero arriba
     const w=$('#var'); w.style.transition='transform 2.6s cubic-bezier(.15,.8,.2,1)'; w.style.transform=`rotate(${ang}deg)`;
     (function ticks(k){ if(k>28)return; SFX.play('tick'); setTimeout(()=>ticks(k+1), 40+k*k*.35); })(0);
     setTimeout(()=>{
-      let txt,v;
-      if(res.t==="GOL"){M.gA++;txt="El VAR confirmó. GOL. La pantallita está de tu lado.";v="plata";ev(M.min,"<b>Rueda del VAR.</b> "+txt+` <span class="tag plata">plata</span>`,'goal')}
-      else if(res.t==="PENAL"){const g=rnd()<.75;if(g)M.gA++;txt="No fue gol, pero hubo penal antes. "+(g?"El 9 la clavó. Gol.":"El 9 la tiró a la tribuna. Increíble.");v=g?"plata":"mierda";ev(M.min,"<b>Rueda del VAR.</b> "+txt+` <span class="tag ${v}">${v}</span>`,g?'goal':'dec')}
-      else if(res.t==="AMARILLA"){M.atk*=.95;txt="Anulado, y amarilla al 9 por protestar. Doble mierda.";v="mierda";ev(M.min,"<b>Rueda del VAR.</b> "+txt+` <span class="tag mierda">mierda</span>`,'dec')}
-      else {txt="Anulado. Tres minutos mirando la pantalla para nada.";v="mierda";ev(M.min,"<b>Rueda del VAR.</b> "+txt+` <span class="tag mierda">mierda</span>`,'dec')}
+      let txt,v,cls='dec';
+      if(res==="GOL"){M.gA++;txt="El VAR lo confirmó. GOL. La pantallita está de tu lado.";v="plata";cls='goal'}
+      else if(res==="NO ES GOL"){txt="Anulado. Tres minutos mirando el monitor para nada.";v="mierda"}
+      else if(res==="PENAL"){const g=rnd()<.8;if(g)M.gA++;txt="Penal para vos. "+(g?"El 9 la clavó abajo. Gol.":"El 9 la tiró a la tribuna. Increíble.");v=g?"plata":"mierda";cls=g?'goal':'dec'}
+      else if(res==="NO ES PENAL"){M.def*=1.08;txt="Era penal en contra y el VAR lo levantó. Te salvaste de una.";v="plata"}
+      else if(res==="AMARILLA"){M.atk*=.96;txt="Nada de nada, y amarilla al 9 por protestar de más.";v="mierda"}
+      else {M.atk*=1.12;M.def*=1.08;txt="Roja para ellos. Se quedan con diez y vos con toda la cancha.";v="plata"}
+      ev(M.min,`<b>Rueda del VAR: ${res}.</b> `+txt+` <span class="tag ${v}">${v}</span>`,cls);
+      if(res==="GOL"||(res==="PENAL"&&cls==='goal')){SFX.play('gol');ev(M.min,"GOL. "+M.gA+"-"+M.gB,'goal')}
+      else if(v==="plata")SFX.play('caja'); else SFX.play('uuh');
       if(v==="plata")G.plata++;else G.mierda++;
-      G.decisiones.push({ronda:RONDAS[G.ronda],min:M.min,op:"Rueda del VAR",tag:v,txt,gf:res.t==="GOL"?1:0});
+      G.decisiones.push({ronda:RONDAS[G.ronda],min:M.min,op:"Rueda del VAR",tag:v,txt,gf:cls==='goal'?1:0});
       marcador();sh.style.display="none";reanudar();
     },2900);
   };
