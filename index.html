@@ -139,6 +139,15 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .fcTirada b{color:var(--plata)}
 .fcFinal{border-left:4px solid var(--plata);background:var(--plata-bg);padding:10px 14px;font-size:14px;margin:8px 0}
 .fcFinal.m{border-left-color:var(--mierda);background:var(--mierda-bg)}
+/* Marca propia de la seccion, no el logo de EA: una chapita con el joystick y FC. */
+.fcLogo{display:inline-flex;align-items:center;gap:7px;vertical-align:middle;margin-right:10px;
+  padding:5px 9px 5px 7px;border-radius:9px;background:linear-gradient(150deg,#F7DA7A,#C99A20);
+  color:#241a02;font-family:"Anton",sans-serif;font-size:15px;letter-spacing:.06em;line-height:1;
+  box-shadow:0 2px 8px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.45)}
+.fcLogo svg{width:17px;height:17px;display:block}
+.btn .fcLogo{margin-top:-2px}
+h2 .fcLogo{font-size:17px;padding:6px 11px 6px 9px}
+h2 .fcLogo svg{width:19px;height:19px}
 .stats{margin-top:10px;font-size:13px;color:var(--ink2);line-height:1.7}
 .stats b{color:var(--ink)}
 .stats .lnk{background:none;border:0;color:var(--plata);text-decoration:underline;cursor:pointer;font:inherit;padding:0}
@@ -312,7 +321,7 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
     <p>Te toca un equipo. Tenés tres chances de quedártelo o tirar de nuevo; a la cuarta, plata o mierda. Siempre puede venir algo mejor... o no. Después, una copa a pura decisión. Campeón es plata. Lo demás, mierda.</p>
   </div>
   <button class="btn oro" id="bRandom">Tirar <small>El equipo te toca. No se elige. Así es esto.</small></button>
-  <button class="btn sec" id="bFC">Plata o mierda para FC <small>Un versus al azar para jugar en la consola. Tres chances y la cuarta es la que hay.</small></button>
+  <button class="btn sec" id="bFC"><span class="fcLogo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7.2 7h9.6a4 4 0 0 1 3.93 3.24l.79 4.1A2.6 2.6 0 0 1 18.97 17.5a2.6 2.6 0 0 1-2.1-1.07L15.6 14.7H8.4l-1.27 1.73A2.6 2.6 0 0 1 5.03 17.5 2.6 2.6 0 0 1 2.48 14.34l.79-4.1A4 4 0 0 1 7.2 7Z" stroke="#241a02" stroke-width="1.7" stroke-linejoin="round"/><path d="M6.6 10.4v2.2M5.5 11.5h2.2" stroke="#241a02" stroke-width="1.7" stroke-linecap="round"/><circle cx="16.2" cy="10.9" r="1.05" fill="#241a02"/><circle cx="18.1" cy="12.6" r="1.05" fill="#241a02"/></svg>FC</span>Plata o mierda para FC <small>Un versus al azar para jugar en la consola. Tres chances y la cuarta es lo que hay.</small></button>
   <details class="cfg"><summary>Parámetros de prueba</summary>
     <label>Segundos reales por partido <input id="cDur" type="number" value="13" min="10" max="180"></label>
     <label>Decisiones por tiempo <input id="cDec" type="number" value="2" min="1" max="4"></label>
@@ -327,9 +336,9 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 <!-- PLATA O MIERDA PARA FC -->
 <section class="screen" id="fc">
   <div class="eyebrow">Para la consola</div>
-  <h2 class="display" style="font-size:32px;margin:4px 0 2px">Plata o mierda para FC</h2>
+  <h2 class="display" style="font-size:26px;margin:4px 0 2px;line-height:1.08;text-wrap:balance"><span class="fcLogo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7.2 7h9.6a4 4 0 0 1 3.93 3.24l.79 4.1A2.6 2.6 0 0 1 18.97 17.5a2.6 2.6 0 0 1-2.1-1.07L15.6 14.7H8.4l-1.27 1.73A2.6 2.6 0 0 1 5.03 17.5 2.6 2.6 0 0 1 2.48 14.34l.79-4.1A4 4 0 0 1 7.2 7Z" stroke="#241a02" stroke-width="1.7" stroke-linejoin="round"/><path d="M6.6 10.4v2.2M5.5 11.5h2.2" stroke="#241a02" stroke-width="1.7" stroke-linecap="round"/><circle cx="16.2" cy="10.9" r="1.05" fill="#241a02"/><circle cx="18.1" cy="12.6" r="1.05" fill="#241a02"/></svg>FC</span>Plata o mierda para FC</h2>
   <p class="kicker" style="color:var(--ink2);font-size:14px;margin:0 0 10px">
-    Tirás y te sale un versus. Tres veces podés pedir otro. La cuarta es la que hay.</p>
+    Tirás y te sale un versus. Tres veces podés pedir otro. La cuarta es lo que hay.</p>
   <details class="cfg" id="fcCfg"><summary>Cómo querés el random</summary>
     <label>Estrellas desde
       <select id="fcMin"><option>1</option><option>1.5</option><option>2</option><option>2.5</option><option selected>3</option><option>3.5</option><option>4</option><option>4.5</option><option>5</option></select>
@@ -1549,7 +1558,7 @@ const CTX={
 const GK_ARMS=`<svg viewBox="0 0 40 60"><circle cx="20" cy="14" r="7" fill="#f1c9a5"/><rect x="11" y="20" width="18" height="22" rx="4" fill="#111"/><rect x="-2" y="2" width="7" height="24" rx="3" fill="#111" transform="rotate(-40 1 14)"/><rect x="35" y="2" width="7" height="24" rx="3" fill="#111" transform="rotate(40 39 14)"/><rect x="10" y="42" width="7" height="17" rx="3" fill="#e6e6e6" transform="rotate(15 13 42)"/><rect x="23" y="42" width="7" height="17" rx="3" fill="#e6e6e6" transform="rotate(-15 27 42)"/></svg>`;
 /* ============ PLATA O MIERDA PARA FC ============
    No se juega acá: te sorteo un versus para que lo juegues en la consola.
-   Mismo formato que el sorteo de la copa: tres rechazos y la cuarta es la que hay.
+   Mismo formato que el sorteo de la copa: tres rechazos y la cuarta es lo que hay.
    El peso sube fino para Argentina, Latinoamérica y Europa, y baja el resto,
    que es justo lo que en el FC te sale siempre. */
 const FC_SUD=["Argentina","Brasil","Uruguay","Chile","Colombia","Paraguay","Ecuador","Perú","Bolivia","Venezuela"];
@@ -1606,7 +1615,7 @@ function fcVersus(){
 function fcPintar(v,forzado){
   const lado=(e)=>`<div class="lado">${escudo(e,54)}<div class="nom">${e.n}</div>
     <div class="det">${e.pais} · ${e.liga}</div><div class="est">${stars(e.s)}</div></div>`;
-  $('#fcVs').innerHTML=`<div class="fcTirada">Tirada <b>${FC.tirada}</b> de 4${forzado?" · esta es la que hay":""}</div>
+  $('#fcVs').innerHTML=`<div class="fcTirada">Tirada <b>${FC.tirada}</b> de 4${forzado?" · esta es lo que hay":""}</div>
     <div class="vs">${lado(v.a)}<div class="mid">VS</div>${lado(v.b)}</div>`;
 }
 function fcTirar(){
@@ -1617,7 +1626,7 @@ function fcTirar(){
   fcPintar(v,ultima);
   if(ultima){ fcCerrar(v,true); return; }
   $('#fcBtns').innerHTML=`<button class="btn oro" id="fcOk">Me lo quedo<small>Este es el partido.</small></button>
-    <button class="btn sec" id="fcOtra">Otra<small>${FC.tirada===3?"Ojo: la próxima es la que hay, salga lo que salga.":"Te quedan "+(3-FC.tirada)+" chances."}</small></button>`;
+    <button class="btn sec" id="fcOtra">Otra<small>${FC.tirada===3?"Ojo: la próxima es lo que hay, salga lo que salga.":"Te quedan "+(3-FC.tirada)+" chances."}</small></button>`;
   $('#fcOk').onclick=()=>fcCerrar(v,false);
   $('#fcOtra').onclick=fcTirar;
 }
@@ -1629,7 +1638,7 @@ function fcCerrar(v,forzado){
     ? `<b>Plata o mierda.</b> Se te acabaron las chances: ${v.a.n} contra ${v.b.n}. Bancátelo.`
     : `<b>Lo elegiste vos.</b> ${v.a.n} contra ${v.b.n}. Después no te quejes.`;
   $('#fcVs').insertAdjacentHTML('beforeend',`<div class="fcFinal ${forzado?'m':''}">${txt}</div>`);
-  const resumen=`PLATA O MIERDA PARA FC\n${v.a.n} (${v.a.s}★, ${v.a.pais}) vs ${v.b.n} (${v.b.s}★, ${v.b.pais})\n${forzado?"Salió en la cuarta. Es la que hay.":"Elegido en la tirada "+FC.tirada+"."}\nTirá el tuyo: ${location.origin+location.pathname}`;
+  const resumen=`PLATA O MIERDA PARA FC\n${v.a.n} (${v.a.s}★, ${v.a.pais}) vs ${v.b.n} (${v.b.s}★, ${v.b.pais})\n${forzado?"Salió en la cuarta. Es lo que hay.":"Elegido en la tirada "+FC.tirada+"."}\nTirá el tuyo: ${location.origin+location.pathname}`;
   $('#fcBtns').innerHTML=`<button class="btn oro" id="fcCopiar">Copiar para el grupo</button>
     <button class="btn sec" id="fcOtroVs">Tirar otro versus<small>Arranca de cero, con tres chances.</small></button>`;
   $('#fcCopiar').onclick=async()=>{try{await navigator.clipboard.writeText(resumen);$('#fcCopiar').textContent="Copiado. Mandalo."}catch(e){$('#fcCopiar').textContent="No se pudo copiar."}};
