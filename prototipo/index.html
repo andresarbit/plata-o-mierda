@@ -188,6 +188,25 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 /* arco */
 .arcoFoto{position:relative;margin:10px 0 6px;border-radius:8px;overflow:hidden;background:#000 center/cover no-repeat;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 .arcoFoto .red{position:absolute;border:0;background:none;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(3,1fr);aspect-ratio:auto;overflow:visible}
+/* tiro libre: en vez de 15 casilleros, una reticula fina de 12x5.
+   La pelota va casi exactamente donde tocaste, pero cuantizada al centro de la
+   celda mas cercana: 60 destinos en vez de 15, sin llegar al pixel. */
+.arcoFoto .mira{position:absolute;cursor:crosshair;border:2px solid rgba(240,198,74,.55);border-radius:6px;
+  background-image:repeating-linear-gradient(to right,rgba(240,198,74,.42) 0 1px,transparent 1px 8.3333%),
+                   repeating-linear-gradient(to bottom,rgba(240,198,74,.42) 0 1px,transparent 1px 20%),
+                   linear-gradient(rgba(10,14,10,.22),rgba(10,14,10,.22));
+  box-shadow:inset 0 0 26px rgba(240,198,74,.16),0 0 0 1px rgba(0,0,0,.45)}
+.arcoFoto .mira.listo{cursor:default}
+.arcoFoto .barrera{position:absolute;background:rgba(0,0,0,.34);border-top:2px dashed rgba(255,255,255,.28);pointer-events:none}
+.arcoFoto .pin{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;pointer-events:none;
+  border:2px solid rgba(240,198,74,.95);box-shadow:0 0 12px rgba(240,198,74,.7)}
+.arcoFoto .pin::after{content:"";position:absolute;inset:9px;border-radius:50%;background:rgba(240,198,74,.95)}
+.arcoFoto .pelota{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;pointer-events:none;
+  background:#fff;box-shadow:inset -3px -3px 0 #9a9a9a,0 0 14px rgba(255,255,255,.75);
+  transition:left .42s cubic-bezier(.2,.7,.3,1),top .42s cubic-bezier(.2,.7,.3,1)}
+.arcoFoto .guante{position:absolute;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;pointer-events:none;
+  background:rgba(226,91,74,.55);border:2px solid rgba(255,150,130,.9);box-shadow:0 0 16px rgba(255,120,100,.6);
+  transition:left .38s ease-out,top .38s ease-out}
 .arcoFoto .cell{border:1.5px solid rgba(240,198,74,.5);border-radius:5px;background:rgba(240,198,74,.05);box-shadow:inset 0 0 12px rgba(240,198,74,.14),0 0 6px rgba(240,198,74,.14);position:relative;color:transparent}
 .arcoFoto .cell:hover,.arcoFoto .cell:focus-visible{background:rgba(240,198,74,.3)}
 .arcoFoto .cell.pick{background:rgba(240,198,74,.62);box-shadow:inset 0 0 16px rgba(255,255,255,.6)}
@@ -216,6 +235,24 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .card p{margin:8px 0;font-size:15px}
 .card .path{font-size:14px;color:var(--ink2);font-variant-numeric:tabular-nums}
 .card ul{padding-left:18px;margin:6px 0;font-size:14px}
+/* recorrido de la copa: una ficha por ronda, en vez de la lista escrita */
+.rondas{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:16px 0 4px}
+.rd{background:var(--bg);border-radius:8px;padding:8px 4px 9px;text-align:center;border-top:4px solid var(--line);opacity:1}
+.rd.ok{border-top-color:#5FBF74} .rd.no{border-top-color:var(--mierda)} .rd.off{opacity:.35}
+.rd b{display:block;font-family:"Anton",sans-serif;font-size:11px;letter-spacing:.08em;color:var(--ink2)}
+.rd span{display:block;font-size:15px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
+.rd .pen{display:block;font-size:10px;color:var(--plata);letter-spacing:.05em}
+/* numeros del torneo */
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+.nums div{background:var(--bg);border-radius:8px;padding:10px 4px;text-align:center}
+.nums b{display:block;font-family:"Anton",sans-serif;font-size:30px;line-height:1;color:var(--ink)}
+.nums small{display:block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);margin-top:4px}
+/* balanza de decisiones */
+.pmbar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--bg);margin-top:14px}
+.pmbar i{display:block;height:100%}
+.pmbar .ip{background:var(--plata)} .pmbar .im{background:var(--mierda)}
+.pmlab{display:flex;justify-content:space-between;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-top:5px}
+.pmlab .lp{color:var(--plata)} .pmlab .lm{color:var(--mierda)}
 .cnt{display:flex;gap:16px;font-family:"Anton",sans-serif;font-size:28px;margin-top:10px}
 .cnt small{display:block;font-family:"Archivo",sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
 .foot{font-size:11.5px;color:var(--ink2);margin-top:26px;line-height:1.4}
@@ -506,7 +543,7 @@ const SITUACIONES = [
 {id:"escapa9",usa:["2", "1"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Se escapa el 9 de ellos, solo, a 30 metros del arco. Tu 2 llega de atrás.",ops:[
  {l:"Jugar limpio y confiar en el arquero",tag:"plata",d:"Mano a mano.",r:[{p:.55,txt:"Mano a mano y tu 1 se agrandó: la tapó con el pecho. La gente delira."},{p:.45,gc:1,txt:"La picó por arriba del arquero. Gol. Vos elegiste confiar."}]},
  {l:"Hacharlo de atrás",tag:"mierda",d:"Roja segura. Jugás con diez el resto del partido.",r:[{p:1,rojo:true,saca:"2",def:.9,atk:.9,txt:"Lo hachaste de atrás. Roja directa. Jugás con diez, pero el gol no fue."}]}]},
-{id:"arquerocorner",usa:["1"],tipo:"LATE",t:"Último minuto",sit:"Minuto {m}. Vas perdiendo. Córner a favor. Tu arquero levanta la mano: quiere subir.",ops:[
+{id:"arquerocorner",usa:["1"],marc:"pierde",tipo:"LATE",t:"Último minuto",sit:"Minuto {m}. Vas perdiendo. Córner a favor. Tu arquero levanta la mano: quiere subir.",ops:[
  {l:"Que suba",tag:"plata",d:"Si la empalma de cabeza, es historia. Si la pierden, es un arco vacío.",r:[{p:.2,gf:1,txt:"¡GOL DEL ARQUERO! De cabeza, al ángulo. Esto lo contás toda la vida."},{p:.55,txt:"Subió, la cabeceó afuera, volvió corriendo como loco. Susto y nada más."},{p:.25,gc:1,txt:"La despejaron, contra de 70 metros, arco vacío. Gol. Vos dejaste que subiera."}]},
  {l:"Que se quede",tag:"mierda",d:"Córner normal.",r:[{p:.12,gf:1,txt:"Centro al primer palo, peinada, y el 2 la empujó. Gol de córner como la gente."},{p:.88,txt:"Córner, despeje, y a seguir. Nada."}]}]},
 {id:"diez",usa:["10"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Tu 10 la pide en la mitad de la cancha con tres encima.",ops:[
@@ -543,13 +580,13 @@ const SITUACIONES = [
 {id:"contra",usa:["5", "2"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Contra de ellos, tres contra dos. Tu 5 puede cortarla con la mano.",ops:[
  {l:"Mano y a bancársela",tag:"mierda",d:"Roja, tiro libre. Pero la contra no fue.",r:[{p:1,rojo:true,saca:"5",def:.9,atk:.9,txt:"Mano. Roja. Tiro libre que pegó en la barrera. Diez jugadores, gol salvado."}]},
  {l:"Que corran y confiar",tag:"plata",d:"O la sacan o entra.",r:[{p:.45,txt:"Tres contra dos, pero el 2 leyó el pase y la sacó. Aplausos."},{p:.55,gc:1,txt:"Tres contra dos. Pase, gol. Tal cual lo viste venir."}]}]},
-{id:"tiempo",usa:["1"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Vas ganando. Tu arquero quiere hacer tiempo en cada saque.",ops:[
+{id:"tiempo",usa:["1"],marc:"gana",tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Vas ganando. Tu arquero quiere hacer tiempo en cada saque.",ops:[
  {l:"Que haga tiempo",tag:"mierda",d:"Amarilla segura, reloj a tu favor.",r:[{p:.75,def:1.12,atk:.85,txt:"Hizo tiempo, amarilla, silbidos. Pero el reloj es tuyo."},{p:.25,gc:1,txt:"Tanto hacer tiempo que el equipo se durmió. Gol de ellos. Se despertaron tarde."}]},
  {l:"Que juegue rápido",tag:"plata",d:"Vas a buscar otro.",r:[{p:.35,gf:1,txt:"Saque rápido, contra, gol. Se liquidó."},{p:.45,txt:"Jugaste rápido. Ida y vuelta. Nada."},{p:.2,gc:1,txt:"Jugaste rápido, te desarmaste, gol de ellos. Ahora sí, a bancársela."}]}]},
 {id:"pibe",usa:[],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Falta un cambio. Tenés un pibe de 17 en el banco que la rompe en reserva.",ops:[
  {l:"Que entre el pibe",tag:"plata",d:"O se consagra o se esconde.",r:[{p:.4,gf:1,txt:"Entró el pibe y a los 8 minutos metió un gol. Nació una estrella. Hoy."},{p:.6,atk:.95,txt:"Entró el pibe y no tocó la pelota. Está bien, tiene 17."}]},
  {l:"Que entre el veterano",tag:"mierda",d:"Sabe. No corre.",r:[{p:.2,gf:1,txt:"Entró el veterano y metió un gol de oficio. Primer toque."},{p:.8,def:1.05,txt:"Entró el veterano, ordenó todo, y no corrió ni un metro."}]}]},
-{id:"noventa",usa:["1"],tipo:"LATE",t:"Último minuto",sit:"Minuto {m}. Vas perdiendo. Último córner. ¿Sube el arquero?",ops:[
+{id:"noventa",usa:["1"],marc:"pierde",tipo:"LATE",t:"Último minuto",sit:"Minuto {m}. Vas perdiendo. Último córner. ¿Sube el arquero?",ops:[
  {l:"Que suba, todos al área",tag:"plata",d:"Todo o nada.",r:[{p:.25,gf:1,txt:"Todos al área, y la peinó alguien. Gol. Nadie sabe quién. No importa."},{p:.5,txt:"Todos al área, despeje, corrida, y nada. Susto para los dos."},{p:.25,gc:1,txt:"Todos al área. Contra. Arco vacío. Gol. Vos lo mandaste."}]},
  {l:"Córner normal",tag:"mierda",d:"Lo de siempre.",r:[{p:.12,gf:1,txt:"Centro, cabezazo, gol. Un córner normal que salió bien."},{p:.88,txt:"Córner, despeje, nada."}]}]},
 {id:"simular",usa:["7"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Tu 7 entra al área, lo rozan. Puede tirarse.",ops:[
@@ -599,7 +636,7 @@ const SITUACIONES = [
 {id:"c3",usa:["3","4"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. El 3 la está pasando mal con el 7 de ellos. Tenés al 4 en el banco, que es central.",ops:[
  {l:"Sacás al 3, el 4 de lateral",d:"Un central de lateral: marca, no pasa.",r:[{p:.7,def:1.12,atk:.95,saca:"3",txt:"El 4 de lateral. No pasó más nadie por ahí. Tampoco vos."},{p:.3,def:.9,saca:"3",txt:"El 4 de lateral. Lento. Lo pasaron igual, pero ahora de a dos."}]},
  {l:"Lo bancás, le mandás ayuda",d:"El 11 baja a ayudar.",r:[{p:.6,def:1.05,atk:.92,txt:"El 11 bajó a ayudar. Se cerró la banda, pero perdiste al 11 arriba."},{p:.4,gc:1,txt:"El 11 bajó, no llegó, y el 7 de ellos metió el centro del gol."}]}]},
-{id:"c10b",cat:"lesion",usa:["10","8"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. Vas perdiendo y el 10 pide salir: está acalambrado.",ops:[
+{id:"c10b",cat:"lesion",usa:["10","8"],marc:"pierde",tipo:"ST",t:"El cambio",sit:"Minuto {m}. Vas perdiendo y el 10 pide salir: está acalambrado.",ops:[
  {l:"Sacalo, entra el 8",d:"Menos magia, más pulmón.",r:[{p:.5,atk:.95,def:1.08,saca:"10",txt:"Entró el 8 y el equipo corre. Corre mucho. Gol, poco."},{p:.5,atk:1.05,saca:"10",txt:"Entró el 8 y sorprendió: llegó dos veces al área como un 10."}]},
  {l:"Que se quede aunque sea parado",d:"Un 10 acalambrado sigue siendo un 10.",r:[{p:.4,atk:1.15,txt:"Se quedó parado en la medialuna. Le llegó una y metió el pase del año."},{p:.6,atk:.88,txt:"Se quedó parado. Jugaste con diez y medio. Se notó."}]}]},
 {id:"c9b",usa:["9"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. El 9 erró tres goles. La gente lo silba. El suplente se saca la pechera.",ops:[
@@ -608,7 +645,7 @@ const SITUACIONES = [
 {id:"c1b",usa:["1"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. Tu arquero viene regalando salidas. Tenés al suplente, que es bueno con los pies.",ops:[
  {l:"Cambiás al arquero",d:"Raro, pero se hace.",r:[{p:.5,def:1.05,saca:"1",txt:"Cambiaste al arquero a los {m}. Rarísimo. El suplente salió jugando como un 5 y el equipo respiró."},{p:.5,def:.85,saca:"1",txt:"Cambiaste al arquero a los {m}. El suplente entró nervioso. El primer centro se le cayó."}]},
  {l:"Le gritás que la reviente",d:"Nada de salidas: patadón.",r:[{p:1,atk:.95,def:1.05,txt:"Patadón a dividir todo el partido. Feo, pero no regaló más nada."}]}]},
-{id:"c6",usa:["6","4"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. Vas ganando. ¿Metés un central más?",ops:[
+{id:"c6",usa:["6","4"],marc:"gana",tipo:"ST",t:"El cambio",sit:"Minuto {m}. Vas ganando. ¿Metés un central más?",ops:[
  {l:"Entra el 6, salís con tres centrales",d:"Cerrás con llave.",r:[{p:.7,def:1.2,atk:.8,txt:"Tres centrales. Cerraste con llave. Ellos la tienen, vos la mirás."},{p:.3,def:.95,atk:.8,txt:"Tres centrales y te metiste tan atrás que el área parecía una parada de colectivo. Sufrís."}]},
  {l:"Seguís igual, a buscar el segundo",d:"El que no ataca, sufre.",r:[{p:.45,atk:1.1,txt:"Seguiste igual. Te quedó espacio para la contra: dos mano a mano."},{p:.55,def:.92,txt:"Seguiste igual y ellos se adelantaron. Ahora vivís en tu área."}]}]},
 {id:"c11",usa:["11"],tipo:"ST",t:"El cambio",sit:"Minuto {m}. El 11 se peleó con el DT en la línea. Quiere salir él mismo.",ops:[
@@ -669,7 +706,7 @@ const SITUACIONES = [
 {id:"n16",usa:["11"],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. Tu 11 quedó solo contra el arquero, pero el línea levantó la bandera. No sabés si es offside.",ops:[
  {l:"Que siga y defina",d:"Hasta que pite, se juega.",r:[{p:.45,gf:1,txt:"Siguió, definió, y el VAR dijo que estaba habilitado. Gol."},{p:.55,txt:"Siguió, definió, y estaba offside por un pie. Se anuló."}]},
  {l:"Que frene",d:"Respetar al línea.",r:[{p:1,txt:"Frenó. Estaba habilitado. Te lo dice el VAR cuando ya no importa."}]}]},
-{id:"n17",usa:["2","3"],tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Van ganando. El 2 y el 3 te preguntan si siguen subiendo.",ops:[
+{id:"n17",usa:["2","3"],marc:"gana",tipo:"ST",t:"Segundo tiempo",sit:"Minuto {m}. Van ganando. El 2 y el 3 te preguntan si siguen subiendo.",ops:[
  {l:"Que suban, vamos por otro",d:"Laterales volantes.",r:[{p:.4,gf:1,txt:"Subieron, desborde y gol. Liquidado."},{p:.6,gc:1,txt:"Subieron los dos y te agarraron con tres atrás. Empataron."}]},
  {l:"Que se queden, cerrá el partido",d:"Línea de cuatro fija.",r:[{p:.85,def:1.15,atk:.9,txt:"Se quedaron. Cerraste el partido. Aburrido y efectivo."},{p:.15,gc:1,txt:"Se quedaron, pero igual entró un gol de pelota parada. Fútbol."}]}]},
 {id:"n18",usa:[],tipo:"PT",t:"Pelota dividida",sit:"Minuto {m}. El árbitro te cobró una falta inexistente en la puerta del área. Tiro libre de ellos.",ops:[
@@ -733,7 +770,7 @@ const SITUACIONES = [
 {id:"tl7",usa:["7"],tipo:"PT",t:"Tiro libre",sit:"Minuto {m}. El 7 quiere pegarle de tres dedos desde la izquierda.",ops:[
  {l:"Que le pegue de tres dedos",d:"Si le sale, es cuadro.",r:[{p:.2,gf:1,txt:"De tres dedos, comba imposible, ángulo. Eso se cuelga en un museo."},{p:.8,txt:"De tres dedos y le salió un centro sin destinatario. Igual quedó lindo el intento."}]},
  {l:"Que la ponga al área y listo",d:"Sin fantasía.",r:[{p:.22,gf:1,txt:"Centro al área, peinada y gol. Simple."},{p:.78,txt:"Centro al área, despeje. Simple y sin gol."}]}]},
-{id:"tl8",usa:["10","5"],tipo:"ST",t:"Tiro libre",sit:"Minuto {m}. Tiro libre a favor y quedan cinco minutos. Vas perdiendo por uno.",ops:[
+{id:"tl8",usa:["10","5"],marc:"pierde",tipo:"ST",t:"Tiro libre",sit:"Minuto {m}. Tiro libre a favor y quedan cinco minutos. Vas perdiendo y no queda otra.",ops:[
  {l:"Que suba todo el mundo, hasta el 1",d:"Última bala.",r:[{p:.3,gf:1,txt:"Subieron todos. Centro, rebote, y el 5 la metió con la rodilla. Delirio."},{p:.4,txt:"Subieron todos, la sacaron y no llegaron a nada. Se acaba el tiempo."},{p:.3,gc:1,txt:"Subieron todos y te la clavaron en el arco vacío. Ahora perdés por dos."}]},
  {l:"Jugarla y buscar el centro después",d:"Con cabeza.",r:[{p:.2,gf:1,txt:"La jugaron, centro medido, cabezazo, gol. Todavía hay partido."},{p:.8,txt:"La jugaron, tocaron, tocaron, y se les fue el tiempo tocando."}]}]},
 {id:"tl9",usa:["9"],tipo:"PT",t:"Tiro libre",sit:"Minuto {m}. Le hicieron falta al 9 y quedó dolorido. Igual quiere patearla él.",ops:[
@@ -768,7 +805,7 @@ const SITUACIONES = [
 {id:"df8",usa:["1"],tipo:"ARQ",t:"Sos el 1",sit:"Minuto {m}. Salen jugando desde el fondo y presionan con tres. ¿Qué hacés?",ops:[
  {l:"Salir jugando igual, tenés huevos",d:"Confianza total.",r:[{p:.55,atk:1.08,txt:"Saliste jugando entre tres. La rompiste. Ahora atacan ellos corriendo para atrás."},{p:.45,gc:1,txt:"Saliste jugando y te la robaron en el borde del área. Gol. Culpa tuya."}]},
  {l:"Reventarla al córner",d:"A la mierda con el estilo.",r:[{p:1,def:1.05,atk:.97,txt:"La reventaste. Córner en contra, pero por lo menos no fue gol."}]}]},
-{id:"df9",usa:["5","8"],tipo:"ST",t:"Atrás",sit:"Minuto {m}. Vas ganando por uno y ellos empujan. Faltan quince.",ops:[
+{id:"df9",usa:["5","8"],marc:"gana",tipo:"ST",t:"Atrás",sit:"Minuto {m}. Vas ganando y ellos empujan. Faltan quince.",ops:[
  {l:"Meter el bus: todos atrás de la pelota",d:"Cerrar con llave.",r:[{p:.75,def:1.2,atk:.75,txt:"Todos atrás de la pelota. No pasa ni el aire. Feo, pero efectivo."},{p:.25,gc:1,txt:"Todos atrás y la pelota igual entró de rebote. La mala suerte del que se mete."}]},
  {l:"Seguir peleando la pelota en el medio",d:"No regalar la cancha.",r:[{p:.55,atk:1.05,txt:"Siguieron peleándola en el medio. Ellos nunca se acomodaron."},{p:.45,gc:1,txt:"Siguieron peleándola y en una pérdida en el medio te contragolpearon. Empate."}]}]},
 {id:"df10",usa:["4","6"],tipo:"PT",t:"Atrás",sit:"Minuto {m}. El 10 de ellos se está tirando en cada roce y el árbitro le cobra todo.",ops:[
@@ -1226,6 +1263,7 @@ function empezarPartido(){
   M.agenda.push({min:45,tipo:"ET"});
   slots(50,82,n).forEach(m=>M.agenda.push({min:m,tipo:rnd()<.3?"ARQ":"ST"}));
   if(rnd()<.5)M.agenda.push({min:52+Math.floor(rnd()*28),tipo:"VAR"});
+  if(rnd()<.45)M.agenda.push({min:18+Math.floor(rnd()*58),tipo:"TL"});  // tiro libre con punteria
   M.agenda.push({min:83+Math.floor(rnd()*3),tipo:"LATE"});
   M.agenda.push({min:87+Math.floor(rnd()*2),tipo:"ARCO"});
   M.agenda.sort((a,b)=>a.min-b.min);
@@ -1263,6 +1301,16 @@ function correr(){
     if(M.min>=90&&!M.pausa)finPartido();
   },ms);
 }
+/* Una situacion que afirma como va el partido ("vas ganando", "vas perdiendo")
+   solo puede salir si el marcador la respalda. Antes esto eran cuatro ids sueltos
+   escritos a mano en el filtro, y por eso se colaban las que nadie habia listado:
+   perdiendo 2-5 aparecia "vas ganando: mete el autobus". */
+function marcOK(x){
+  if(!x.marc) return true;
+  const d=M.gA-M.gB;
+  return x.marc==="gana"?d>0 : x.marc==="pierde"?d<0 : x.marc==="empata"?d===0
+       : x.marc==="gana1"?d===1 : x.marc==="pierde1"?d===-1 : true;
+}
 function decision(a){
   M.pausa=true;$('#clock').classList.add('pause');
   if(a.tipo==="ET")SFX.play('silbato');
@@ -1273,11 +1321,14 @@ function decision(a){
   let s;
   if(a.id){s=SITUACIONES.find(x=>x.id===a.id)}
   else if(a.tipo==="VAR"){ return ruedaVAR(); }
+  else if(a.tipo==="TL"){ return tiroLibre(()=>reanudar()); }
   else if(a.tipo==="LATE"){ // el arquero sube al córner: sólo al final y perdiendo
     if(!(M.gA<M.gB)||M.fuera.has("1"))return reanudar();
-    s=pick(SITUACIONES.filter(x=>x.tipo==="LATE")); }
+    const late=SITUACIONES.filter(x=>x.tipo==="LATE"&&marcOK(x)&&!(x.usa||[]).some(n=>M.fuera.has(n)));
+    if(!late.length)return reanudar();
+    s=pick(late); }
   else{ const bag=G.bolsa[a.tipo];
-    const ok=x=>(!x.req||G.flags[x.req]) && (!x.veto||G.flags[x.veto]!==true) && !(x.usa||[]).some(n=>M.fuera.has(n)) && !(x.id==="tiempo"&&!(M.gA>M.gB)) && !(x.id==="c6"&&!(M.gA>M.gB)) && !(x.id==="c10b"&&!(M.gA<M.gB)) && !(x.id==="n17"&&!(M.gA>M.gB))
+    const ok=x=>(!x.req||G.flags[x.req]) && (!x.veto||G.flags[x.veto]!==true) && !(x.usa||[]).some(n=>M.fuera.has(n)) && marcOK(x)
       && !(x.cat==="lesion" && (M.lesionHoy || G.lesiones>=2 || (G.ronda===0&&rnd()<.75) || rnd()<.5));
     const i=bag.findIndex(ok); s=i>=0?bag.splice(i,1)[0]:null;
     if(s&&s.cat==="lesion"){M.lesionHoy=true;G.lesiones=(G.lesiones||0)+1}
@@ -1381,6 +1432,13 @@ const ARCOS={
     {img:"arco-p5",ar:"720/509",red:[5,11,90,48]},
     {img:"arco-p6",ar:"720/509",red:[5,11,90,48]}
   ],
+  tirolibre:[     // mismas medidas: se generaron con la misma referencia.
+                  // arco-t3 queda afuera: la pierna del pateador tapa el cuarto izquierdo del arco
+                  // y no se ve donde estas apuntando.
+    {img:"arco-t1",ar:"720/509",red:[5,11,90,48]},
+    {img:"arco-t2",ar:"720/509",red:[5,11,90,48]},
+    {img:"arco-p6",ar:"720/509",red:[5,11,90,48]}
+  ],
   atajar:[                                              // camara detras del arco: el arco entra entero y ancho
     {img:"arco-a1",ar:"720/580",red:[6,36.7,89,43.3],pen:1},
     {img:"arco-a2",ar:"720/580",red:[6,36.7,89,43.3],pen:1},
@@ -1458,6 +1516,85 @@ function arco(modo,cb,ctx){
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
 
+/* ============ TIRO LIBRE: punteria fina ============ */
+/* El arco real mide 7.32 x 2.44 m. Se trabaja en esas unidades para que las
+   distancias sean creibles: un arquero llega a unos 2.4 m, asi que el centro
+   es facil de atajar y los angulos no, como en la cancha. */
+const TL_COLS=12, TL_FILAS=5, ANCHO_M=7.32, ALTO_M=2.44, ALCANCE_M=2.62;
+/* Resolucion separada de la pantalla para poder simular la dificultad sin tocar la UI.
+   cu,cv = donde apuntaste ya cuantizado. Devuelve donde termino la pelota, donde
+   se tiro el arquero, y el veredicto. */
+function resolverTL(cu,cv,bx0,bx1,ladoBarrera){
+  const filo=Math.max(0,.5-Math.min(cu,1-cu))/.5;      // que tan al palo apuntaste
+  const alto=Math.max(0,.35-cv)/.35;                   // que tan arriba
+  const err=.04+.075*filo+.035*alto;                   // al angulo cuesta mas ejecutar
+  const bxF=cu+(rnd()-.5)*2*err, byF=cv+(rnd()-.5)*2*err*1.4;
+  const afuera=bxF<0||bxF>1||byF<0||byF>1;
+  const kx=Math.min(.95,Math.max(.05,(ladoBarrera?0.30:0.70)+(rnd()-.5)*.5));
+  const ky=Math.min(.95,Math.max(.15,.55+(rnd()-.5)*.5));
+  const enBarrera=!afuera && byF>.62 && bxF>bx0 && bxF<bx1;
+  const dm=Math.hypot((bxF-kx)*ANCHO_M,(byF-ky)*ALTO_M);
+  const atajada=!afuera && !enBarrera && dm<ALCANCE_M;
+  return {bxF,byF,kx,ky,afuera,enBarrera,atajada,gol:!afuera&&!enBarrera&&!atajada};
+}
+function tiroLibre(cb){
+  const sh=$('#sheet'); sh.style.display="block";
+  const A=pick(ARCOS.tirolibre);
+  const pie=rnd()<.65?"derecho":"zurdo";
+  const dist=17+Math.floor(rnd()*11);
+  // la barrera tapa una franja baja, de un lado; el arquero cubre el otro
+  const ladoBarrera=rnd()<.5?0:1;
+  const bx0=ladoBarrera?0.52:0.10, bx1=ladoBarrera?0.90:0.48;
+  sh.innerHTML=`<div class="eyebrow">Minuto ${M.min} · tiro libre</div>
+  <p class="sit">Falta al borde del área, a ${dist} metros. Patea el <b>${pie.toUpperCase()}</b>.
+  La barrera tapa el palo ${ladoBarrera?'derecho':'izquierdo'}. Tocá dónde la querés poner: va casi exacto a donde pongas el dedo.</p>
+  <div class="arcoFoto" style="aspect-ratio:${A.ar};background-image:url(img/${A.img}.jpg)">
+    <div class="mira" id="mira" style="left:${A.red[0]}%;top:${A.red[1]}%;width:${A.red[2]}%;height:${A.red[3]}%">
+      <div class="barrera" style="left:${bx0*100}%;right:${(1-bx1)*100}%;top:62%;bottom:0"></div>
+    </div>
+  </div>
+  <p class="sub">Cuanto más al ángulo, menos llega el arquero. Y más chance de tirarla afuera.</p>`;
+  const mira=$('#mira');
+  mira.onpointerdown=(e)=>{
+    mira.onpointerdown=null; mira.classList.add('listo');
+    const r=mira.getBoundingClientRect();
+    // donde toco, cuantizado al centro de la celda: casi exacto, pero no al pixel
+    let u=(e.clientX-r.left)/r.width, v=(e.clientY-r.top)/r.height;
+    u=Math.min(.999,Math.max(0,u)); v=Math.min(.999,Math.max(0,v));
+    const cu=(Math.floor(u*TL_COLS)+.5)/TL_COLS, cv=(Math.floor(v*TL_FILAS)+.5)/TL_FILAS;
+    const pin=document.createElement('div'); pin.className='pin';
+    pin.style.left=cu*100+'%'; pin.style.top=cv*100+'%'; mira.appendChild(pin);
+    SFX.play('patada');
+    const R=resolverTL(cu,cv,bx0,bx1,ladoBarrera);
+    const {bxF,byF,kx,ky,afuera}=R;
+    const pel=document.createElement('div'); pel.className='pelota';
+    pel.style.left=cu*100+'%'; pel.style.top=cv*100+'%'; mira.appendChild(pel);
+    const gua=document.createElement('div'); gua.className='guante';
+    gua.style.left='50%'; gua.style.top='60%'; mira.appendChild(gua);
+    requestAnimationFrame(()=>{
+      pel.style.left=Math.min(1.08,Math.max(-.08,bxF))*100+'%';
+      pel.style.top=Math.min(1.08,Math.max(-.08,byF))*100+'%';
+      gua.style.left=kx*100+'%'; gua.style.top=ky*100+'%';
+    });
+    setTimeout(()=>{
+      const {enBarrera,atajada}=R;
+      let gol=false,txt;
+      if(afuera){ txt=byF<0?"Por arriba del travesaño. Se fue a la tribuna.":"Afuera. Ni cerca del arco."; }
+      else if(enBarrera){ txt="Le pegó a la barrera. Salió rebotada."; }
+      else if(atajada){ txt="El arquero llegó. La sacó al córner. Mirá dónde estaba."; }
+      else { gol=true; txt=(cv<.3&&(cu<.2||cu>.8))?"AL ÁNGULO. Ni la vio. Golazo.":"Gol de tiro libre. Adentro."; }
+      if(gol){ M.gA++; SFX.play('gol'); } else SFX.play(atajada?'atajada':'golcontra');
+      const v=gol?'plata':'mierda';
+      ev(M.min,`<b>Tiro libre.</b> ${txt} <span class="tag ${v}">${v}</span>`,gol?'goal':'dec');
+      if(gol){ G.plata++; ev(M.min,"GOL. "+M.gA+"-"+M.gB,'goal'); } else G.mierda++;
+      G.decisiones.push({ronda:RONDAS[G.ronda],min:M.min,op:"Tiro libre",tag:v,txt,gf:gol?1:0});
+      marcador();
+      setTimeout(()=>{ sh.style.display="none"; cb(); },1100);
+    },900);
+  };
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+
 /* ============ FIN DE PARTIDO / PENALES ============ */
 function finPartido(){
   if(M.terminado)return;M.terminado=true;clearInterval(timer);SFX.play('silbato'); setTimeout(()=>SFX.play('silbato'),300); setTimeout(()=>SFX.play('silbato'),600);
@@ -1478,7 +1615,7 @@ function finPartido(){
 }
 function cerrar(win,txt){
   const m=G.llaves[G.ronda].find(x=>x.mio); let cuadro=txt; if(m&&m.a.id!==G.eq.id){ cuadro=txt.replace(/^(\d+)-(\d+)/,'$2-$1').replace(/\((\d+)-(\d+) pen\.\)/,'($2-$1 pen.)'); }
-  G.resultados.push({win,txt,cuadro,riv:M.riv.n});
+  G.resultados.push({win,txt,cuadro,riv:M.riv.n,gf:M.gA,gc:M.gB,pen:/pen\./.test(txt)});
   const sh=$('#sheet');sh.style.display="block";
   sh.innerHTML=`<div class="eyebrow">Final del partido</div><h2>${win?"Ganaste "+txt:"Perdiste "+txt}</h2><p class="sit">${win?(G.ronda===RONDAS.length-1?"CAMPEÓN. Plata.":pick(["Seguís en la copa. Mañana otra vez.","A la siguiente ronda. No te agrandes.","Pasaste. Nadie se acuerda cómo."])):pick(["Se terminó. Así, sin más.","A casa. Vos tomaste las decisiones.","Eliminado. Mierda, pero en la tuya."])}</p><button class="btn" id="bSeguir">${win?(G.ronda===4?"Ver la tarjeta":"Seguir"):"Ver la tarjeta"}</button>`;
   $('#bSeguir').onclick=()=>{
@@ -1542,9 +1679,29 @@ function tarjeta(plata){
   const ronda=G.resultados.length-1;
   const hasta=plata?"Saliste campeón":`Te fuiste en ${RONDAS[ronda]}`;
   const path=G.resultados.map((r,i)=>`${r.riv} ${r.txt}`).join(" · ");
-  const claves=G.decisiones.filter(d=>d.gf||d.gc||d.rojo||/Camino/.test(d.ronda)).slice(-6); if(claves.length<3)claves.push(...G.decisiones.filter(d=>!claves.includes(d)).slice(-3));
   const frase=plata?pick(["Te la jugaste y la levantaste. Plata.","Campeón con "+G.eq.n+". Andá a contarlo.","Todas las decisiones fueron tuyas. La copa también."]):pick(["La próxima, con el 1 de siempre.","Vos elegiste. Te la bancaste. Mierda igual.","Se juega otra vez. Siempre se juega otra vez."]);
-  c.innerHTML=`<div class="eyebrow">${G.eq.n} · ${stars(G.eq.s)} · semilla ${G.seed}</div><h1 class="${plata?'p':'m'}">${plata?"Plata":"Mierda"}</h1><p><b>${hasta}</b> con ${G.eq.n}${plata?"":" contra "+G.resultados[ronda].riv}.</p><p class="path">${path}</p><p><b>Decisiones que te marcaron:</b></p><ul>${claves.map(d=>`<li>${d.op}: ${d.txt}</li>`).join("")||"<li>Ninguna. Eso también es una decisión.</li>"}</ul><div class="cnt"><span>${G.plata}<small>plata</small></span><span>${G.mierda}<small>mierda</small></span></div><p><i>${frase}</i></p>`;
+  // números de la copa, sacados de los partidos jugados
+  const gf=G.resultados.reduce((a,r)=>a+(r.gf||0),0), gc=G.resultados.reduce((a,r)=>a+(r.gc||0),0);
+  const dif=gf-gc;                       // los penales ya se marcan en la ficha de su ronda
+  const fichas=RONDAS.map((nom,i)=>{
+    const r=G.resultados[i];
+    if(!r) return `<div class="rd off"><b>${nom.toUpperCase()}</b><span>—</span></div>`;
+    return `<div class="rd ${r.win?'ok':'no'}"><b>${nom.toUpperCase()}</b><span>${r.gf}-${r.gc}</span>${r.pen?'<span class="pen">penales</span>':''}</div>`;
+  }).join("");
+  const tot=Math.max(1,G.plata+G.mierda), pp=Math.round(G.plata/tot*100);
+  c.innerHTML=`<div class="eyebrow">${G.eq.n} · ${stars(G.eq.s)} · semilla ${G.seed}</div>
+    <h1 class="${plata?'p':'m'}">${plata?"Plata":"Mierda"}</h1>
+    <p><b>${hasta}</b> con ${G.eq.n}${plata?"":" contra "+G.resultados[ronda].riv}.</p>
+    <div class="rondas">${fichas}</div>
+    <div class="nums">
+      <div><b>${G.resultados.length}</b><small>partidos</small></div>
+      <div><b>${gf}</b><small>a favor</small></div>
+      <div><b>${gc}</b><small>en contra</small></div>
+      <div><b>${dif>0?'+':''}${dif}</b><small>diferencia</small></div>
+    </div>
+    <div class="pmbar"><i class="ip" style="width:${pp}%"></i><i class="im" style="width:${100-pp}%"></i></div>
+    <div class="pmlab"><span class="lp">${G.plata} plata</span><span class="lm">${G.mierda} mierda</span></div>
+    <p><i>${frase}</i></p>`;
   G.resumen=`PLATA O MIERDA — ${plata?"PLATA":"MIERDA"}\n${hasta} con ${G.eq.n} (${G.eq.s}★).\n${path}\nDecisiones: ${G.plata} plata, ${G.mierda} mierda.\nJugá la misma copa: ${location.href}`;
 }
 
