@@ -125,6 +125,12 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .sorteoResumen span{display:inline-block;margin:4px 6px 0 0;padding:2px 8px;border:1px solid var(--line);border-radius:3px}
 .sorteoResumen span.no{text-decoration:line-through;opacity:.7}
 .sorteoResumen span.mio{border-color:var(--plata);color:var(--plata);font-weight:700}
+.stats{margin-top:10px;font-size:13px;color:var(--ink2);line-height:1.7}
+.stats b{color:var(--ink)}
+.stats .lnk{background:none;border:0;color:var(--plata);text-decoration:underline;cursor:pointer;font:inherit;padding:0}
+.stats table{border-collapse:collapse;margin-top:6px;font-size:13px}
+.stats td{padding:1px 12px 1px 0;color:var(--ink2)}
+.stats td:last-child{color:var(--ink);text-align:right}
 .carry{border-left:4px solid var(--mierda);background:var(--mierda-bg);padding:10px 14px;font-size:14px;margin-top:8px}
 .carry b{color:var(--mierda)}
 /* partido */
@@ -236,6 +242,7 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
     <label>Decisiones por tiempo <input id="cDec" type="number" value="2" min="1" max="4"></label>
     <label>Goles promedio por partido <input id="cGoles" type="number" value="2.2" step="0.2" min="1" max="6"></label>
     <label>Semilla (vacío = random) <input id="cSeed" type="text" placeholder="auto"></label>
+    <div id="stats" class="stats">Estadísticas del motor nuevo: <button type="button" id="bStats" class="lnk">ver</button></div>
   </details>
   <p class="foot">Los nombres de clubes se usan sólo con fines identificativos dentro del juego. No hay afiliación ni aval de los clubes mencionados.</p>
 </section>
@@ -1036,8 +1043,43 @@ function epico(done){
   setTimeout(()=>{d.remove();done()},2600);
 }
 /* la tierra y el polvo se precargan para que no falten en el golpe */
+/* muestra las estadisticas del motor nuevo. Usa /get, que lee sin sumar,
+   asi que mirarlas no ensucia la medicion.
+   Lee de a una y reintenta: si una clave falla, se avisa en vez de mostrar un 0,
+   que se confundiria con "nadie llego hasta ahi". */
+async function leerClave(k){
+  for(let intento=0;intento<2;intento++){
+    try{
+      const r=await fetch(ABACUS+'/get/'+NS+'/'+k,{cache:'no-store'});
+      if(r.status===404) return 0;                 // la clave todavia no existe: es cero de verdad
+      if(r.ok){ const j=await r.json(); if(typeof j.value==='number') return j.value }
+    }catch(e){}
+    await new Promise(r=>setTimeout(r,250));
+  }
+  return null;                                     // no se pudo leer
+}
+async function verStats(){
+  const box=$('#stats'); box.textContent='Buscando…';
+  const claves=['copas','campeon','final','semi','4tos','8vos'], v={};
+  for(const k of claves){ v[k]=await leerClave(k); await new Promise(r=>setTimeout(r,120)) }
+  const fallaron=claves.filter(k=>v[k]===null);
+  if(fallaron.length){ box.textContent='No se pudieron leer '+fallaron.join(', ')+'. Probá de nuevo.'; return }
+  if(!v.copas){ box.textContent='Todavía no se jugó ninguna copa con el motor nuevo.'; return }
+  const pc=n=>Math.round(n/v.copas*100)+'%', alaFinal=v.campeon+v.final;
+  box.innerHTML='<b>'+v.copas+' copas</b> con el motor nuevo'
+    +'<table>'
+    +'<tr><td>Campeón</td><td>'+v.campeon+' · '+pc(v.campeon)+'</td></tr>'
+    +'<tr><td>Llegó a la final</td><td>'+alaFinal+' · '+pc(alaFinal)+'</td></tr>'
+    +'<tr><td>Se fue en semi</td><td>'+v.semi+'</td></tr>'
+    +'<tr><td>Se fue en 4tos</td><td>'+v['4tos']+'</td></tr>'
+    +'<tr><td>Se fue en 8vos</td><td>'+v['8vos']+'</td></tr>'
+    +'</table>'
+    +'<div style="margin-top:6px">Motor viejo, de referencia: <b>178 copas, 7,9% campeón</b>.</div>';
+}
+const ABACUS='https://abacus.jasoncameron.dev', NS='plataomierda-v2';   // /hit suma, /get lee sin sumar
 /* la visita solo cuenta desde el sitio publicado, no desde las pruebas locales */
 try{if(location.hostname.endsWith('github.io')){var _hv=document.getElementById('hitVisitas');if(_hv)_hv.src='https://hits.sh/andresarbit.github.io/plata-o-mierda.svg'}}catch(e){}
+try{var _bs=document.getElementById('bStats'); if(_bs)_bs.onclick=verStats}catch(e){}
 ['tierra','polvo1','polvo2','polvo3'].forEach(n=>{try{new Image().src='img/'+n+'.jpg'}catch(e){}});
 /* el polvo es un JPG sobre negro: sin screen se veria un recuadro negro, asi que lo sacamos */
 try{if(!(window.CSS&&CSS.supports&&CSS.supports('mix-blend-mode','screen')))document.documentElement.classList.add('sin-blend')}catch(e){document.documentElement.classList.add('sin-blend')}
@@ -1477,19 +1519,23 @@ function tarjeta(plata){
   show('final'); SFX.play(plata?'campeon':'boo');
   /* Contadores.
      - copas-plata / copas-mierda: los de siempre, siguen sumando el historico.
-     - v2-*: arrancan de cero el 2026-09-08 para medir el motor amable por separado.
-       Referencia del motor viejo, antes de que los tests automaticos la ensuciaran:
+     - abacus (NS): la medicion del motor amable, desde cero el 2026-09-08.
+       Se usa abacus y no hits.sh porque hits.sh SUMA UNA VISITA CADA VEZ QUE SE LEE
+       el badge, asi que consultarlo falseaba el propio numero que se queria medir.
+       Abacus separa /hit (suma) de /get (lee sin sumar).
+       Referencia del motor viejo, antes de que los tests la ensuciaran:
        14 plata / 164 mierda = 178 copas, 7,9% de campeon.
-     - v2-hasta-*: hasta donde llegaste. Eso es lo que se quiso mover con la
-       calibracion: llegar mas seguido a la final, no solo salir campeon.
+     - las claves 8vos|4tos|semi|final|campeon dicen hasta donde llegaste. Eso es lo
+       que se quiso mover con la calibracion: llegar mas seguido a la final.
      Solo cuenta desde el sitio publicado: en localhost no se toca nada, para que
      las pruebas no vuelvan a contaminar los numeros. */
   try{
     if(location.hostname.endsWith('github.io')){
       const H='https://hits.sh/andresarbit.github.io/plata-o-mierda/', t=Date.now();
       const res=plata?'plata':'mierda';
+      new Image().src=H+'copas-'+res+'.svg?'+t;                 // historico de siempre
       const hasta=plata?'campeon':(['8vos','4tos','semi','final'][G.resultados.length-1]||'8vos');
-      ['copas-'+res,'v2-copas-'+res,'v2-hasta-'+hasta].forEach(k=>{try{new Image().src=H+k+'.svg?'+t}catch(e){}});
+      ['copas',hasta].forEach(k=>{try{fetch(ABACUS+'/hit/'+NS+'/'+k,{mode:'cors',cache:'no-store'}).catch(()=>{})}catch(e){}});
     }
   }catch(e){}
   const c=$('#card');c.className='card '+(plata?'plata':'mierda');
