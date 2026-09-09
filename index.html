@@ -872,19 +872,19 @@ const SITUACIONES = [
 {id:"camsilbidos",foto:"amb-hinchada",req:"hinchada",tipo:"CAM",t:"La bandera",sit:"La hinchada llegó con una bandera dedicada a vos. No es de agradecimiento.",ops:[
  {l:"Vas al alambrado a hablar",tag:"plata",d:"Cara a cara.",r:[{p:.65,carry:{atk:1.1,def:1.05,txt:"Fuiste al alambrado y les bancaste la cara. Terminaron aplaudiendo."}},{p:.35,carry:{def:.9,txt:"Fuiste al alambrado y te comiste una puteada de veinte minutos. Salís con eso en la cabeza."}}]},
  {l:"Hacés como que no la viste",tag:"mierda",d:"Nada cambia. Ellos siguen.",r:[{p:1,carry:{atk:.95,txt:"Hiciste como que no la viste. La bandera estuvo colgada los noventa minutos."}}]}]},
-{id:"camplantel",foto:"vestuario-charla",req:"bolsillo",tipo:"CAM",t:"Se enteraron",sit:"Alguien contó que el hotel bueno lo pagaste vos. El capitán te para en el pasillo.",ops:[
+{id:"camplantel",foto:"amb-tunel",req:"bolsillo",tipo:"CAM",t:"Se enteraron",sit:"Alguien contó que el hotel bueno lo pagaste vos. El capitán te para en el pasillo.",ops:[
  {l:"Le decís que no es nada",tag:"plata",d:"Y se termina ahí.",r:[{p:1,carry:{atk:1.1,def:1.08,txt:"Le dijiste que no era nada. El vestuario se enteró igual. Ahora corren por vos."}}]},
  {l:"Aprovechás y se los cobrás",tag:"mierda",d:"Se lo recordás en la charla.",r:[{p:1,carry:{atk:.95,def:.95,txt:"Se los recordaste en la charla. Quedó un silencio raro. Nadie te lo agradeció."}}]}]},
-{id:"camcancha",foto:"amb-entrenamiento",tipo:"CAM",t:"El estado de la cancha",sit:"La cancha está pesada. El canchero pregunta si la riega o la deja seca con el pasto largo.",ops:[
+{id:"camcancha",foto:"amb-canchero",tipo:"CAM",t:"El estado de la cancha",sit:"La cancha está pesada. El canchero pregunta si la riega o la deja seca con el pasto largo.",ops:[
  {l:"Que la rieguen",tag:"plata",d:"Pelota rápida. Para los dos.",r:[{p:1,carry:{atk:1.1,def:.95,txt:"Regaron la cancha. La pelota voló. Para vos y para ellos."}}]},
  {l:"Seca y con el pasto largo",tag:"mierda",d:"Se juega horrible. Justo lo que querés.",r:[{p:1,carry:{atk:.95,def:1.12,txt:"Pasto largo y seco. Un partido feo y trabado, de los tuyos."}}]}]},
 {id:"camdoble",foto:"amb-entrenamiento",tipo:"CAM",t:"El doble turno",sit:"El preparador físico quiere doble turno hasta el partido.",ops:[
  {l:"Doble turno",tag:"plata",d:"Llegan enteros o llegan fundidos.",r:[{p:.55,carry:{def:1.15,txt:"Doble turno. Corrieron los noventa como si fueran cuarenta."}},{p:.45,carry:{atk:.88,def:.95,txt:"Doble turno. Llegaron con las piernas duras. Vos lo elegiste."}}]},
  {l:"Los dejás descansar",tag:"mierda",d:"Frescos, pero sueltos.",r:[{p:1,carry:{atk:1.05,def:.95,txt:"Los dejaste descansar. Llegaron frescos y un poco desconectados."}}]}]},
-{id:"camjuvenil",foto:"amb-entrenamiento",tipo:"CAM",t:"El pibe de la reserva",sit:"Un pibe de 17 metió seis goles en la reserva. Nunca pisó primera.",ops:[
+{id:"camjuvenil",foto:"amb-juvenil",tipo:"CAM",t:"El pibe de la reserva",sit:"Un pibe de 17 metió seis goles en la reserva. Nunca pisó primera.",ops:[
  {l:"Lo subís y juega",tag:"plata",d:"Un fenómeno o un pibe asustado.",r:[{p:.5,carry:{atk:1.2,txt:"El pibe entró sin mirar a nadie. Se comió la cancha."}},{p:.5,carry:{atk:.92,txt:"El pibe no tocó una pelota. Le quedó grande. Vos lo subiste."}}]},
  {l:"Que mire desde afuera",tag:"mierda",d:"Ya va a tener su año.",r:[{p:1,carry:{txt:"El pibe se quedó en el banco mirando. Ya va a tener su momento."}}]}]},
-{id:"camcabala",foto:"vestuario-charla",tipo:"CAM",t:"La cábala",sit:"Ganaron el último con la ropa sin lavar. El utilero pregunta qué hace.",ops:[
+{id:"camcabala",foto:"amb-utilero",tipo:"CAM",t:"La cábala",sit:"Ganaron el último con la ropa sin lavar. El utilero pregunta qué hace.",ops:[
  {l:"Nadie lava nada",tag:"plata",d:"Huele a gloria.",r:[{p:.6,carry:{atk:1.08,def:1.05,txt:"Salieron con la ropa del partido anterior. Olía mal y funcionó."}},{p:.4,carry:{def:.95,txt:"Salieron con la ropa sucia y el 5 se agarró una alergia en el cuello."}}]},
  {l:"Que lave todo",tag:"mierda",d:"Limpio y sin magia.",r:[{p:1,carry:{txt:"Lavaron todo. Salieron impecables y sin cábala. Total, eso no existe."}}]}]},
 {id:"camenfermeria",foto:"amb-enfermeria",req:"infiltrado",tipo:"CAM",t:"La enfermería",sit:"El 9 amaneció sin poder apoyar el pie. La infiltración de la ronda pasada le pasó factura.",ops:[
@@ -1310,19 +1310,21 @@ function ruedaVAR(){
    Las de patear comparten encuadre y las de atajar tambien, pero se guarda por toma
    para poder sumar camaras nuevas sin tocar el resto. */
 const ARCOS={
-  patear:[
+  patear:[                                              // detras del jugador, pelota, hombro, penal, lluvia, tiro libre
     {img:"arco-p1",ar:"720/509",red:[5,11,90,48]},
     {img:"arco-p2",ar:"720/509",red:[5,11,90,48]},
     {img:"arco-p3",ar:"720/509",red:[5,11,90,48]},
     {img:"arco-p4",ar:"720/509",red:[5,11,90,48],pen:1},
-    {img:"arco-p5",ar:"720/509",red:[5,11,90,48]}
+    {img:"arco-p5",ar:"720/509",red:[5,11,90,48]},
+    {img:"arco-p6",ar:"720/509",red:[5,11,90,48]}
   ],
-  atajar:[
-    {img:"arco-a1",ar:"720/555",red:[10.5,4.7,79.5,90.3],pen:1},
-    {img:"arco-a2",ar:"720/555",red:[10.5,4.7,79.5,90.3]},
-    {img:"arco-a3",ar:"720/555",red:[10.5,4.7,79.5,90.3]},
-    {img:"arco-a4",ar:"720/555",red:[10.5,4.7,79.5,90.3]},
-    {img:"arco-a5",ar:"720/555",red:[10.5,4.7,79.5,90.3]}
+  atajar:[                                              // camara detras del arco: el arco entra entero y ancho
+    {img:"arco-a1",ar:"720/580",red:[6,36.7,89,43.3],pen:1},
+    {img:"arco-a2",ar:"720/580",red:[6,36.7,89,43.3],pen:1},
+    {img:"arco-a3",ar:"720/580",red:[6,36.7,89,43.3]},
+    {img:"arco-a4",ar:"720/580",red:[6,36.7,89,43.3]},
+    {img:"arco-a5",ar:"720/580",red:[6,36.7,89,43.3]},
+    {img:"arco-a6",ar:"720/580",red:[6,36.7,89,43.3]}
   ]};
 
 const GK_IDLE=`<svg viewBox="0 0 40 60"><circle cx="20" cy="9" r="7" fill="#f1c9a5"/><rect x="11" y="16" width="18" height="24" rx="4" fill="#111"/><rect x="4" y="18" width="7" height="18" rx="3" fill="#111"/><rect x="29" y="18" width="7" height="18" rx="3" fill="#111"/><rect x="12" y="40" width="7" height="18" rx="3" fill="#e6e6e6"/><rect x="21" y="40" width="7" height="18" rx="3" fill="#e6e6e6"/></svg>`;
