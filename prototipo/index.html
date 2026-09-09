@@ -222,7 +222,7 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 <div class="app">
 
 <!-- PORTADA -->
-<img src="https://hits.sh/andresarbit.github.io/plata-o-mierda.svg" alt="" width="1" height="1" style="position:absolute;opacity:0;pointer-events:none">
+<img id="hitVisitas" alt="" width="1" height="1" style="position:absolute;opacity:0;pointer-events:none">
 <button id="bMute" class="mute" aria-label="Sonido">🔊</button>
 <section class="screen on" id="portada">
   <div class="portadaImg"></div>
@@ -1036,6 +1036,8 @@ function epico(done){
   setTimeout(()=>{d.remove();done()},2600);
 }
 /* la tierra y el polvo se precargan para que no falten en el golpe */
+/* la visita solo cuenta desde el sitio publicado, no desde las pruebas locales */
+try{if(location.hostname.endsWith('github.io')){var _hv=document.getElementById('hitVisitas');if(_hv)_hv.src='https://hits.sh/andresarbit.github.io/plata-o-mierda.svg'}}catch(e){}
 ['tierra','polvo1','polvo2','polvo3'].forEach(n=>{try{new Image().src='img/'+n+'.jpg'}catch(e){}});
 /* el polvo es un JPG sobre negro: sin screen se veria un recuadro negro, asi que lo sacamos */
 try{if(!(window.CSS&&CSS.supports&&CSS.supports('mix-blend-mode','screen')))document.documentElement.classList.add('sin-blend')}catch(e){document.documentElement.classList.add('sin-blend')}
@@ -1473,7 +1475,23 @@ function camino(){
 /* ============ TARJETA ============ */
 function tarjeta(plata){
   show('final'); SFX.play(plata?'campeon':'boo');
-  try{new Image().src='https://hits.sh/andresarbit.github.io/plata-o-mierda/copas-'+(plata?'plata':'mierda')+'.svg?'+Date.now()}catch(e){}
+  /* Contadores.
+     - copas-plata / copas-mierda: los de siempre, siguen sumando el historico.
+     - v2-*: arrancan de cero el 2026-09-08 para medir el motor amable por separado.
+       Referencia del motor viejo, antes de que los tests automaticos la ensuciaran:
+       14 plata / 164 mierda = 178 copas, 7,9% de campeon.
+     - v2-hasta-*: hasta donde llegaste. Eso es lo que se quiso mover con la
+       calibracion: llegar mas seguido a la final, no solo salir campeon.
+     Solo cuenta desde el sitio publicado: en localhost no se toca nada, para que
+     las pruebas no vuelvan a contaminar los numeros. */
+  try{
+    if(location.hostname.endsWith('github.io')){
+      const H='https://hits.sh/andresarbit.github.io/plata-o-mierda/', t=Date.now();
+      const res=plata?'plata':'mierda';
+      const hasta=plata?'campeon':(['8vos','4tos','semi','final'][G.resultados.length-1]||'8vos');
+      ['copas-'+res,'v2-copas-'+res,'v2-hasta-'+hasta].forEach(k=>{try{new Image().src=H+k+'.svg?'+t}catch(e){}});
+    }
+  }catch(e){}
   const c=$('#card');c.className='card '+(plata?'plata':'mierda');
   const ronda=G.resultados.length-1;
   const hasta=plata?"Saliste campeón":`Te fuiste en ${RONDAS[ronda]}`;
