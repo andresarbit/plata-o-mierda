@@ -1551,34 +1551,111 @@ function tarjeta(plata){
 /* ============ TARJETA JPG (canvas 1080×1920) ============ */
 function wrapText(ctx,text,x,y,maxW,lh,maxLines){const words=text.split(' ');let line='',lines=0;for(const w of words){const t=line?line+' '+w:w;if(ctx.measureText(t).width>maxW&&line){ctx.fillText(line,x,y);y+=lh;line=w;lines++;if(maxLines&&lines>=maxLines-1){line+='…';break}}else line=t}if(line){ctx.fillText(line,x,y);y+=lh}return y}
 function loadImg(src){return new Promise(r=>{if(!src)return r(null);const i=new Image();i.crossOrigin='anonymous';i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src})}
+/* Tarjeta para compartir. Fondo de pasto, y solo lo principal de la carrera:
+   el equipo que te toco, si fue plata o mierda, y los resultados ronda por ronda.
+   Las decisiones ya se leen en la pantalla final; en la imagen sobraban. */
+function rect(ctx,x,y,w,h,r){ ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath(); }
+/* letterSpacing de canvas no esta en todos los Safari, asi que se espacia a mano */
+function espaciado(ctx,txt,cx,y,sp){
+  const ancho=[...txt].reduce((a,c)=>a+ctx.measureText(c).width+sp,0)-sp;
+  let x=cx-ancho/2; const al=ctx.textAlign; ctx.textAlign='left';
+  for(const c of txt){ ctx.fillText(c,x,y); x+=ctx.measureText(c).width+sp }
+  ctx.textAlign=al;
+}
 async function tarjetaJPG(){
-  const plata=!!G.campeon; const c=$('#tarjetaCanvas'); const ctx=c.getContext('2d'); const W=1080,H=1920;
-  const g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'#0F1411'); g.addColorStop(1,'#1a2a1f'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-  // franja de color del equipo
-  ctx.fillStyle=G.eq.c1; ctx.fillRect(0,0,W,18); ctx.fillStyle=G.eq.c2; ctx.fillRect(0,18,W,8);
-  ctx.textAlign='center'; ctx.fillStyle='#A4AEA6'; ctx.font='600 34px Archivo, sans-serif'; ctx.fillText('PLATA O MIERDA · LA COPA', W/2, 110);
-  // escudo (si se puede cargar cross-origin; si no, generado)
-  let y=150; const u=ESCUDOS[G.eq.id]; const img=await loadImg(u?(/thesportsdb/.test(u)?u+'/preview':u):null);
-  if(img){ const sz=260; const r=Math.min(sz/img.width,sz/img.height); ctx.drawImage(img,W/2-img.width*r/2,y,img.width*r,img.height*r); y+=sz+20; }
-  else { ctx.fillStyle=G.eq.c1; ctx.beginPath(); ctx.moveTo(W/2,y); ctx.lineTo(W/2+120,y+35); ctx.lineTo(W/2+120,y+150); ctx.quadraticCurveTo(W/2+120,y+230,W/2,y+270); ctx.quadraticCurveTo(W/2-120,y+230,W/2-120,y+150); ctx.lineTo(W/2-120,y+35); ctx.closePath(); ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=8; ctx.stroke(); y+=290; }
-  ctx.fillStyle='#F1F2EC'; ctx.font='400 92px Anton, Impact, sans-serif'; y=wrapText(ctx,G.eq.n.toUpperCase(),W/2,y+80,W-120,96,2);
-  ctx.fillStyle='#A4AEA6'; ctx.font='400 34px Archivo, sans-serif'; ctx.fillText(G.eq.pais+' · '+G.eq.liga, W/2, y+10); y+=40;
-  ctx.fillStyle='#E3BE4A'; ctx.font='400 44px Archivo, sans-serif'; ctx.fillText('★'.repeat(Math.floor(G.eq.s))+(G.eq.s%1?'½':'')+'☆'.repeat(5-Math.ceil(G.eq.s)), W/2, y+50); y+=80;
-  // PLATA / MIERDA
-  ctx.fillStyle=plata?'#E3BE4A':'#C89A6E'; ctx.font='400 300px Anton, Impact, sans-serif'; ctx.fillText(plata?'PLATA':'MIERDA', W/2, y+300); y+=340;
-  const ronda=G.resultados.length-1; const hasta=plata?'Salió campeón':'Se fue en '+RONDAS[ronda]+' contra '+G.resultados[ronda].riv;
-  ctx.fillStyle='#F1F2EC'; ctx.font='700 40px Archivo, sans-serif'; y=wrapText(ctx,hasta,W/2,y+40,W-140,50,2);
-  // camino
-  ctx.fillStyle='#A4AEA6'; ctx.font='400 32px Archivo, sans-serif'; y+=20;
-  for(const r of G.resultados){ ctx.fillText((r.win?'✔ ':'✘ ')+r.riv+'  '+r.txt, W/2, y+40); y+=46; }
-  // decisiones
-  const claves=G.decisiones.filter(d=>d.gf||d.gc||d.rojo||/Camino/.test(d.ronda)).slice(-4);
-  if(claves.length){ y+=40; ctx.fillStyle='#E3BE4A'; ctx.font='600 30px Archivo, sans-serif'; ctx.fillText('LO QUE TE MARCÓ', W/2, y+30); y+=50; ctx.fillStyle='#F1F2EC'; ctx.font='400 30px Archivo, sans-serif'; ctx.textAlign='left';
-    for(const d of claves){ y=wrapText(ctx,'• '+d.op+': '+d.txt, 90, y+34, W-180, 38, 2); y+=6; if(y>H-260)break; } ctx.textAlign='center'; }
-  // pie
-  ctx.fillStyle='#E3BE4A'; ctx.font='400 44px Anton, Impact, sans-serif'; ctx.fillText(G.plata+' PLATA · '+G.mierda+' MIERDA', W/2, H-150);
-  ctx.fillStyle='#A4AEA6'; ctx.font='400 30px Archivo, sans-serif'; ctx.fillText('andresarbit.github.io/plata-o-mierda', W/2, H-90);
-  ctx.fillText('Jugá la misma copa: semilla '+G.seed, W/2, H-50);
+  try{ await document.fonts.ready }catch(e){}
+  const plata=!!G.campeon, c=$('#tarjetaCanvas'), ctx=c.getContext('2d'), W=1080, H=1920;
+  const ORO='#E3BE4A', BLANCO='#F1F2EC', GRIS='#9AA79C';
+
+  // fondo: pasto, y encima un degradado para que el texto lea
+  const pasto=await loadImg('img/pasto.jpg');
+  if(pasto) ctx.drawImage(pasto,0,0,W,H);
+  else { ctx.fillStyle='#16241a'; ctx.fillRect(0,0,W,H); }
+  let g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'rgba(8,12,9,.78)'); g.addColorStop(.30,'rgba(8,12,9,.26)');
+  g.addColorStop(.70,'rgba(8,12,9,.34)'); g.addColorStop(1,'rgba(8,12,9,.86)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  // viñeta, para que el pasto quede pero los bordes no compitan
+  const vg=ctx.createRadialGradient(W/2,H/2,H*.28,W/2,H/2,H*.72);
+  vg.addColorStop(0,'rgba(8,12,9,0)'); vg.addColorStop(1,'rgba(8,12,9,.72)');
+  ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
+
+  // franja con los colores del equipo
+  ctx.fillStyle=G.eq.c1; ctx.fillRect(0,0,W,14); ctx.fillStyle=G.eq.c2; ctx.fillRect(0,14,W,6);
+  ctx.textAlign='center';
+
+  ctx.fillStyle=ORO; ctx.font='600 30px Archivo, sans-serif';
+  espaciado(ctx,'PLATA O MIERDA',W/2,108,9);
+  ctx.fillStyle='rgba(227,190,74,.35)'; ctx.fillRect(W/2-70,130,140,3);
+
+  // se mide el bloque antes de dibujarlo para centrarlo entre el titulo y el pie:
+  // con tres resultados sobraba un hueco grande abajo
+  ctx.font='400 80px Anton, Impact, sans-serif';
+  const lineasNom = ctx.measureText(G.eq.n.toUpperCase()).width > (W-140) ? 2 : 1;
+  const nFilas=G.resultados.length, altoFila=76, altoPanel=nFilas*altoFila+28;
+  const bloque = 244 + lineasNom*86 + 90 + 270 + 80 + altoPanel + 64 + 50;
+  const TOPE=170, PIE=H-150;
+  let y = TOPE + Math.max(0,(PIE-TOPE-bloque)/2);
+
+  // escudo
+  const u=ESCUDOS[G.eq.id];
+  const img=await loadImg(u?(/thesportsdb/.test(u)?u+'/preview':u):null);
+  if(img){ const sz=210, r=Math.min(sz/img.width,sz/img.height);
+    ctx.drawImage(img,W/2-img.width*r/2,y,img.width*r,img.height*r); y+=sz+34; }
+  else { ctx.fillStyle=G.eq.c1; ctx.beginPath(); ctx.moveTo(W/2,y); ctx.lineTo(W/2+95,y+28);
+    ctx.lineTo(W/2+95,y+120); ctx.quadraticCurveTo(W/2+95,y+184,W/2,y+216);
+    ctx.quadraticCurveTo(W/2-95,y+184,W/2-95,y+120); ctx.lineTo(W/2-95,y+28); ctx.closePath();
+    ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.85)'; ctx.lineWidth=7; ctx.stroke(); y+=250; }
+
+  ctx.fillStyle=BLANCO; ctx.font='400 80px Anton, Impact, sans-serif';
+  y=wrapText(ctx,G.eq.n.toUpperCase(),W/2,y+62,W-140,86,2);
+  ctx.fillStyle=ORO; ctx.font='400 38px Archivo, sans-serif';
+  ctx.fillText('★'.repeat(Math.floor(G.eq.s))+(G.eq.s%1?'½':'')+'☆'.repeat(5-Math.ceil(G.eq.s)),W/2,y+26);
+  y+=90;
+
+  // el veredicto
+  ctx.fillStyle=plata?ORO:'#C89A6E';
+  ctx.font='400 250px Anton, Impact, sans-serif';
+  ctx.shadowColor='rgba(0,0,0,.75)'; ctx.shadowBlur=34; ctx.shadowOffsetY=8;
+  ctx.fillText(plata?'PLATA':'MIERDA',W/2,y+215);
+  ctx.shadowColor='transparent'; ctx.shadowBlur=0; ctx.shadowOffsetY=0;
+  y+=270;
+
+  const ronda=G.resultados.length-1;
+  ctx.fillStyle=BLANCO; ctx.font='700 38px Archivo, sans-serif';
+  ctx.fillText(plata?('Campeón con '+G.eq.n):('Se fue en '+RONDAS[ronda]),W/2,y+30);
+  y+=80;
+
+  // los resultados, ronda por ronda
+  const alto=altoFila, panel=altoPanel;
+  ctx.fillStyle='rgba(8,12,9,.62)'; rect(ctx,80,y,W-160,panel,20); ctx.fill();
+  ctx.strokeStyle='rgba(227,190,74,.22)'; ctx.lineWidth=2; ctx.stroke();
+  let fy=y+14;
+  G.resultados.forEach((r,k)=>{
+    if(k) { ctx.fillStyle='rgba(255,255,255,.07)'; ctx.fillRect(110,fy,W-220,1); }
+    ctx.textAlign='left'; ctx.fillStyle=ORO; ctx.font='600 26px Archivo, sans-serif';
+    ctx.fillText((RONDAS[k]||'').toUpperCase(),112,fy+32);
+    ctx.fillStyle=r.win?'#7FD18B':'#D98C7A'; ctx.font='400 34px Archivo, sans-serif';
+    ctx.fillText(r.win?'✔':'✘',112,fy+66);
+    ctx.fillStyle=BLANCO; ctx.font='400 32px Archivo, sans-serif';
+    const riv=r.riv.length>26?r.riv.slice(0,25)+'…':r.riv;
+    ctx.fillText(riv,152,fy+66);
+    ctx.textAlign='right'; ctx.fillStyle=GRIS; ctx.font='400 30px Archivo, sans-serif';
+    ctx.fillText(r.txt,W-112,fy+66);
+    fy+=alto;
+  });
+  ctx.textAlign='center'; y+=panel+64;
+
+  ctx.fillStyle=ORO; ctx.font='400 40px Anton, Impact, sans-serif';
+  ctx.fillText(G.plata+' PLATA · '+G.mierda+' MIERDA',W/2,y+34);
+
+  ctx.fillStyle=GRIS; ctx.font='400 28px Archivo, sans-serif';
+  ctx.fillText('andresarbit.github.io/plata-o-mierda',W/2,H-88);
+  ctx.fillText('semilla '+G.seed,W/2,H-46);
   return new Promise(r=>c.toBlob(r,'image/jpeg',.9));
 }
 
