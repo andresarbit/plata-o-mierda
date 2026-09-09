@@ -125,6 +125,20 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .sorteoResumen span{display:inline-block;margin:4px 6px 0 0;padding:2px 8px;border:1px solid var(--line);border-radius:3px}
 .sorteoResumen span.no{text-decoration:line-through;opacity:.7}
 .sorteoResumen span.mio{border-color:var(--plata);color:var(--plata);font-weight:700}
+/* versus de la seccion para FC */
+.vs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin:14px 0 6px;
+  background:var(--bg2);border-radius:12px;padding:16px 10px}
+.vs .lado{text-align:center;min-width:0}
+.vs .lado img,.vs .lado svg{width:54px;height:54px;object-fit:contain;display:block;margin:0 auto 6px}
+.vs .nom{font-family:"Anton",sans-serif;font-size:17px;line-height:1.05;text-transform:uppercase;
+  overflow-wrap:anywhere;hyphens:auto}
+.vs .det{font-size:11px;color:var(--ink2);margin-top:3px;line-height:1.25}
+.vs .est{font-size:13px;color:var(--plata);margin-top:3px;letter-spacing:.02em}
+.vs .mid{font-family:"Anton",sans-serif;font-size:20px;color:var(--ink2)}
+.fcTirada{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);text-align:center;margin:2px 0 8px}
+.fcTirada b{color:var(--plata)}
+.fcFinal{border-left:4px solid var(--plata);background:var(--plata-bg);padding:10px 14px;font-size:14px;margin:8px 0}
+.fcFinal.m{border-left-color:var(--mierda);background:var(--mierda-bg)}
 .stats{margin-top:10px;font-size:13px;color:var(--ink2);line-height:1.7}
 .stats b{color:var(--ink)}
 .stats .lnk{background:none;border:0;color:var(--plata);text-decoration:underline;cursor:pointer;font:inherit;padding:0}
@@ -187,16 +201,39 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .varptr{position:absolute;left:50%;top:-13px;margin-left:-13px;width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:26px solid #f0c64a;z-index:2;filter:drop-shadow(0 3px 3px rgba(0,0,0,.7))}
 /* arco */
 .arcoFoto{position:relative;margin:10px 0 6px;border-radius:8px;overflow:hidden;background:#000 center/cover no-repeat;box-shadow:0 8px 24px rgba(0,0,0,.5)}
-.arcoFoto .red{position:absolute;border:0;background:none;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(3,1fr);aspect-ratio:auto;overflow:visible}
-/* tiro libre: en vez de 15 casilleros, una reticula fina de 12x5.
-   La pelota va casi exactamente donde tocaste, pero cuantizada al centro de la
-   celda mas cercana: 60 destinos en vez de 15, sin llegar al pixel. */
-.arcoFoto .mira{position:absolute;cursor:crosshair;border:2px solid rgba(240,198,74,.55);border-radius:6px;
-  background-image:repeating-linear-gradient(to right,rgba(240,198,74,.42) 0 1px,transparent 1px 8.3333%),
-                   repeating-linear-gradient(to bottom,rgba(240,198,74,.42) 0 1px,transparent 1px 20%),
-                   linear-gradient(rgba(10,14,10,.22),rgba(10,14,10,.22));
-  box-shadow:inset 0 0 26px rgba(240,198,74,.16),0 0 0 1px rgba(0,0,0,.45)}
-.arcoFoto .mira.listo{cursor:default}
+/* Defender: la pelota y la pierna del rival se mueven con ritmos distintos, asi
+   que la ventana para entrar limpio se abre y se cierra sola. Se toca la pelota
+   y defendiste; se toca la pierna y es falta. */
+.tackle{position:relative;width:100%;aspect-ratio:720/645;border-radius:8px;overflow:hidden;cursor:pointer;
+  background:#0b0f0c center/cover no-repeat;background-image:url(img/defender.jpg);
+  box-shadow:0 8px 24px rgba(0,0,0,.5);touch-action:manipulation}
+.tackle .zona{position:absolute;left:4%;right:4%;top:40%;bottom:6%;border:3px solid rgba(226,70,58,.75);
+  border-radius:8px;pointer-events:none;animation:latir 1.6s ease-in-out infinite}
+.tackle.listo .zona{animation:none;border-color:rgba(240,198,74,.7)}
+.tackle .pierna{position:absolute;top:52%;width:58px;height:150px;margin:-14px 0 0 -29px;border-radius:28px;
+  background:linear-gradient(180deg,#232d28,#0b100d);border:2px solid rgba(255,255,255,.16);
+  box-shadow:0 10px 26px rgba(0,0,0,.75);animation:driblaPierna 1.15s ease-in-out infinite alternate}
+.tackle .pierna::after{content:"";position:absolute;left:-8px;right:-14px;bottom:-6px;height:34px;border-radius:14px;
+  background:linear-gradient(180deg,#e9e6dc,#b9b4a6);box-shadow:0 4px 10px rgba(0,0,0,.6)}
+.tackle .balon{position:absolute;top:76%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;
+  background:#fff;box-shadow:inset -4px -4px 0 #9a9a9a,0 0 18px rgba(255,255,255,.8),0 6px 14px rgba(0,0,0,.6);
+  animation:driblaPelota 1.5s ease-in-out infinite alternate}
+.tackle.listo .pierna,.tackle.listo .balon{animation-play-state:paused}
+@keyframes driblaPierna{from{left:26%}to{left:74%}}
+@keyframes driblaPelota{from{left:70%}to{left:30%}}
+@media (prefers-reduced-motion:reduce){.tackle .pierna,.tackle .balon{animation-duration:3s}}
+/* Apuntar: no se muestra ninguna division adentro del arco. Solo un rectangulo
+   rojo que late marcando donde hay que tocar. La reticula que cuantiza el toque
+   existe en el codigo, no en la pantalla. */
+.arcoFoto .mira{position:absolute;cursor:crosshair;border-radius:8px;
+  border:3px solid rgba(226,70,58,.75);
+  box-shadow:0 0 16px rgba(226,70,58,.45),inset 0 0 30px rgba(226,70,58,.10);
+  animation:latir 1.6s ease-in-out infinite}
+@keyframes latir{
+  0%,100%{border-color:rgba(226,70,58,.55);box-shadow:0 0 10px rgba(226,70,58,.28),inset 0 0 20px rgba(226,70,58,.07)}
+  50%    {border-color:rgba(255,96,80,1);  box-shadow:0 0 30px rgba(255,96,80,.8), inset 0 0 40px rgba(255,96,80,.20)}}
+.arcoFoto .mira.listo{cursor:default;animation:none;border-color:rgba(240,198,74,.7);box-shadow:0 0 14px rgba(240,198,74,.4)}
+@media (prefers-reduced-motion:reduce){.arcoFoto .mira{animation:none}}
 .arcoFoto .barrera{position:absolute;background:rgba(0,0,0,.34);border-top:2px dashed rgba(255,255,255,.28);pointer-events:none}
 .arcoFoto .pin{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;pointer-events:none;
   border:2px solid rgba(240,198,74,.95);box-shadow:0 0 12px rgba(240,198,74,.7)}
@@ -207,11 +244,6 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .arcoFoto .guante{position:absolute;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;pointer-events:none;
   background:rgba(226,91,74,.55);border:2px solid rgba(255,150,130,.9);box-shadow:0 0 16px rgba(255,120,100,.6);
   transition:left .38s ease-out,top .38s ease-out}
-.arcoFoto .cell{border:1.5px solid rgba(240,198,74,.5);border-radius:5px;background:rgba(240,198,74,.05);box-shadow:inset 0 0 12px rgba(240,198,74,.14),0 0 6px rgba(240,198,74,.14);position:relative;color:transparent}
-.arcoFoto .cell:hover,.arcoFoto .cell:focus-visible{background:rgba(240,198,74,.3)}
-.arcoFoto .cell.pick{background:rgba(240,198,74,.62);box-shadow:inset 0 0 16px rgba(255,255,255,.6)}
-.arcoFoto .cell.gkcell{background:rgba(226,91,74,.5);box-shadow:inset 0 0 16px rgba(255,120,100,.75)}
-.arcoFoto .cell.ball::after{content:"";position:absolute;inset:0;margin:auto;width:44%;aspect-ratio:1;border-radius:50%;background:#fff;box-shadow:inset -2px -2px 0 #999,0 0 10px rgba(255,255,255,.7)}
 .arco{margin:12px 0 4px;background:linear-gradient(var(--pasto),var(--pasto2));padding:14px 10px 6px;border-radius:8px;position:relative}
 .red{position:relative;border:4px solid #eee;border-bottom:0;border-radius:3px 3px 0 0;background:
   repeating-linear-gradient(0deg,rgba(255,255,255,.13) 0 1px,transparent 1px 11px),
@@ -240,7 +272,9 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .rd{background:var(--bg);border-radius:8px;padding:8px 4px 9px;text-align:center;border-top:4px solid var(--line);opacity:1}
 .rd.ok{border-top-color:#5FBF74} .rd.no{border-top-color:var(--mierda)} .rd.off{opacity:.35}
 .rd b{display:block;font-family:"Anton",sans-serif;font-size:11px;letter-spacing:.08em;color:var(--ink2)}
-.rd span{display:block;font-size:15px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
+.rd em{display:block;font-style:normal;font-size:11px;line-height:1.15;color:var(--ink);margin-top:4px;
+  min-height:26px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.rd span{display:block;font-size:15px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
 .rd .pen{display:block;font-size:10px;color:var(--plata);letter-spacing:.05em}
 /* numeros del torneo */
 .nums{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
@@ -274,6 +308,7 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
     <p>Te toca un equipo. Tenés tres chances de quedártelo o tirar de nuevo; a la cuarta, plata o mierda. Siempre puede venir algo mejor... o no. Después, una copa a pura decisión. Campeón es plata. Lo demás, mierda.</p>
   </div>
   <button class="btn oro" id="bRandom">Tirar <small>El equipo te toca. No se elige. Así es esto.</small></button>
+  <button class="btn sec" id="bFC">Plata o mierda para FC <small>Un versus al azar para jugar en la consola. Tres chances y la cuarta es la que hay.</small></button>
   <details class="cfg"><summary>Parámetros de prueba</summary>
     <label>Segundos reales por partido <input id="cDur" type="number" value="13" min="10" max="180"></label>
     <label>Decisiones por tiempo <input id="cDec" type="number" value="2" min="1" max="4"></label>
@@ -285,6 +320,48 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 </section>
 
 <!-- ELECCIÓN -->
+<!-- PLATA O MIERDA PARA FC -->
+<section class="screen" id="fc">
+  <div class="eyebrow">Para la consola</div>
+  <h2 class="display" style="font-size:32px;margin:4px 0 2px">Plata o mierda para FC</h2>
+  <p class="kicker" style="color:var(--ink2);font-size:14px;margin:0 0 10px">
+    Tirás y te sale un versus. Tres veces podés pedir otro. La cuarta es la que hay.</p>
+  <details class="cfg" id="fcCfg"><summary>Cómo querés el random</summary>
+    <label>Estrellas desde
+      <select id="fcMin"><option>1</option><option>1.5</option><option>2</option><option>2.5</option><option selected>3</option><option>3.5</option><option>4</option><option>4.5</option><option>5</option></select>
+    </label>
+    <label>Estrellas hasta
+      <select id="fcMax"><option>1</option><option>1.5</option><option>2</option><option>2.5</option><option>3</option><option>3.5</option><option>4</option><option>4.5</option><option selected>5</option></select>
+    </label>
+    <label>Región
+      <select id="fcReg">
+        <option value="todo" selected>Todas</option>
+        <option value="arg">Solo Argentina</option>
+        <option value="sud">Sudamérica (tipo Libertadores)</option>
+        <option value="eur">Europa (tipo Champions)</option>
+        <option value="resto">Resto del mundo</option>
+      </select>
+    </label>
+    <label>Emparejamiento
+      <select id="fcPar">
+        <option value="libre" selected>Como salga</option>
+        <option value="parejo">Parejo (hasta media estrella)</option>
+        <option value="desparejo">David contra Goliat (estrella y media o más)</option>
+      </select>
+    </label>
+    <label>Países
+      <select id="fcPais">
+        <option value="libre" selected>Como salga</option>
+        <option value="mismo">Clásico: mismo país</option>
+        <option value="distinto">Internacional: países distintos</option>
+      </select>
+    </label>
+  </details>
+  <div id="fcVs"></div>
+  <div id="fcBtns"></div>
+  <button class="btn sec" id="bFCsalir">Volver</button>
+</section>
+
 <section class="screen" id="eleccion">
   <div class="eyebrow">Tu equipo</div>
   <input type="search" id="buscar" placeholder="Buscá por club, país o liga" autocomplete="off">
@@ -1264,6 +1341,7 @@ function empezarPartido(){
   slots(50,82,n).forEach(m=>M.agenda.push({min:m,tipo:rnd()<.3?"ARQ":"ST"}));
   if(rnd()<.5)M.agenda.push({min:52+Math.floor(rnd()*28),tipo:"VAR"});
   if(rnd()<.45)M.agenda.push({min:18+Math.floor(rnd()*58),tipo:"TL"});  // tiro libre con punteria
+  if(rnd()<.5)M.agenda.push({min:22+Math.floor(rnd()*50),tipo:"DEF"}); // cruce: sacarle la pelota sin hacer falta
   M.agenda.push({min:83+Math.floor(rnd()*3),tipo:"LATE"});
   M.agenda.push({min:87+Math.floor(rnd()*2),tipo:"ARCO"});
   M.agenda.sort((a,b)=>a.min-b.min);
@@ -1316,12 +1394,13 @@ function decision(a){
   if(a.tipo==="ET")SFX.play('silbato');
   if(a.tipo==="ARCO"){ // tiro decisivo o atajada decisiva, según quién esté peor
     const soyArquero=(M.gA>M.gB)?true:(M.gA<M.gB)?false:rnd()<.5;
-    return arco(soyArquero?"atajar":"patear",(res)=>{reanudar()});
+    return apuntar(soyArquero?"atajar":"patear","jugada",()=>reanudar());
   }
   let s;
   if(a.id){s=SITUACIONES.find(x=>x.id===a.id)}
   else if(a.tipo==="VAR"){ return ruedaVAR(); }
-  else if(a.tipo==="TL"){ return tiroLibre(()=>reanudar()); }
+  else if(a.tipo==="TL"){ return apuntar(rnd()<.55?"patear":"atajar","libre",()=>reanudar()); }
+  else if(a.tipo==="DEF"){ return defender(()=>reanudar()); }
   else if(a.tipo==="LATE"){ // el arquero sube al córner: sólo al final y perdiendo
     if(!(M.gA<M.gB)||M.fuera.has("1"))return reanudar();
     const late=SITUACIONES.filter(x=>x.tipo==="LATE"&&marcOK(x)&&!(x.usa||[]).some(n=>M.fuera.has(n)));
@@ -1392,10 +1471,11 @@ function ruedaVAR(){
   const n=VAR_SECT.length, step=360/n;
   sh.innerHTML=`<div class="eyebrow">Minuto ${M.min} · la rueda del VAR</div><p class="sit">${pick(["Jugada polémica en el área. El árbitro se va a la pantallita.","Se armó el tumulto y el árbitro dibuja la pantallita con las manos.","Todos gritan. El árbitro corre hasta el monitor al costado de la cancha."])} Girá y bancate lo que salga.</p>
   <div class="foto sala"></div>
-  <div class="varwrap"><div class="varptr"></div><div class="var" id="var"></div></div>
+  <div class="varwrap"><div class="varptr"></div><div class="var" id="var" role="button" tabindex="0" aria-label="Girar la rueda"></div></div>
   <div class="linea"><button id="bGirar">Girar</button></div>`;
-  $('#bGirar').onclick=()=>{
-    $('#bGirar').disabled=true;
+  const girar=()=>{
+    if($('#bGirar').disabled)return;
+    $('#bGirar').disabled=true; $('#var').style.cursor='default';
     const i=Math.floor(rnd()*n), res=VAR_SECT[i];
     const ang=360*5+(360-i*step);   // el sector i está centrado en i*step, el puntero arriba
     const w=$('#var'); w.style.transition='transform 2.6s cubic-bezier(.15,.8,.2,1)'; w.style.transform=`rotate(${ang}deg)`;
@@ -1416,6 +1496,11 @@ function ruedaVAR(){
       marcador();sh.style.display="none";reanudar();
     },2900);
   };
+  $('#bGirar').onclick=girar;
+  // se puede girar tocando la pelota del centro, no solo el boton
+  $('#var').style.cursor='pointer';
+  $('#var').onclick=girar;
+  $('#var').onkeydown=(e)=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();girar()}};
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
 
@@ -1423,175 +1508,309 @@ function ruedaVAR(){
 /* Cada toma trae su rectangulo de arco medido sobre la foto: [izq, arriba, ancho, alto] en %.
    Las de patear comparten encuadre y las de atajar tambien, pero se guarda por toma
    para poder sumar camaras nuevas sin tocar el resto. */
+/* Cada toma sirve para lo que muestra: la del penal solo sale en penales, la del
+   tiro libre solo en tiros libres. red = boca del arco medida sobre la foto, en %. */
 const ARCOS={
-  patear:[                                              // detras del jugador, pelota, hombro, penal, lluvia, tiro libre
-    {img:"arco-p1",ar:"720/509",red:[5,11,90,48]},
-    {img:"arco-p2",ar:"720/509",red:[5,11,90,48]},
-    {img:"arco-p3",ar:"720/509",red:[5,11,90,48]},
-    {img:"arco-p4",ar:"720/509",red:[5,11,90,48],pen:1},
-    {img:"arco-p5",ar:"720/509",red:[5,11,90,48]},
-    {img:"arco-p6",ar:"720/509",red:[5,11,90,48]}
-  ],
-  tirolibre:[     // mismas medidas: se generaron con la misma referencia.
-                  // arco-t3 queda afuera: la pierna del pateador tapa el cuarto izquierdo del arco
-                  // y no se ve donde estas apuntando.
-    {img:"arco-t1",ar:"720/509",red:[5,11,90,48]},
-    {img:"arco-t2",ar:"720/509",red:[5,11,90,48]},
-    {img:"arco-p6",ar:"720/509",red:[5,11,90,48]}
-  ],
-  atajar:[                                              // camara detras del arco: el arco entra entero y ancho
-    {img:"arco-a1",ar:"720/580",red:[6,36.7,89,43.3],pen:1},
-    {img:"arco-a2",ar:"720/580",red:[6,36.7,89,43.3],pen:1},
-    {img:"arco-a3",ar:"720/580",red:[6,36.7,89,43.3]},
-    {img:"arco-a4",ar:"720/580",red:[6,36.7,89,43.3]},
-    {img:"arco-a5",ar:"720/580",red:[6,36.7,89,43.3]},
-    {img:"arco-a6",ar:"720/580",red:[6,36.7,89,43.3]}
-  ]};
+  patear:{
+    penal:  [{img:"arco-p4",ar:"720/509",red:[5,11,90,48]},
+             {img:"arco-p7",ar:"720/509",red:[5,11,90,48]}],
+    jugada: [{img:"arco-p1",ar:"720/509",red:[5,11,90,48]},
+             {img:"arco-p2",ar:"720/509",red:[5,11,90,48]},
+             {img:"arco-p3",ar:"720/509",red:[5,11,90,48]},
+             {img:"arco-p5",ar:"720/509",red:[5,11,90,48]}],
+    libre:  [{img:"arco-t1",ar:"720/509",red:[5,11,90,48]},
+             {img:"arco-t2",ar:"720/509",red:[5,11,90,48]},
+             {img:"arco-p6",ar:"720/509",red:[5,11,90,48]}]
+  },
+  atajar:{
+    penal:  [{img:"arco-a1",ar:"720/580",red:[6,36.7,89,43.3]},
+             {img:"arco-a2",ar:"720/580",red:[6,36.7,89,43.3]}],
+    jugada: [{img:"arco-a3",ar:"720/580",red:[6,36.7,89,43.3]},
+             {img:"arco-a5",ar:"720/580",red:[6,36.7,89,43.3]},
+             {img:"arco-a6",ar:"720/580",red:[6,36.7,89,43.3]}],
+    libre:  [{img:"arco-a4",ar:"720/580",red:[6,36.7,89,43.3]},
+             {img:"arco-a7",ar:"720/580",red:[6,36.7,89,43.3]}]
+  }};
 
-const GK_IDLE=`<svg viewBox="0 0 40 60"><circle cx="20" cy="9" r="7" fill="#f1c9a5"/><rect x="11" y="16" width="18" height="24" rx="4" fill="#111"/><rect x="4" y="18" width="7" height="18" rx="3" fill="#111"/><rect x="29" y="18" width="7" height="18" rx="3" fill="#111"/><rect x="12" y="40" width="7" height="18" rx="3" fill="#e6e6e6"/><rect x="21" y="40" width="7" height="18" rx="3" fill="#e6e6e6"/></svg>`;
+/* Numeros de cada contexto. alcance = cuanto llega el que ataja, en metros.
+   err = cuanto se desvia el que patea respecto de donde apunto. */
+const CTX={
+  penal: {alcance:1.42, errP:.045, errA:.045, barrera:false, afueraExtra:.00,
+          tit:{patear:"Penal a favor",atajar:"Penal en contra"}},
+  jugada:{alcance:2.40, errP:.055, errA:.075, barrera:false, afueraExtra:.02,
+          tit:{patear:"Quedaste mano a mano",atajar:"Te quedaron mano a mano"}},
+  libre: {alcance:2.62, errP:.040, errA:.055, barrera:true,  afueraExtra:.00,
+          tit:{patear:"Tiro libre a favor",atajar:"Tiro libre en contra"}}
+};
 const GK_ARMS=`<svg viewBox="0 0 40 60"><circle cx="20" cy="14" r="7" fill="#f1c9a5"/><rect x="11" y="20" width="18" height="22" rx="4" fill="#111"/><rect x="-2" y="2" width="7" height="24" rx="3" fill="#111" transform="rotate(-40 1 14)"/><rect x="35" y="2" width="7" height="24" rx="3" fill="#111" transform="rotate(40 39 14)"/><rect x="10" y="42" width="7" height="17" rx="3" fill="#e6e6e6" transform="rotate(15 13 42)"/><rect x="23" y="42" width="7" height="17" rx="3" fill="#e6e6e6" transform="rotate(-15 27 42)"/></svg>`;
-function arco(modo,cb,ctx){
-  const sh=$('#sheet');sh.style.display="block";
-  const pen=!!M.enPenales;
-  const titulo=pen?(modo==="patear"?"Penales · pateás vos":"Penales · atajás vos"):(modo==="patear"?"Tiro decisivo":"Atajada decisiva");
-  // el pateador: pie hábil + tendencia. Derecho cruzado = a TU derecha; derecho abierto = a TU izquierda (al revés para el zurdo).
-  const pie=rnd()<.65?"derecho":"zurdo"; const tipo=rnd()<.55?"cruzada":(rnd()<.6?"abierta":"al medio");
-  const lado=tipo==="al medio"?"centro":((pie==="derecho")===(tipo==="cruzada")?"derecha":"izquierda"); // desde tu punto de vista
-  const tend=`Patea un <b>${pie.toUpperCase()}</b>. Tendencia: la tira <b>${tipo.toUpperCase()}</b>${tipo==="al medio"?"":" (para vos, "+lado+")"}.`;
-  const sit=pen?(modo==="patear"?`Último penal. Si la metés, seguís. Si la tirás afuera, a casa. Elegí dónde la ponés.`:`Ahora atajás vos. Si la sacás, ganaste. Elegí a dónde te tirás. ${tend}`):(modo==="patear"?`Minuto ${M.min}. Quedaste mano a mano. Elegí dónde la ponés. Los palos de arriba son gol seguro si entra... si entra.`:`Minuto ${M.min}. Penal en contra. Elegí a dónde te tirás. ${tend}`);
-  const lbl=pen?"Penal":(modo==="patear"?"Tiro decisivo":"Atajada decisiva");
-  const cells=[];for(let r=0;r<3;r++)for(let c=0;c<5;c++)cells.push(`<button class="cell" data-r="${r}" data-c="${c}" aria-label="fila ${r+1} columna ${c+1}">·</button>`);
-  const pool=ARCOS[modo]; const conPen=pool.filter(x=>x.pen);
-  const A=pick(pen&&conPen.length?conPen:pool);          // en los penales, la toma de penal
-  const foto=`<div class="arcoFoto" style="aspect-ratio:${A.ar};background-image:url(img/${A.img}.jpg)"><div class="red" style="left:${A.red[0]}%;top:${A.red[1]}%;width:${A.red[2]}%;height:${A.red[3]}%">${cells.join("")}</div></div>`;
-  sh.innerHTML=`<div class="eyebrow">${titulo}</div><p class="sit">${sit}</p>${foto}<p class="sub">${modo==="patear"?"Tocá un casillero del arco para patear.":"Tocá un casillero para elegir a dónde te tirás."}</p>`;
-  const colPos=(c)=>(c*20)+"%";
-  const rowBottom=(r)=>(r===0?"30%":r===1?"12%":"0%");
-  // alcance del arquero: su casillero + adyacentes horizontales en filas medias/bajas; en fila de arriba sólo su casillero y el de al lado si está cerca del centro
-  const ataja=(kr,kc,sr,sc)=>{ if(kr===sr&&Math.abs(kc-sc)<=1)return true; if(Math.abs(kr-sr)===1&&kc===sc)return true; return false };
-  const keeperAI=()=>{ // tiende al centro, con sesgo
-    const c=weighted([{p:.1,v:0},{p:.22,v:1},{p:.36,v:2},{p:.22,v:3},{p:.1,v:4}]).v;
-    const r=weighted([{p:.2,v:0},{p:.45,v:1},{p:.35,v:2}]).v;return {r,c}};
-  const shooterAI=()=>{ // 70% respeta su tendencia, 30% te sorprende
-    const bias=rnd()<.7;
-    let c;
-    if(bias&&lado==="derecha")c=weighted([{p:.05,v:0},{p:.1,v:1},{p:.15,v:2},{p:.35,v:3},{p:.35,v:4}]).v;
-    else if(bias&&lado==="izquierda")c=weighted([{p:.35,v:0},{p:.35,v:1},{p:.15,v:2},{p:.1,v:3},{p:.05,v:4}]).v;
-    else if(bias&&lado==="centro")c=weighted([{p:.08,v:0},{p:.17,v:1},{p:.5,v:2},{p:.17,v:3},{p:.08,v:4}]).v;
-    else c=weighted([{p:.22,v:0},{p:.18,v:1},{p:.2,v:2},{p:.18,v:3},{p:.22,v:4}]).v;
-    const r=weighted([{p:.35,v:0},{p:.3,v:1},{p:.35,v:2}]).v;return {r,c}};
-  const pal=(r,c)=>(r===0&&(c===0||c===4));
-  sh.querySelectorAll('.cell').forEach(b=>b.onclick=()=>{
-    sh.querySelectorAll('.cell').forEach(x=>x.onclick=null);
-    const r=+b.dataset.r,c=+b.dataset.c;b.classList.add('pick');
-    let gol,txt; SFX.play('patada');
-    if(modo==="patear"){
-      const k=keeperAI();
-      setTimeout(()=>{const kc=sh.querySelector(`.cell[data-r="${k.r}"][data-c="${k.c}"]`); if(kc)kc.classList.add('gkcell');
-        const afuera=pal(r,c)?rnd()<.22:(r===0?rnd()<.1:rnd()<.04);
-        const balls=sh.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);balls.classList.add('ball');
-        if(afuera){gol=false;txt=pal(r,c)?"La buscaste al ángulo y se fue por arriba. Por centímetros. Era gol.":"La tiraste afuera. Así, sin arquero."}
-        else if(ataja(k.r,k.c,r,c)){gol=false;txt="El arquero adivinó. La sacó. Mirá dónde se tiró."}
-        else{gol=true;txt=pal(r,c)?"AL ÁNGULO. Inatajable. Plata pura.":"Gol. El arquero se tiró al otro lado."}
-        fin();},380);
-    }else{
-      const s=shooterAI();
-      setTimeout(()=>{const kc=sh.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`); if(kc)kc.classList.add('gkcell');
-        const balls=sh.querySelector(`.cell[data-r="${s.r}"][data-c="${s.c}"]`);balls.classList.add('ball');
-        const afuera=pal(s.r,s.c)?rnd()<.2:rnd()<.06;
-        if(afuera){gol=false;txt="La tiró afuera. Vos te habías tirado al otro lado, pero no importa."}
-        else if(ataja(r,c,s.r,s.c)){gol=false;txt="¡LA ATAJASTE! Adivinaste el palo. Sos un muro."}
-        else{gol=true;txt="Gol de ellos. Te tiraste al otro lado. Mirá la pelota."}
-        fin();},380);
+/* ============ PLATA O MIERDA PARA FC ============
+   No se juega acá: te sorteo un versus para que lo juegues en la consola.
+   Mismo formato que el sorteo de la copa: tres rechazos y la cuarta es la que hay.
+   El peso sube fino para Argentina, Latinoamérica y Europa, y baja el resto,
+   que es justo lo que en el FC te sale siempre. */
+const FC_SUD=["Argentina","Brasil","Uruguay","Chile","Colombia","Paraguay","Ecuador","Perú","Bolivia","Venezuela"];
+const FC_EUR=["España","Inglaterra","Italia","Alemania","Francia","Portugal","Países Bajos","Bélgica","Escocia",
+  "Noruega","Suecia","Dinamarca","Austria","Suiza","Polonia","Turquía","Grecia","Croacia","Chequia","Rumania",
+  "Ucrania","Islandia","Serbia","Irlanda","Hungría","Bulgaria","Israel","Finlandia","Irlanda del Norte","Gibraltar",
+  "Malta","Moldavia","Estonia","Letonia","Lituania","Kosovo","Macedonia del Norte","Georgia","Azerbaiyán","Kazajistán"];
+const FC_EUR_GRANDE=["España","Inglaterra","Italia","Alemania","Francia","Portugal","Países Bajos"];
+function fcRegion(e){
+  if(e.pais==="Argentina")return "arg";
+  if(FC_SUD.includes(e.pais))return "sud";
+  if(FC_EUR.includes(e.pais))return "eur";
+  return "resto";
+}
+function fcPeso(e){
+  if(e.pais==="Argentina")return 3.0;
+  if(FC_SUD.includes(e.pais))return 2.2;
+  if(e.pais==="México")return 1.6;
+  if(FC_EUR_GRANDE.includes(e.pais))return 2.0;
+  if(FC_EUR.includes(e.pais))return 1.2;
+  return .5;                                    // los de siempre del FC, más abajo
+}
+const FC={tirada:0, elegido:null};
+function fcLeer(){
+  const mn=parseFloat($('#fcMin').value), mx=parseFloat($('#fcMax').value);
+  return {min:Math.min(mn,mx), max:Math.max(mn,mx), reg:$('#fcReg').value,
+          par:$('#fcPar').value, pais:$('#fcPais').value};
+}
+function fcPool(c){
+  return EQUIPOS.filter(e=>e.s>=c.min && e.s<=c.max &&
+    (c.reg==="todo" || (c.reg==="sud" ? (fcRegion(e)==="sud"||fcRegion(e)==="arg") : fcRegion(e)===c.reg)));
+}
+function fcSorteoUno(pool){                       // sorteo ponderado sin repetir
+  let tot=0; for(const e of pool) tot+=fcPeso(e);
+  let r=Math.random()*tot;
+  for(const e of pool){ r-=fcPeso(e); if(r<=0)return e; }
+  return pool[pool.length-1];
+}
+function fcVersus(){
+  const c=fcLeer(); const pool=fcPool(c);
+  if(pool.length<2)return null;
+  for(let intento=0;intento<400;intento++){
+    const a=fcSorteoUno(pool); const b=fcSorteoUno(pool);
+    if(a.id===b.id)continue;
+    const d=Math.abs(a.s-b.s);
+    if(c.par==="parejo" && d>0.5)continue;
+    if(c.par==="desparejo" && d<1.5)continue;
+    if(c.pais==="mismo" && a.pais!==b.pais)continue;
+    if(c.pais==="distinto" && a.pais===b.pais)continue;
+    return {a,b};
+  }
+  return null;
+}
+function fcPintar(v,forzado){
+  const lado=(e)=>`<div class="lado">${escudo(e,54)}<div class="nom">${e.n}</div>
+    <div class="det">${e.pais} · ${e.liga}</div><div class="est">${stars(e.s)}</div></div>`;
+  $('#fcVs').innerHTML=`<div class="fcTirada">Tirada <b>${FC.tirada}</b> de 4${forzado?" · esta es la que hay":""}</div>
+    <div class="vs">${lado(v.a)}<div class="mid">VS</div>${lado(v.b)}</div>`;
+}
+function fcTirar(){
+  const v=fcVersus();
+  if(!v){ $('#fcVs').innerHTML='<p class="sit">Con esos filtros no hay dos equipos posibles. Aflojá alguno.</p>';
+          $('#fcBtns').innerHTML=''; return; }
+  FC.tirada++; const ultima=FC.tirada>=4;
+  fcPintar(v,ultima);
+  if(ultima){ fcCerrar(v,true); return; }
+  $('#fcBtns').innerHTML=`<button class="btn oro" id="fcOk">Me lo quedo<small>Este es el partido.</small></button>
+    <button class="btn sec" id="fcOtra">Otra<small>${FC.tirada===3?"Ojo: la próxima es la que hay, salga lo que salga.":"Te quedan "+(3-FC.tirada)+" chances."}</small></button>`;
+  $('#fcOk').onclick=()=>fcCerrar(v,false);
+  $('#fcOtra').onclick=fcTirar;
+}
+function fcCerrar(v,forzado){
+  FC.elegido=v;
+  try{ if(location.hostname.endsWith('github.io'))fetch(ABACUS+'/hit/'+NS+'/fc',{mode:'cors',cache:'no-store'}).catch(()=>{}) }catch(e){}
+  SFX.play(forzado?'impactofinal':'caja');
+  const txt=forzado
+    ? `<b>Plata o mierda.</b> Se te acabaron las chances: ${v.a.n} contra ${v.b.n}. Bancátelo.`
+    : `<b>Lo elegiste vos.</b> ${v.a.n} contra ${v.b.n}. Después no te quejes.`;
+  $('#fcVs').insertAdjacentHTML('beforeend',`<div class="fcFinal ${forzado?'m':''}">${txt}</div>`);
+  const resumen=`PLATA O MIERDA PARA FC\n${v.a.n} (${v.a.s}★, ${v.a.pais}) vs ${v.b.n} (${v.b.s}★, ${v.b.pais})\n${forzado?"Salió en la cuarta. Es la que hay.":"Elegido en la tirada "+FC.tirada+"."}\nTirá el tuyo: ${location.origin+location.pathname}`;
+  $('#fcBtns').innerHTML=`<button class="btn oro" id="fcCopiar">Copiar para el grupo</button>
+    <button class="btn sec" id="fcOtroVs">Tirar otro versus<small>Arranca de cero, con tres chances.</small></button>`;
+  $('#fcCopiar').onclick=async()=>{try{await navigator.clipboard.writeText(resumen);$('#fcCopiar').textContent="Copiado. Mandalo."}catch(e){$('#fcCopiar').textContent="No se pudo copiar."}};
+  $('#fcOtroVs').onclick=()=>{FC.tirada=0;fcTirar()};
+}
+function fcAbrir(){
+  show('fc'); FC.tirada=0; FC.elegido=null;
+  $('#fcVs').innerHTML='<p class="sit" style="color:var(--ink2)">Tocá tirar y mirá qué te toca.</p>';
+  $('#fcBtns').innerHTML='<button class="btn oro" id="fcGo">Tirar<small>Un versus al azar. No se elige.</small></button>';
+  $('#fcGo').onclick=fcTirar;
+}
+
+/* ============ DEFENDER ============
+   Entra el rival, la pelota va de un lado al otro y la pierna tambien, pero a
+   otro ritmo: cada tanto la pierna tapa la pelota y ahi entrar es falta.
+   Si la falta es adentro del area, se cobra penal y se pasa directo a atajarlo. */
+function defender(cb){
+  const sh=$('#sheet'); sh.style.display="block";
+  const enArea=rnd()<.42;
+  sh.innerHTML=`<div class="eyebrow">Minuto ${M.min} · te encaran</div>
+  <p class="sit">Se te viene solo ${enArea?"<b>adentro del área</b>":"por la puerta del área"}.
+  Tocá <b>la pelota</b> para sacársela. Si le tocás la pierna es falta${enArea?" y penal":""}.</p>
+  <div class="tackle" id="tackle">
+    <div class="zona"></div>
+    <div class="pierna" id="pierna"></div>
+    <div class="balon" id="balon"></div>
+  </div>
+  <p class="sub">Esperá el momento: la pierna y la pelota no van al mismo ritmo.</p>`;
+  const cancha=$('#tackle'); let resuelto=false;
+  const cerrar=(clase,txt,v,sigue)=>{
+    if(resuelto)return; resuelto=true; clearTimeout(reloj);
+    cancha.classList.add('listo'); cancha.onpointerdown=null;
+    ev(M.min,`<b>Cruce.</b> ${txt} <span class="tag ${v}">${v}</span>`,clase);
+    if(v==="plata")G.plata++;else G.mierda++;
+    G.decisiones.push({ronda:RONDAS[G.ronda],min:M.min,op:"Cruce",tag:v,txt});
+    marcador();
+    setTimeout(()=>{ sh.style.display="none"; sigue?sigue():cb(); },1100);
+  };
+  cancha.onpointerdown=(e)=>{
+    if(resuelto)return;
+    const rb=$('#balon').getBoundingClientRect(), rp=$('#pierna').getBoundingClientRect();
+    const x=e.clientX, y=e.clientY;
+    const enPierna = x>rp.left-6 && x<rp.right+6 && y>rp.top-6 && y<rp.bottom+6;
+    const cx=rb.left+rb.width/2, cy=rb.top+rb.height/2;
+    const enPelota = Math.hypot(x-cx,y-cy) < rb.width*0.95;
+    if(enPierna && !enPelota){
+      SFX.play('uuh');
+      if(enArea) cerrar('dec rojo',"Le metiste la pierna adentro del área. Penal en contra. Vos la pediste.",'mierda',
+        ()=>apuntar("atajar","penal",()=>cb()));
+      else cerrar('dec',"Llegaste tarde y le pegaste. Falta al borde del área.",'mierda',
+        ()=>apuntar("atajar","libre",()=>cb()));
+    } else if(enPelota){
+      SFX.play('patada');
+      const limpio=rnd()<.82;
+      if(limpio){ M.atk*=1.06; cerrar('dec',"Le sacaste la pelota limpia y salieron jugando. Qué cruce.",'plata'); }
+      else cerrar('dec',"Tocaste la pelota primero, pero el árbitro cobró falta igual. Injusticia.",'mierda');
+    } else {
+      SFX.play('uuh');
+      cerrar('dec',"Tiraste el manotazo al aire. Te pasó y quedó de frente al arco.",'mierda',
+        ()=>apuntar("atajar","jugada",()=>cb()));
     }
-    function fin(){
-      setTimeout(()=>{
-        if(gol)SFX.play(modo==="patear"?'gol':'golcontra'); else SFX.play(modo==="patear"?'golcontra':'atajada');
-        if(modo==="patear"){ if(gol&&!pen)M.gA++; ev(M.min,"<b>"+lbl+".</b> "+txt+` <span class="tag ${gol?'plata':'mierda'}">${gol?'plata':'mierda'}</span>`,gol?'goal':'dec'); if(gol)G.plata++;else G.mierda++; G.decisiones.push({ronda:RONDAS[G.ronda],min:M.min,op:lbl,tag:gol?"plata":"mierda",txt,gf:gol&&!pen?1:0}) }
-        else{ if(gol&&!pen)M.gB++; ev(M.min,"<b>"+lbl+".</b> "+txt+` <span class="tag ${gol?'mierda':'plata'}">${gol?'mierda':'plata'}</span>`,gol?'goal contra':'dec'); if(gol)G.mierda++;else G.plata++; G.decisiones.push({ronda:RONDAS[G.ronda],min:M.min,op:lbl,tag:gol?"mierda":"plata",txt,gc:gol&&!pen?1:0}) }
-        marcador();sh.style.display="none";cb({gol});
-      },1100);
-    }
-  });
+  };
+  const reloj=setTimeout(()=>{
+    SFX.play('uuh');
+    cerrar('dec',"No te decidiste nunca. Te encaró y siguió de largo.",'mierda',
+      ()=>apuntar("atajar","jugada",()=>cb()));
+  },5200);
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
 
-/* ============ TIRO LIBRE: punteria fina ============ */
-/* El arco real mide 7.32 x 2.44 m. Se trabaja en esas unidades para que las
-   distancias sean creibles: un arquero llega a unos 2.4 m, asi que el centro
-   es facil de atajar y los angulos no, como en la cancha. */
-const TL_COLS=12, TL_FILAS=5, ANCHO_M=7.32, ALTO_M=2.44, ALCANCE_M=2.62;
-/* Resolucion separada de la pantalla para poder simular la dificultad sin tocar la UI.
-   cu,cv = donde apuntaste ya cuantizado. Devuelve donde termino la pelota, donde
-   se tiro el arquero, y el veredicto. */
-function resolverTL(cu,cv,bx0,bx1,ladoBarrera){
-  const filo=Math.max(0,.5-Math.min(cu,1-cu))/.5;      // que tan al palo apuntaste
-  const alto=Math.max(0,.35-cv)/.35;                   // que tan arriba
-  const err=.04+.075*filo+.035*alto;                   // al angulo cuesta mas ejecutar
-  const bxF=cu+(rnd()-.5)*2*err, byF=cv+(rnd()-.5)*2*err*1.4;
+/* ============ APUNTAR ============
+   Una sola mecanica para penal, jugada y tiro libre, pateando o atajando.
+   No hay grilla a la vista: un rectangulo rojo late marcando la boca del arco y
+   se toca adentro. Por dentro hay una reticula de 16x6 que cuantiza el toque, o
+   sea 96 destinos en vez de los 15 casilleros de antes: la pelota va casi
+   exactamente donde pusiste el dedo, sin depender del pixel exacto. */
+const MIRA_COLS=16, MIRA_FILAS=6, ANCHO_M=7.32, ALTO_M=2.44;
+
+/* Resolucion separada de la pantalla para poder simular la dificultad sin la UI. */
+function resolverTiro(modo,ctxN,cu,cv,bx0,bx1){
+  const C=CTX[ctxN];
+  const filo=Math.max(0,.5-Math.min(cu,1-cu))/.5;   // que tan al palo
+  const alto=Math.max(0,.35-cv)/.35;                // que tan arriba
+  let bxF,byF,dx,dy;
+  if(modo==="patear"){
+    const err=C.errP+.075*filo+.035*alto+C.afueraExtra;
+    bxF=cu+(rnd()-.5)*2*err; byF=cv+(rnd()-.5)*2*err*1.4;
+    // el que ataja adivina un lado; en el penal se juega mas al palo
+    dx=ctxN==="penal" ? weighted([{p:.34,v:.18},{p:.32,v:.82},{p:.34,v:.5}]).v
+                      : .5+(rnd()-.5)*.75;
+    dy=ctxN==="penal" ? .55+(rnd()-.5)*.5 : .55+(rnd()-.5)*.6;
+  }else{
+    // vos elegis donde te tiras (cu,cv). El rival apunta solo.
+    const tx=weighted([{p:.26,v:.12},{p:.26,v:.88},{p:.16,v:.30},{p:.16,v:.70},{p:.16,v:.5}]).v;
+    const ty=weighted([{p:.34,v:.22},{p:.36,v:.55},{p:.30,v:.82}]).v;
+    const errR=C.errA;
+    bxF=tx+(rnd()-.5)*2*errR; byF=ty+(rnd()-.5)*2*errR*1.4;
+    dx=cu; dy=cv;
+  }
   const afuera=bxF<0||bxF>1||byF<0||byF>1;
-  const kx=Math.min(.95,Math.max(.05,(ladoBarrera?0.30:0.70)+(rnd()-.5)*.5));
-  const ky=Math.min(.95,Math.max(.15,.55+(rnd()-.5)*.5));
-  const enBarrera=!afuera && byF>.62 && bxF>bx0 && bxF<bx1;
-  const dm=Math.hypot((bxF-kx)*ANCHO_M,(byF-ky)*ALTO_M);
-  const atajada=!afuera && !enBarrera && dm<ALCANCE_M;
-  return {bxF,byF,kx,ky,afuera,enBarrera,atajada,gol:!afuera&&!enBarrera&&!atajada};
+  const enBarrera=C.barrera && !afuera && byF>.62 && bxF>bx0 && bxF<bx1;
+  const dm=Math.hypot((bxF-dx)*ANCHO_M,(byF-dy)*ALTO_M);
+  const tapada=!afuera && !enBarrera && dm<C.alcance;
+  const entra=!afuera && !enBarrera && !tapada;
+  return {bxF,byF,dx,dy,afuera,enBarrera,tapada,
+          gol: modo==="patear" ? entra : entra};      // "entra la pelota al arco"
 }
-function tiroLibre(cb){
-  const sh=$('#sheet'); sh.style.display="block";
-  const A=pick(ARCOS.tirolibre);
-  const pie=rnd()<.65?"derecho":"zurdo";
-  const dist=17+Math.floor(rnd()*11);
-  // la barrera tapa una franja baja, de un lado; el arquero cubre el otro
+
+function apuntar(modo,ctxN,cb){
+  const C=CTX[ctxN], sh=$('#sheet'); sh.style.display="block";
+  const pool=ARCOS[modo][ctxN]; const A=pick(pool);
+  const pen=!!M.enPenales;
   const ladoBarrera=rnd()<.5?0:1;
-  const bx0=ladoBarrera?0.52:0.10, bx1=ladoBarrera?0.90:0.48;
-  sh.innerHTML=`<div class="eyebrow">Minuto ${M.min} · tiro libre</div>
-  <p class="sit">Falta al borde del área, a ${dist} metros. Patea el <b>${pie.toUpperCase()}</b>.
-  La barrera tapa el palo ${ladoBarrera?'derecho':'izquierdo'}. Tocá dónde la querés poner: va casi exacto a donde pongas el dedo.</p>
+  const bx0=C.barrera?(ladoBarrera?0.52:0.10):-1, bx1=C.barrera?(ladoBarrera?0.90:0.48):-1;
+  const pie=rnd()<.65?"derecho":"zurdo";
+  const titulo=pen?(modo==="patear"?"Penales · pateás vos":"Penales · atajás vos"):C.tit[modo];
+  let sit;
+  if(modo==="patear"){
+    sit=(pen?"Último penal. Si la metés, seguís.":
+        ctxN==="penal"?`Minuto ${M.min}. Penal a favor.`:
+        ctxN==="libre"?`Minuto ${M.min}. Falta al borde del área. La barrera tapa el palo ${ladoBarrera?'derecho':'izquierdo'}.`:
+        `Minuto ${M.min}. Quedaste solo contra el arquero.`)+" Tocá adentro del arco dónde la querés poner.";
+  }else{
+    sit=(pen?"Ahora atajás vos. Si la sacás, ganaste.":
+        ctxN==="penal"?`Minuto ${M.min}. Penal en contra.`:
+        ctxN==="libre"?`Minuto ${M.min}. Tiro libre en contra desde la puerta del área.`:
+        `Minuto ${M.min}. Se les escapó uno y quedó solo.`)+
+        ` Patea un <b>${pie.toUpperCase()}</b>. Tocá adentro del arco a dónde te tirás.`;
+  }
+  const barreraHTML=C.barrera?`<div class="barrera" style="left:${bx0*100}%;right:${(1-bx1)*100}%;top:62%;bottom:0"></div>`:"";
+  sh.innerHTML=`<div class="eyebrow">${pen?"Penales":"Minuto "+M.min} · ${titulo}</div>
+  <p class="sit">${sit}</p>
   <div class="arcoFoto" style="aspect-ratio:${A.ar};background-image:url(img/${A.img}.jpg)">
-    <div class="mira" id="mira" style="left:${A.red[0]}%;top:${A.red[1]}%;width:${A.red[2]}%;height:${A.red[3]}%">
-      <div class="barrera" style="left:${bx0*100}%;right:${(1-bx1)*100}%;top:62%;bottom:0"></div>
-    </div>
+    <div class="mira" id="mira" style="left:${A.red[0]}%;top:${A.red[1]}%;width:${A.red[2]}%;height:${A.red[3]}%">${barreraHTML}</div>
   </div>
-  <p class="sub">Cuanto más al ángulo, menos llega el arquero. Y más chance de tirarla afuera.</p>`;
+  <p class="sub">${modo==="patear"?"Cuanto más al ángulo, menos llega el arquero. Y más chance de tirarla afuera.":"Tirate donde creas que la va a poner."}</p>`;
   const mira=$('#mira');
-  mira.onpointerdown=(e)=>{
+  const tirar=(clientX,clientY)=>{
     mira.onpointerdown=null; mira.classList.add('listo');
     const r=mira.getBoundingClientRect();
-    // donde toco, cuantizado al centro de la celda: casi exacto, pero no al pixel
-    let u=(e.clientX-r.left)/r.width, v=(e.clientY-r.top)/r.height;
+    let u=(clientX-r.left)/r.width, v=(clientY-r.top)/r.height;
     u=Math.min(.999,Math.max(0,u)); v=Math.min(.999,Math.max(0,v));
-    const cu=(Math.floor(u*TL_COLS)+.5)/TL_COLS, cv=(Math.floor(v*TL_FILAS)+.5)/TL_FILAS;
+    const cu=(Math.floor(u*MIRA_COLS)+.5)/MIRA_COLS, cv=(Math.floor(v*MIRA_FILAS)+.5)/MIRA_FILAS;
+    const R=resolverTiro(modo,ctxN,cu,cv,bx0,bx1);
+    SFX.play('patada');
     const pin=document.createElement('div'); pin.className='pin';
     pin.style.left=cu*100+'%'; pin.style.top=cv*100+'%'; mira.appendChild(pin);
-    SFX.play('patada');
-    const R=resolverTL(cu,cv,bx0,bx1,ladoBarrera);
-    const {bxF,byF,kx,ky,afuera}=R;
     const pel=document.createElement('div'); pel.className='pelota';
-    pel.style.left=cu*100+'%'; pel.style.top=cv*100+'%'; mira.appendChild(pel);
     const gua=document.createElement('div'); gua.className='guante';
-    gua.style.left='50%'; gua.style.top='60%'; mira.appendChild(gua);
-    requestAnimationFrame(()=>{
-      pel.style.left=Math.min(1.08,Math.max(-.08,bxF))*100+'%';
-      pel.style.top=Math.min(1.08,Math.max(-.08,byF))*100+'%';
-      gua.style.left=kx*100+'%'; gua.style.top=ky*100+'%';
-    });
+    if(modo==="patear"){ pel.style.left=cu*100+'%'; pel.style.top=cv*100+'%'; gua.style.left='50%'; gua.style.top='60%'; }
+    else { pel.style.left='50%'; pel.style.top='115%'; gua.style.left=cu*100+'%'; gua.style.top=cv*100+'%'; }
+    mira.appendChild(pel); mira.appendChild(gua);
     setTimeout(()=>{
-      const {enBarrera,atajada}=R;
-      let gol=false,txt;
-      if(afuera){ txt=byF<0?"Por arriba del travesaño. Se fue a la tribuna.":"Afuera. Ni cerca del arco."; }
-      else if(enBarrera){ txt="Le pegó a la barrera. Salió rebotada."; }
-      else if(atajada){ txt="El arquero llegó. La sacó al córner. Mirá dónde estaba."; }
-      else { gol=true; txt=(cv<.3&&(cu<.2||cu>.8))?"AL ÁNGULO. Ni la vio. Golazo.":"Gol de tiro libre. Adentro."; }
-      if(gol){ M.gA++; SFX.play('gol'); } else SFX.play(atajada?'atajada':'golcontra');
-      const v=gol?'plata':'mierda';
-      ev(M.min,`<b>Tiro libre.</b> ${txt} <span class="tag ${v}">${v}</span>`,gol?'goal':'dec');
-      if(gol){ G.plata++; ev(M.min,"GOL. "+M.gA+"-"+M.gB,'goal'); } else G.mierda++;
-      G.decisiones.push({ronda:RONDAS[G.ronda],min:M.min,op:"Tiro libre",tag:v,txt,gf:gol?1:0});
+      pel.style.left=Math.min(1.08,Math.max(-.08,R.bxF))*100+'%';
+      pel.style.top=Math.min(1.08,Math.max(-.08,R.byF))*100+'%';
+      gua.style.left=R.dx*100+'%'; gua.style.top=R.dy*100+'%';
+    },40);
+    setTimeout(()=>{
+      const gol=R.gol; let txt;
+      if(modo==="patear"){
+        if(R.afuera) txt=R.byF<0?"Por arriba del travesaño. A la tribuna.":"Afuera. Ni cerca.";
+        else if(R.enBarrera) txt="Le pegó a la barrera. Rebote y afuera.";
+        else if(R.tapada) txt="El arquero llegó. La sacó. Mirá dónde se tiró.";
+        else txt=(cv<.28&&(cu<.18||cu>.82))?"AL ÁNGULO. Ni la vio. Golazo.":"Gol. Adentro.";
+      }else{
+        if(R.afuera) txt="La tiró afuera. Ni te hizo falta.";
+        else if(R.enBarrera) txt="Le pegó a tu barrera. Se salvaron ustedes.";
+        else if(R.tapada) txt="¡LA SACASTE! Te tiraste justo. Sos un muro.";
+        else txt="Gol de ellos. Te tiraste al otro lado. Mirá la pelota.";
+      }
+      const bien = modo==="patear" ? gol : !gol;
+      if(modo==="patear"){ if(gol&&!pen)M.gA++; } else { if(gol&&!pen)M.gB++; }
+      SFX.play(bien?(modo==="patear"?'gol':'atajada'):(modo==="patear"?'golcontra':'golcontra'));
+      const v=bien?'plata':'mierda';
+      const lbl=pen?"Penal":C.tit[modo];
+      ev(M.min,`<b>${lbl}.</b> ${txt} <span class="tag ${v}">${v}</span>`,gol?(modo==="patear"?'goal':'goal contra'):'dec');
+      if(bien)G.plata++;else G.mierda++;
+      if(gol&&!pen)ev(M.min,(modo==="patear"?"GOL. ":"Gol de ellos. ")+M.gA+"-"+M.gB,'goal');
+      G.decisiones.push({ronda:RONDAS[G.ronda],min:M.min,op:lbl,tag:v,txt,
+                         gf:(modo==="patear"&&gol&&!pen)?1:0, gc:(modo==="atajar"&&gol&&!pen)?1:0});
       marcador();
-      setTimeout(()=>{ sh.style.display="none"; cb(); },1100);
+      setTimeout(()=>{ sh.style.display="none"; cb({gol}); },1100);
     },900);
   };
+  mira.onpointerdown=(e)=>tirar(e.clientX,e.clientY);
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
 
@@ -1602,9 +1821,9 @@ function finPartido(){
   ev(90,"Final. Empate. Penales. No se juega la tanda entera: 4-4 y queda el último. Plata o mierda.",'sys');
   M.pausa=true;M.enPenales=true;
   const ronda=(k)=>{
-    arco("patear",(r1)=>{
+    apuntar("patear","penal",(r1)=>{
       if(!r1.gol)return cerrar(false,`${M.gA}-${M.gB} (${4}-${5} pen.)`);
-      arco("atajar",(r2)=>{
+      apuntar("atajar","penal",(r2)=>{
         if(!r2.gol)return cerrar(true,`${M.gA}-${M.gB} (${5}-${4} pen.)`);
         if(k>=2){ const win=rnd()<.5; ev(90,win?"Siguieron pateando. Al final, el 2 tuyo la clavó y el de ellos la tiró a la tribuna.":"Siguieron pateando. Al final, el de ellos la clavó y tu 2 la tiró a la tribuna.",'sys'); return cerrar(win,`${M.gA}-${M.gB} (${win?"6-5":"5-6"} pen.)`)}
         ev(90,"Sigue la tanda. Otra vez vos.",'sys');ronda(k+1);
@@ -1685,8 +1904,8 @@ function tarjeta(plata){
   const dif=gf-gc;                       // los penales ya se marcan en la ficha de su ronda
   const fichas=RONDAS.map((nom,i)=>{
     const r=G.resultados[i];
-    if(!r) return `<div class="rd off"><b>${nom.toUpperCase()}</b><span>—</span></div>`;
-    return `<div class="rd ${r.win?'ok':'no'}"><b>${nom.toUpperCase()}</b><span>${r.gf}-${r.gc}</span>${r.pen?'<span class="pen">penales</span>':''}</div>`;
+    if(!r) return `<div class="rd off"><b>${nom.toUpperCase()}</b><em>—</em><span>—</span></div>`;
+    return `<div class="rd ${r.win?'ok':'no'}"><b>${nom.toUpperCase()}</b><em>${r.riv}</em><span>${r.gf}-${r.gc}</span>${r.pen?'<span class="pen">penales</span>':''}</div>`;
   }).join("");
   const tot=Math.max(1,G.plata+G.mierda), pp=Math.round(G.plata/tot*100);
   c.innerHTML=`<div class="eyebrow">${G.eq.n} · ${stars(G.eq.s)} · semilla ${G.seed}</div>
@@ -1818,6 +2037,8 @@ async function tarjetaJPG(){
 
 /* ============ WIRING ============ */
 $('#bRandom').onclick=()=>{leerCfg();nuevaCopa($('#cSeed').value.trim());sorteo()};
+$('#bFC').onclick=fcAbrir;
+$('#bFCsalir').onclick=()=>show('portada');
 $('#buscar').oninput=(e)=>renderLista(e.target.value);
 $('#bJugar').onclick=empezarPartido;
 $('#bOtra').onclick=()=>{location.hash="";$('#cSeed').value="";show('portada')};
