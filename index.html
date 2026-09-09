@@ -164,19 +164,16 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .foto.cancha{aspect-ratio:720/300;background-image:url(img/pizarra-cancha.jpg);background-position:center 55%}
 .foto.vestuario{aspect-ratio:720/260;background-image:url(img/vestuario-charla.jpg);background-position:center 45%}
 .foto.sala{aspect-ratio:720/170;background-image:url(img/var-sala.jpg)}
+.foto.amb{aspect-ratio:720/430}
 /* rueda del VAR */
 .varwrap{position:relative;width:min(268px,74vw);aspect-ratio:1;margin:10px auto 6px}
 .var{width:100%;height:100%;border-radius:50%;background:url(img/var-rueda.png) center/contain no-repeat;filter:drop-shadow(0 10px 22px rgba(0,0,0,.65))}
 .varptr{position:absolute;left:50%;top:-13px;margin-left:-13px;width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:26px solid #f0c64a;z-index:2;filter:drop-shadow(0 3px 3px rgba(0,0,0,.7))}
 /* arco */
 .arcoFoto{position:relative;margin:10px 0 6px;border-radius:8px;overflow:hidden;background:#000 center/cover no-repeat;box-shadow:0 8px 24px rgba(0,0,0,.5)}
-.arcoFoto.arco-patear{background-image:url(img/arco-patear.jpg);aspect-ratio:720/310}
-.arcoFoto.arco-atajar{background-image:url(img/arco-atajar.jpg);aspect-ratio:720/400}
 .arcoFoto .red{position:absolute;border:0;background:none;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(3,1fr);aspect-ratio:auto;overflow:visible}
-.arcoFoto.arco-patear .red{left:5.5%;top:16.1%;width:89.2%;height:65.2%}
-.arcoFoto.arco-atajar .red{left:2.4%;top:17%;width:95%;height:69.8%;grid-template-columns:141.5fr 132.5fr 136.5fr 132.5fr 141fr;grid-template-rows:100fr 90fr 89fr}
-.arcoFoto .cell{border:1px solid rgba(240,198,74,.25);background:rgba(0,0,0,.04);position:relative}
-.arcoFoto .cell:hover,.arcoFoto .cell:focus-visible{background:rgba(240,198,74,.32)}
+.arcoFoto .cell{border:1.5px solid rgba(240,198,74,.5);border-radius:5px;background:rgba(240,198,74,.05);box-shadow:inset 0 0 12px rgba(240,198,74,.14),0 0 6px rgba(240,198,74,.14);position:relative;color:transparent}
+.arcoFoto .cell:hover,.arcoFoto .cell:focus-visible{background:rgba(240,198,74,.3)}
 .arcoFoto .cell.pick{background:rgba(240,198,74,.62);box-shadow:inset 0 0 16px rgba(255,255,255,.6)}
 .arcoFoto .cell.gkcell{background:rgba(226,91,74,.5);box-shadow:inset 0 0 16px rgba(255,120,100,.75)}
 .arcoFoto .cell.ball::after{content:"";position:absolute;inset:0;margin:auto;width:44%;aspect-ratio:1;border-radius:50%;background:#fff;box-shadow:inset -2px -2px 0 #999,0 0 10px rgba(255,255,255,.7)}
@@ -838,24 +835,61 @@ const SITUACIONES = [
  {l:"Lo gambeteo",tag:"plata",d:"Te consagrás o te cuelgan.",r:[{p:.6,atk:1.05,txt:"Lo gambeteaste en tu área. Locura. La gente gritó tu nombre."},{p:.4,gc:1,txt:"Te la sacó y la empujó. Gol. Lo van a pasar en todos los programas."}]},
  {l:"Patadón a la tribuna",tag:"mierda",d:"Nada.",r:[{p:1,txt:"Patadón a la tribuna. Seguro. Nadie se acuerda."}]}]},
 // ---------- CAMINO (entre partidos) ----------
-{id:"cam9",tipo:"CAM",t:"El 9 terminó tocado",sit:"El 9 salió rengueando. El médico dice 'puede jugar, pero'.",ops:[
- {l:"Lo metés igual, infiltrado",tag:"plata",d:"30% se rompe y lo perdés para toda la copa.",r:[{p:.7,carry:{txt:"Jugás con el 9 infiltrado. Vos lo elegiste."}},{p:.3,carry:{atk:.8,perm:true,txt:"El 9 se rompió en el calentamiento. Perdido para toda la copa. Vos lo elegiste."}}]},
+{id:"cam9",foto:"amb-enfermeria",tipo:"CAM",t:"El 9 terminó tocado",sit:"El 9 salió rengueando. El médico dice 'puede jugar, pero'.",ops:[
+ {l:"Lo metés igual, infiltrado",tag:"plata",d:"30% se rompe y lo perdés para toda la copa.",r:[{p:.7,carry:{flag:"infiltrado",txt:"Jugás con el 9 infiltrado. Vos lo elegiste."}},{p:.3,carry:{atk:.8,perm:true,txt:"El 9 se rompió en el calentamiento. Perdido para toda la copa. Vos lo elegiste."}}]},
  {l:"Lo guardás",tag:"mierda",d:"Jugás el próximo sin él.",r:[{p:1,carry:{atk:.85,txt:"Jugás sin el 9. Vos lo elegiste."}}]}]},
-{id:"cam2",tipo:"CAM",t:"El 2 está al límite",sit:"El 2 tiene amarillas acumuladas. Una más y se pierde el siguiente.",ops:[
+{id:"cam2",foto:"amb-entrenamiento",tipo:"CAM",t:"El 2 está al límite",sit:"El 2 tiene amarillas acumuladas. Una más y se pierde el siguiente.",ops:[
  {l:"Que juegue, que se cuide",tag:"plata",d:"Si cae la amarilla, se pierde la ronda que viene.",r:[{p:.5,carry:{txt:"El 2 juega y 'se cuida'. Ya veremos."}},{p:.5,carry:{def:.85,next:true,txt:"El 2 juega, pero ya sabés: le sacaron amarilla al minuto 3 y se pierde el siguiente."}}]},
  {l:"Descansa",tag:"mierda",d:"Jugás con el suplente ahora, lo tenés limpio después.",r:[{p:1,carry:{def:.9,txt:"Jugás sin el 2. Descansa para la próxima. Vos lo elegiste."}}]}]},
-{id:"camarq",tipo:"CAM",t:"El arquero suplente",sit:"El arquero suplente pide jugar. No sabés cómo está.",ops:[
+{id:"camarq",foto:"amb-entrenamiento",tipo:"CAM",t:"El arquero suplente",sit:"El arquero suplente pide jugar. No sabés cómo está.",ops:[
  {l:"Lo ponés",tag:"plata",d:"Un muro o un colador. Se revela al primer tiro.",r:[{p:.5,carry:{def:1.2,txt:"Atajó el suplente. Primer tiro: la sacó del ángulo. Es un muro."}},{p:.5,carry:{def:.75,txt:"Atajó el suplente. Primer tiro: se le metió entre las piernas. Colador. Vos lo elegiste."}}]},
  {l:"El titular de siempre",tag:"mierda",d:"Lo conocido.",r:[{p:1,carry:{txt:"Ataja el de siempre."}}]}]},
-{id:"camtapado",tipo:"CAM",t:"El tapado",sit:"Un representante te ofrece un refuerzo de última hora. 'Un tapado', dice. No lo viste jugar.",ops:[
- {l:"Lo fichás sin verlo",tag:"plata",d:"Un crack o un problema.",r:[{p:.5,carry:{atk:1.2,txt:"El tapado es un crack. Se puso la 10 y nadie dijo nada."}},{p:.5,carry:{atk:.9,def:.9,txt:"El tapado no juega a nada y se peleó con el 9 en el primer entrenamiento. Vos lo trajiste."}}]},
+{id:"camtapado",foto:"amb-representante",tipo:"CAM",t:"El tapado",sit:"Un representante te ofrece un refuerzo de última hora. 'Un tapado', dice. No lo viste jugar.",ops:[
+ {l:"Lo fichás sin verlo",tag:"plata",d:"Un crack o un problema.",r:[{p:.5,carry:{atk:1.2,flag:"tapado",txt:"El tapado es un crack. Se puso la 10 y nadie dijo nada."}},{p:.5,carry:{atk:.9,def:.9,flag:"tapado",txt:"El tapado no juega a nada y se peleó con el 9 en el primer entrenamiento. Vos lo trajiste."}}]},
  {l:"Seguís con los tuyos",tag:"mierda",d:"Lo conocido.",r:[{p:1,carry:{txt:"Seguís con los tuyos. Los conocés."}}]}]},
-{id:"camprensa",tipo:"CAM",t:"La prensa",sit:"Conferencia. Te preguntan por el rival.",ops:[
- {l:"'Les vamos a pasar por arriba'",tag:"plata",d:"Ellos se calientan. Tu gente llena la cancha.",r:[{p:1,carry:{atk:1.12,def:.92,txt:"'Les vamos a pasar por arriba', dijiste. Ellos lo pegaron en el vestuario. Tu gente llenó la cancha."}}]},
+{id:"camprensa",foto:"amb-prensa",tipo:"CAM",t:"La prensa",sit:"Conferencia. Te preguntan por el rival.",ops:[
+ {l:"'Les vamos a pasar por arriba'",tag:"plata",d:"Ellos se calientan. Tu gente llena la cancha.",r:[{p:1,carry:{atk:1.12,def:.92,flag:"bocon",txt:"'Les vamos a pasar por arriba', dijiste. Ellos lo pegaron en el vestuario. Tu gente llenó la cancha."}}]},
  {l:"'Rival difícil, respeto'",tag:"mierda",d:"Nada cambia.",r:[{p:1,carry:{txt:"'Rival difícil, respeto.' Nadie se acuerda de lo que dijiste."}}]}]},
-{id:"camviaje",tipo:"CAM",t:"El viaje",sit:"Hay que viajar 14 horas. El club ofrece vuelo chárter, pero sale lo que no hay.",ops:[
+{id:"camviaje",foto:"amb-micro",tipo:"CAM",t:"El viaje",sit:"Hay que viajar 14 horas. El club ofrece vuelo chárter, pero sale lo que no hay.",ops:[
  {l:"Vuelo de línea, con escala",tag:"mierda",d:"Llegan muertos.",r:[{p:1,carry:{atk:.9,def:.9,txt:"Llegaron muertos después de 20 horas de viaje. Se nota en las piernas."}}]},
- {l:"Chárter, y que se arreglen con la plata",tag:"plata",d:"Llegan frescos. El tesorero no te habla.",r:[{p:1,carry:{atk:1.05,def:1.05,txt:"Chárter. Llegaron frescos. El tesorero no te habla más."}}]}]},
+ {l:"Chárter, y que se arreglen con la plata",tag:"plata",d:"Llegan frescos. El tesorero no te habla.",r:[{p:1,carry:{atk:1.05,def:1.05,flag:"tesorero",txt:"Chárter. Llegaron frescos. El tesorero no te habla más."}}]}]},
+/* --- consecuencias encadenadas: se destraban con un flag que dejo una decision anterior --- */
+{id:"camhotel",foto:"amb-hotel",req:"tesorero",tipo:"CAM",t:"El hotel",sit:"El tesorero se encargó de la concentración. Reservó un hotel sobre la ruta, pegado a la balanza de camiones.",ops:[
+ {l:"Que se banquen",tag:"mierda",d:"Ahorrás. Duermen para el traste.",r:[{p:1,carry:{atk:.9,def:.9,txt:"Durmieron con los camiones frenando toda la noche. Se levantaron rotos. Vos lo elegiste."}}]},
+ {l:"Lo pagás de tu bolsillo",tag:"plata",d:"Duermen bien. Te quedás sin sueldo.",r:[{p:1,carry:{atk:1.05,def:1.05,flag:"bolsillo",txt:"Pagaste el hotel bueno de tu bolsillo. Durmieron como angelitos. Vos no dormiste nada."}}]}]},
+{id:"campremios",foto:"amb-tesorero",req:"tesorero",tipo:"CAM",t:"Los premios",sit:"El plantel pregunta cuánto cobran si pasan. El tesorero dice que no hay un peso y te mira a vos.",ops:[
+ {l:"Prometés igual",tag:"plata",d:"Salen enchufados. Después vemos de dónde sale.",r:[{p:1,carry:{atk:1.12,txt:"Prometiste un premio que no sabés de dónde va a salir. Salieron enchufados."}}]},
+ {l:"Les decís la verdad",tag:"mierda",d:"Que jueguen por la camiseta. O no.",r:[{p:.5,carry:{txt:"Les dijiste que no hay nada. Un par asintió. Nadie dijo una palabra más."}},{p:.5,carry:{atk:.9,def:.95,txt:"Les dijiste que no hay nada. Se les cayó la cara. Salieron a caminar."}}]}]},
+{id:"camdevuelta",foto:"amb-prensa",req:"bocon",tipo:"CAM",t:"Te devolvieron la gentileza",sit:"Tu frase de la conferencia apareció pegada en el vestuario de ellos. Ampliada y subrayada.",ops:[
+ {l:"Redoblás la apuesta",tag:"plata",d:"O sos un fenómeno o sos un papelón.",r:[{p:.55,carry:{atk:1.15,txt:"Redoblaste. Tu gente te llevó en andas antes de jugar. La presión pasó al otro lado."}},{p:.45,carry:{atk:.9,def:.9,txt:"Redoblaste y salieron a comerte. Tu propio plantel te miró raro. Vos lo elegiste."}}]},
+ {l:"Pedís disculpas públicas",tag:"mierda",d:"Se desinfla todo.",r:[{p:1,carry:{def:1.08,txt:"Pediste disculpas. Se desinfló el asunto y tus jugadores respiraron."}}]}]},
+{id:"camcomision",foto:"amb-representante",req:"tapado",tipo:"CAM",t:"La comisión",sit:"El representante del tapado reaparece. Quiere su comisión antes del partido.",ops:[
+ {l:"Le pagás",tag:"plata",d:"Se va contento. El tesorero no.",r:[{p:1,carry:{flag:"tesorero",txt:"Le pagaste. Se fue con el sobre bajo el brazo. El tesorero te miró con odio."}}]},
+ {l:"Que espere",tag:"mierda",d:"El tapado se va a enterar.",r:[{p:1,carry:{atk:.9,txt:"El representante le contó todo al jugador. El tapado entrenó mirando el celular."}}]}]},
+{id:"cambanderazo",foto:"amb-hinchada",tipo:"CAM",t:"El banderazo",sit:"La hinchada quiere hacer un banderazo en la puerta de la concentración a las tres de la mañana.",ops:[
+ {l:"Que vengan",tag:"plata",d:"Piel de gallina. Y nadie duerme.",r:[{p:.6,carry:{atk:1.15,def:.95,txt:"Vinieron dos mil. Nadie durmió, pero salieron a la cancha llorando."}},{p:.4,carry:{atk:.95,def:.9,flag:"hinchada",txt:"Vinieron dos mil, tiraron bengalas hasta las cinco y el plantel salió muerto de sueño."}}]},
+ {l:"Que no vengan",tag:"mierda",d:"Duermen. La hinchada se ofende.",r:[{p:1,carry:{def:1.08,flag:"hinchada",txt:"Los mandaste a dormir. Descansaron bien. La hinchada lo tomó como un desprecio."}}]}]},
+{id:"camsilbidos",foto:"amb-hinchada",req:"hinchada",tipo:"CAM",t:"La bandera",sit:"La hinchada llegó con una bandera dedicada a vos. No es de agradecimiento.",ops:[
+ {l:"Vas al alambrado a hablar",tag:"plata",d:"Cara a cara.",r:[{p:.65,carry:{atk:1.1,def:1.05,txt:"Fuiste al alambrado y les bancaste la cara. Terminaron aplaudiendo."}},{p:.35,carry:{def:.9,txt:"Fuiste al alambrado y te comiste una puteada de veinte minutos. Salís con eso en la cabeza."}}]},
+ {l:"Hacés como que no la viste",tag:"mierda",d:"Nada cambia. Ellos siguen.",r:[{p:1,carry:{atk:.95,txt:"Hiciste como que no la viste. La bandera estuvo colgada los noventa minutos."}}]}]},
+{id:"camplantel",foto:"vestuario-charla",req:"bolsillo",tipo:"CAM",t:"Se enteraron",sit:"Alguien contó que el hotel bueno lo pagaste vos. El capitán te para en el pasillo.",ops:[
+ {l:"Le decís que no es nada",tag:"plata",d:"Y se termina ahí.",r:[{p:1,carry:{atk:1.1,def:1.08,txt:"Le dijiste que no era nada. El vestuario se enteró igual. Ahora corren por vos."}}]},
+ {l:"Aprovechás y se los cobrás",tag:"mierda",d:"Se lo recordás en la charla.",r:[{p:1,carry:{atk:.95,def:.95,txt:"Se los recordaste en la charla. Quedó un silencio raro. Nadie te lo agradeció."}}]}]},
+{id:"camcancha",foto:"amb-entrenamiento",tipo:"CAM",t:"El estado de la cancha",sit:"La cancha está pesada. El canchero pregunta si la riega o la deja seca con el pasto largo.",ops:[
+ {l:"Que la rieguen",tag:"plata",d:"Pelota rápida. Para los dos.",r:[{p:1,carry:{atk:1.1,def:.95,txt:"Regaron la cancha. La pelota voló. Para vos y para ellos."}}]},
+ {l:"Seca y con el pasto largo",tag:"mierda",d:"Se juega horrible. Justo lo que querés.",r:[{p:1,carry:{atk:.95,def:1.12,txt:"Pasto largo y seco. Un partido feo y trabado, de los tuyos."}}]}]},
+{id:"camdoble",foto:"amb-entrenamiento",tipo:"CAM",t:"El doble turno",sit:"El preparador físico quiere doble turno hasta el partido.",ops:[
+ {l:"Doble turno",tag:"plata",d:"Llegan enteros o llegan fundidos.",r:[{p:.55,carry:{def:1.15,txt:"Doble turno. Corrieron los noventa como si fueran cuarenta."}},{p:.45,carry:{atk:.88,def:.95,txt:"Doble turno. Llegaron con las piernas duras. Vos lo elegiste."}}]},
+ {l:"Los dejás descansar",tag:"mierda",d:"Frescos, pero sueltos.",r:[{p:1,carry:{atk:1.05,def:.95,txt:"Los dejaste descansar. Llegaron frescos y un poco desconectados."}}]}]},
+{id:"camjuvenil",foto:"amb-entrenamiento",tipo:"CAM",t:"El pibe de la reserva",sit:"Un pibe de 17 metió seis goles en la reserva. Nunca pisó primera.",ops:[
+ {l:"Lo subís y juega",tag:"plata",d:"Un fenómeno o un pibe asustado.",r:[{p:.5,carry:{atk:1.2,txt:"El pibe entró sin mirar a nadie. Se comió la cancha."}},{p:.5,carry:{atk:.92,txt:"El pibe no tocó una pelota. Le quedó grande. Vos lo subiste."}}]},
+ {l:"Que mire desde afuera",tag:"mierda",d:"Ya va a tener su año.",r:[{p:1,carry:{txt:"El pibe se quedó en el banco mirando. Ya va a tener su momento."}}]}]},
+{id:"camcabala",foto:"vestuario-charla",tipo:"CAM",t:"La cábala",sit:"Ganaron el último con la ropa sin lavar. El utilero pregunta qué hace.",ops:[
+ {l:"Nadie lava nada",tag:"plata",d:"Huele a gloria.",r:[{p:.6,carry:{atk:1.08,def:1.05,txt:"Salieron con la ropa del partido anterior. Olía mal y funcionó."}},{p:.4,carry:{def:.95,txt:"Salieron con la ropa sucia y el 5 se agarró una alergia en el cuello."}}]},
+ {l:"Que lave todo",tag:"mierda",d:"Limpio y sin magia.",r:[{p:1,carry:{txt:"Lavaron todo. Salieron impecables y sin cábala. Total, eso no existe."}}]}]},
+{id:"camenfermeria",foto:"amb-enfermeria",req:"infiltrado",tipo:"CAM",t:"La enfermería",sit:"El 9 amaneció sin poder apoyar el pie. La infiltración de la ronda pasada le pasó factura.",ops:[
+ {l:"Otra infiltración",tag:"plata",d:"Juega. Y capaz no camina más en toda la copa.",r:[{p:.55,carry:{atk:1.08,txt:"Lo infiltraron de nuevo. Aguantó los noventa apretando los dientes."}},{p:.45,carry:{atk:.78,perm:true,txt:"Se rompió en el calentamiento. Perdido para toda la copa. Dos veces te avisaron."}}]},
+ {l:"Se termina acá",tag:"mierda",d:"Lo perdés ahora, pero camina.",r:[{p:1,carry:{atk:.88,txt:"Lo sacaste de la lista. Se fue en muletas pero se fue caminando."}}]}]},
 ];
 
 /* escudo real (TheSportsDB) con respaldo generado si no carga */
@@ -935,7 +969,7 @@ function nuevaCopa(seed){
   const rivales=[]; const equipo=null;
   // situaciones: barajadas una vez por copa, se consumen sin repetir
   const bolsa={PT:shuffle(SITUACIONES.filter(s=>s.tipo==="PT"&&s.id!=="saque")),ST:shuffle(SITUACIONES.filter(s=>s.tipo==="ST")),ET:shuffle(SITUACIONES.filter(s=>s.tipo==="ET")),ARQ:shuffle(SITUACIONES.filter(s=>s.tipo==="ARQ")),CAM:shuffle(SITUACIONES.filter(s=>s.tipo==="CAM"))};
-  G={seed:seedStr,eq:equipo,candidatos,otros,llaves:[],tirada:0,maxRechazos:3,triviaHecha:false,lesiones:0,rechazados:[],rivales,ronda:0,resultados:[],decisiones:[],plata:0,mierda:0,carry:[],perm:{atk:1,def:1},bolsa,campeon:false};
+  G={seed:seedStr,eq:equipo,candidatos,otros,llaves:[],flags:{},tirada:0,maxRechazos:3,triviaHecha:false,lesiones:0,rechazados:[],rivales,ronda:0,resultados:[],decisiones:[],plata:0,mierda:0,carry:[],perm:{atk:1,def:1},bolsa,campeon:false};
   location.hash="s="+encodeURIComponent(seedStr);
 }
 
@@ -1180,7 +1214,7 @@ function decision(a){
     if(!(M.gA<M.gB)||M.fuera.has("1"))return reanudar();
     s=pick(SITUACIONES.filter(x=>x.tipo==="LATE")); }
   else{ const bag=G.bolsa[a.tipo];
-    const ok=x=>!(x.usa||[]).some(n=>M.fuera.has(n)) && !(x.id==="tiempo"&&!(M.gA>M.gB)) && !(x.id==="c6"&&!(M.gA>M.gB)) && !(x.id==="c10b"&&!(M.gA<M.gB)) && !(x.id==="n17"&&!(M.gA>M.gB))
+    const ok=x=>(!x.req||G.flags[x.req]) && (!x.veto||G.flags[x.veto]!==true) && !(x.usa||[]).some(n=>M.fuera.has(n)) && !(x.id==="tiempo"&&!(M.gA>M.gB)) && !(x.id==="c6"&&!(M.gA>M.gB)) && !(x.id==="c10b"&&!(M.gA<M.gB)) && !(x.id==="n17"&&!(M.gA>M.gB))
       && !(x.cat==="lesion" && (M.lesionHoy || G.lesiones>=2 || (G.ronda===0&&rnd()<.75) || rnd()<.5));
     const i=bag.findIndex(ok); s=i>=0?bag.splice(i,1)[0]:null;
     if(s&&s.cat==="lesion"){M.lesionHoy=true;G.lesiones=(G.lesiones||0)+1}
@@ -1272,6 +1306,25 @@ function ruedaVAR(){
 }
 
 /* ============ ARCO 5×3 ============ */
+/* Cada toma trae su rectangulo de arco medido sobre la foto: [izq, arriba, ancho, alto] en %.
+   Las de patear comparten encuadre y las de atajar tambien, pero se guarda por toma
+   para poder sumar camaras nuevas sin tocar el resto. */
+const ARCOS={
+  patear:[
+    {img:"arco-p1",ar:"720/509",red:[5,11,90,48]},
+    {img:"arco-p2",ar:"720/509",red:[5,11,90,48]},
+    {img:"arco-p3",ar:"720/509",red:[5,11,90,48]},
+    {img:"arco-p4",ar:"720/509",red:[5,11,90,48],pen:1},
+    {img:"arco-p5",ar:"720/509",red:[5,11,90,48]}
+  ],
+  atajar:[
+    {img:"arco-a1",ar:"720/555",red:[10.5,4.7,79.5,90.3],pen:1},
+    {img:"arco-a2",ar:"720/555",red:[10.5,4.7,79.5,90.3]},
+    {img:"arco-a3",ar:"720/555",red:[10.5,4.7,79.5,90.3]},
+    {img:"arco-a4",ar:"720/555",red:[10.5,4.7,79.5,90.3]},
+    {img:"arco-a5",ar:"720/555",red:[10.5,4.7,79.5,90.3]}
+  ]};
+
 const GK_IDLE=`<svg viewBox="0 0 40 60"><circle cx="20" cy="9" r="7" fill="#f1c9a5"/><rect x="11" y="16" width="18" height="24" rx="4" fill="#111"/><rect x="4" y="18" width="7" height="18" rx="3" fill="#111"/><rect x="29" y="18" width="7" height="18" rx="3" fill="#111"/><rect x="12" y="40" width="7" height="18" rx="3" fill="#e6e6e6"/><rect x="21" y="40" width="7" height="18" rx="3" fill="#e6e6e6"/></svg>`;
 const GK_ARMS=`<svg viewBox="0 0 40 60"><circle cx="20" cy="14" r="7" fill="#f1c9a5"/><rect x="11" y="20" width="18" height="22" rx="4" fill="#111"/><rect x="-2" y="2" width="7" height="24" rx="3" fill="#111" transform="rotate(-40 1 14)"/><rect x="35" y="2" width="7" height="24" rx="3" fill="#111" transform="rotate(40 39 14)"/><rect x="10" y="42" width="7" height="17" rx="3" fill="#e6e6e6" transform="rotate(15 13 42)"/><rect x="23" y="42" width="7" height="17" rx="3" fill="#e6e6e6" transform="rotate(-15 27 42)"/></svg>`;
 function arco(modo,cb,ctx){
@@ -1285,8 +1338,10 @@ function arco(modo,cb,ctx){
   const sit=pen?(modo==="patear"?`Último penal. Si la metés, seguís. Si la tirás afuera, a casa. Elegí dónde la ponés.`:`Ahora atajás vos. Si la sacás, ganaste. Elegí a dónde te tirás. ${tend}`):(modo==="patear"?`Minuto ${M.min}. Quedaste mano a mano. Elegí dónde la ponés. Los palos de arriba son gol seguro si entra... si entra.`:`Minuto ${M.min}. Penal en contra. Elegí a dónde te tirás. ${tend}`);
   const lbl=pen?"Penal":(modo==="patear"?"Tiro decisivo":"Atajada decisiva");
   const cells=[];for(let r=0;r<3;r++)for(let c=0;c<5;c++)cells.push(`<button class="cell" data-r="${r}" data-c="${c}" aria-label="fila ${r+1} columna ${c+1}">·</button>`);
-  const foto=modo==="patear"?"arco-patear":"arco-atajar";
-  sh.innerHTML=`<div class="eyebrow">${titulo}</div><p class="sit">${sit}</p><div class="arcoFoto ${foto}"><div class="red">${cells.join("")}</div></div><p class="sub">${modo==="patear"?"Tocá un casillero del arco para patear.":"Tocá un casillero para elegir a dónde te tirás."}</p>`;
+  const pool=ARCOS[modo]; const conPen=pool.filter(x=>x.pen);
+  const A=pick(pen&&conPen.length?conPen:pool);          // en los penales, la toma de penal
+  const foto=`<div class="arcoFoto" style="aspect-ratio:${A.ar};background-image:url(img/${A.img}.jpg)"><div class="red" style="left:${A.red[0]}%;top:${A.red[1]}%;width:${A.red[2]}%;height:${A.red[3]}%">${cells.join("")}</div></div>`;
+  sh.innerHTML=`<div class="eyebrow">${titulo}</div><p class="sit">${sit}</p>${foto}<p class="sub">${modo==="patear"?"Tocá un casillero del arco para patear.":"Tocá un casillero para elegir a dónde te tirás."}</p>`;
   const colPos=(c)=>(c*20)+"%";
   const rowBottom=(r)=>(r===0?"30%":r===1?"12%":"0%");
   // alcance del arquero: su casillero + adyacentes horizontales en filas medias/bajas; en fila de arriba sólo su casillero y el de al lado si está cerca del centro
@@ -1375,15 +1430,19 @@ function camino(){
   $('#caminoEyebrow').textContent="Camino a "+RONDAS[G.ronda]+" · vs "+G.rivales[G.ronda].n;
   renderBracket($('#bracketCamino'));
   const esFinal=G.ronda===RONDAS.length-1;
-  const okc=x=>!(esFinal&&x.id==="cam2");
-  let i=G.bolsa.CAM.findIndex(okc); let s=i>=0?G.bolsa.CAM.splice(i,1)[0]:pick(SITUACIONES.filter(x=>x.tipo==="CAM"&&okc(x)));
+  const okc=x=>!(esFinal&&x.id==="cam2") && (!x.req||G.flags[x.req]) && (!x.veto||G.flags[x.veto]!==true);
+  let i=G.bolsa.CAM.findIndex(x=>x.req&&okc(x));           // si hay una cadena abierta, se cobra primero
+  if(i<0)i=G.bolsa.CAM.findIndex(okc);
+  let s=i>=0?G.bolsa.CAM.splice(i,1)[0]:pick(SITUACIONES.filter(x=>x.tipo==="CAM"&&okc(x)));
   const sh=$('#caminoSheet');
-  sh.innerHTML=`<h2>${s.t}</h2><p class="sit">${s.sit}</p>`+s.ops.map((o,i)=>`<button class="btn ${i?'sec':''}" data-i="${i}">${o.l}<small>${o.d}</small></button>`).join("");
+  const amb=s.foto?`<div class="foto amb" style="background-image:url(img/${s.foto}.jpg)"></div>`:"";
+  sh.innerHTML=`<h2>${s.t}</h2><p class="sit">${s.sit}</p>${amb}`+s.ops.map((o,i)=>`<button class="btn ${i?'sec':''}" data-i="${i}">${o.l}<small>${o.d}</small></button>`).join("");
   sh.querySelectorAll('button').forEach(b=>b.onclick=()=>{
     const o=s.ops[+b.dataset.i];const r=weighted(o.r);
     const c=Object.assign({},r.carry);
     const v=valor(c); if(v==="plata")G.plata++;else if(v==="mierda")G.mierda++;
     if(c.perm){G.perm.atk*=c.atk||1;G.perm.def*=c.def||1}
+    if(c.flag)G.flags[c.flag]=true;
     G.carry.push(c);
     G.decisiones.push({ronda:"Camino a "+RONDAS[G.ronda],op:o.l,tag:o.tag,txt:c.txt});
     renderCuadro();
