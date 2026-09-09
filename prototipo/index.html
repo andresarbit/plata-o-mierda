@@ -212,16 +212,20 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .tackle.listo .zona{animation:none;border-color:rgba(240,198,74,.7)}
 .tackle .pierna{position:absolute;top:24%;height:58%;width:auto;pointer-events:none;
   transform:translateX(-50%);filter:drop-shadow(0 14px 20px rgba(0,0,0,.65))}
-.tackle .p1{z-index:3;animation:corre 1.15s ease-in-out infinite alternate}
+.tackle .p1{z-index:3;animation:corre .72s ease-in-out infinite alternate}
 .tackle .p2{z-index:1;top:27%;height:53%;filter:brightness(.58) drop-shadow(0 10px 16px rgba(0,0,0,.7));
-  animation:corre 1.15s ease-in-out infinite alternate-reverse}
+  animation:corre .72s ease-in-out infinite alternate-reverse}
 @keyframes corre{from{left:34%}to{left:64%}}
-.tackle .balon{position:absolute;z-index:2;top:73%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;
+/* La pelota va en medida relativa, no en pixeles fijos: asi escala con la foto
+   y queda a escala real contra la pierna. Una pelota mide 22 cm y de la rodilla
+   al piso hay unos 50, o sea el 44% de la pierna; la pierna ocupa el 58% del
+   alto del cuadro, asi que la pelota es el 23% del ancho. */
+.tackle .balon{position:absolute;z-index:2;top:73%;width:23%;aspect-ratio:1;margin:-11.5% 0 0 -11.5%;border-radius:50%;
   background:#fff;box-shadow:inset -4px -4px 0 #9a9a9a,0 0 18px rgba(255,255,255,.85),0 6px 14px rgba(0,0,0,.65);
-  animation:rueda 1.5s ease-in-out infinite alternate}
+  animation:rueda .95s ease-in-out infinite alternate}
 @keyframes rueda{from{left:22%}to{left:76%}}
 .tackle.listo .pierna,.tackle.listo .balon{animation-play-state:paused}
-@media (prefers-reduced-motion:reduce){.tackle .pierna,.tackle .balon{animation-duration:3s}}
+@media (prefers-reduced-motion:reduce){.tackle .pierna,.tackle .balon{animation-duration:2.4s}}
 /* Apuntar: no se muestra ninguna division adentro del arco. Solo un rectangulo
    rojo que late marcando donde hay que tocar. La reticula que cuantiza el toque
    existe en el codigo, no en la pantalla. */
@@ -1657,7 +1661,7 @@ function defender(cb){
   <p class="sub">Esperá a que se abran: las piernas y la pelota no van al mismo ritmo.</p>`;
   const cancha=$('#tackle'); let resuelto=false;
   const cerrar=(clase,txt,v,sigue)=>{
-    if(resuelto)return; resuelto=true; clearTimeout(reloj);
+    if(resuelto)return; resuelto=true;
     cancha.classList.add('listo'); cancha.onpointerdown=null;
     ev(M.min,`<b>Cruce.</b> ${txt} <span class="tag ${v}">${v}</span>`,clase);
     if(v==="plata")G.plata++;else G.mierda++;
@@ -1669,14 +1673,26 @@ function defender(cb){
     if(resuelto)return;
     const rb=$('#balon').getBoundingClientRect();
     const x=e.clientX, y=e.clientY;
-    // las dos piernas cuentan: la de adelante y la de atras
-    const enPierna=[...cancha.querySelectorAll('.pierna')].some(pn=>{
+    /* La pierna no es un rectangulo lleno: arriba es la pantorrilla, angosta y
+       centrada, y abajo el botin, que ocupa todo el ancho del PNG. Se chequea
+       por tramos para que tocar el pie cuente como pie. */
+    const dentroPierna=(pn)=>{
+      if(!pn)return false;
       const r=pn.getBoundingClientRect();
-      return x>r.left+r.width*.18 && x<r.right-r.width*.18 && y>r.top && y<r.bottom;
-    });
+      if(y<r.top||y>r.bottom)return false;
+      const rel=(y-r.top)/r.height;
+      const borde = rel<.76 ? .30 : .04;          // pantorrilla / botin
+      return x>r.left+r.width*borde && x<r.right-r.width*borde;
+    };
     const cx=rb.left+rb.width/2, cy=rb.top+rb.height/2;
-    const enPelota = Math.hypot(x-cx,y-cy) < rb.width*1.05;
-    if(enPierna && !enPelota){
+    // el radio es la mitad del ancho, no el ancho: antes el area de la pelota
+    // era el doble de grande y se comia el botin
+    const enPelota = Math.hypot(x-cx,y-cy) < rb.width*.58;
+    /* Se decide por lo que se ve encima: la pierna de adelante tapa la pelota,
+       asi que si tocaste ahi es falta aunque la pelota este debajo. */
+    const p1=cancha.querySelector('.p1'), p2=cancha.querySelector('.p2');
+    const enPierna = dentroPierna(p1) || (!enPelota && dentroPierna(p2));
+    if(enPierna){
       SFX.play('uuh');
       if(enArea) cerrar('dec rojo',"Le metiste la pierna adentro del área. Penal en contra. Vos la pediste.",'mierda',
         ()=>apuntar("atajar","penal",()=>cb()));
@@ -1693,11 +1709,7 @@ function defender(cb){
         ()=>apuntar("atajar","jugada",()=>cb()));
     }
   };
-  const reloj=setTimeout(()=>{
-    SFX.play('uuh');
-    cerrar('dec',"No te decidiste nunca. Te encaró y siguió de largo.",'mierda',
-      ()=>apuntar("atajar","jugada",()=>cb()));
-  },5200);
+  // sin reloj: las piernas y la pelota siguen en loop hasta que el jugador toca
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
 
