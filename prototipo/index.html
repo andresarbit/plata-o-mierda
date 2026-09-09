@@ -201,26 +201,26 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .varptr{position:absolute;left:50%;top:-13px;margin-left:-13px;width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:26px solid #f0c64a;z-index:2;filter:drop-shadow(0 3px 3px rgba(0,0,0,.7))}
 /* arco */
 .arcoFoto{position:relative;margin:10px 0 6px;border-radius:8px;overflow:hidden;background:#000 center/cover no-repeat;box-shadow:0 8px 24px rgba(0,0,0,.5)}
-/* Defender: la pelota y la pierna del rival se mueven con ritmos distintos, asi
-   que la ventana para entrar limpio se abre y se cierra sola. Se toca la pelota
-   y defendiste; se toca la pierna y es falta. */
+/* Defender: vista lateral de las dos piernas del rival de la rodilla para abajo,
+   corriendo y cruzandose, y la pelota pasando entre ellas. La pierna de adelante
+   tapa la pelota cuando se cruzan: ahi entrar es falta. */
 .tackle{position:relative;width:100%;aspect-ratio:720/645;border-radius:8px;overflow:hidden;cursor:pointer;
   background:#0b0f0c center/cover no-repeat;background-image:url(img/defender.jpg);
   box-shadow:0 8px 24px rgba(0,0,0,.5);touch-action:manipulation}
-.tackle .zona{position:absolute;left:4%;right:4%;top:40%;bottom:6%;border:3px solid rgba(226,70,58,.75);
-  border-radius:8px;pointer-events:none;animation:latir 1.6s ease-in-out infinite}
+.tackle .zona{position:absolute;left:4%;right:4%;top:34%;bottom:6%;border:3px solid rgba(226,70,58,.75);
+  border-radius:8px;pointer-events:none;z-index:4;animation:latir 1.6s ease-in-out infinite}
 .tackle.listo .zona{animation:none;border-color:rgba(240,198,74,.7)}
-.tackle .pierna{position:absolute;top:52%;width:58px;height:150px;margin:-14px 0 0 -29px;border-radius:28px;
-  background:linear-gradient(180deg,#232d28,#0b100d);border:2px solid rgba(255,255,255,.16);
-  box-shadow:0 10px 26px rgba(0,0,0,.75);animation:driblaPierna 1.15s ease-in-out infinite alternate}
-.tackle .pierna::after{content:"";position:absolute;left:-8px;right:-14px;bottom:-6px;height:34px;border-radius:14px;
-  background:linear-gradient(180deg,#e9e6dc,#b9b4a6);box-shadow:0 4px 10px rgba(0,0,0,.6)}
-.tackle .balon{position:absolute;top:76%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;
-  background:#fff;box-shadow:inset -4px -4px 0 #9a9a9a,0 0 18px rgba(255,255,255,.8),0 6px 14px rgba(0,0,0,.6);
-  animation:driblaPelota 1.5s ease-in-out infinite alternate}
+.tackle .pierna{position:absolute;top:24%;height:58%;width:auto;pointer-events:none;
+  transform:translateX(-50%);filter:drop-shadow(0 14px 20px rgba(0,0,0,.65))}
+.tackle .p1{z-index:3;animation:corre 1.15s ease-in-out infinite alternate}
+.tackle .p2{z-index:1;top:27%;height:53%;filter:brightness(.58) drop-shadow(0 10px 16px rgba(0,0,0,.7));
+  animation:corre 1.15s ease-in-out infinite alternate-reverse}
+@keyframes corre{from{left:34%}to{left:64%}}
+.tackle .balon{position:absolute;z-index:2;top:73%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;
+  background:#fff;box-shadow:inset -4px -4px 0 #9a9a9a,0 0 18px rgba(255,255,255,.85),0 6px 14px rgba(0,0,0,.65);
+  animation:rueda 1.5s ease-in-out infinite alternate}
+@keyframes rueda{from{left:22%}to{left:76%}}
 .tackle.listo .pierna,.tackle.listo .balon{animation-play-state:paused}
-@keyframes driblaPierna{from{left:26%}to{left:74%}}
-@keyframes driblaPelota{from{left:70%}to{left:30%}}
 @media (prefers-reduced-motion:reduce){.tackle .pierna,.tackle .balon{animation-duration:3s}}
 /* Apuntar: no se muestra ninguna division adentro del arco. Solo un rectangulo
    rojo que late marcando donde hay que tocar. La reticula que cuantiza el toque
@@ -1647,13 +1647,14 @@ function defender(cb){
   const enArea=rnd()<.42;
   sh.innerHTML=`<div class="eyebrow">Minuto ${M.min} · te encaran</div>
   <p class="sit">Se te viene solo ${enArea?"<b>adentro del área</b>":"por la puerta del área"}.
-  Tocá <b>la pelota</b> para sacársela. Si le tocás la pierna es falta${enArea?" y penal":""}.</p>
+  Tocá <b>la pelota</b> cuando la veas entre las piernas. Si le tocás una pierna es falta${enArea?" y penal":""}.</p>
   <div class="tackle" id="tackle">
     <div class="zona"></div>
-    <div class="pierna" id="pierna"></div>
+    <img class="pierna p2" src="img/pierna.png" alt="">
     <div class="balon" id="balon"></div>
+    <img class="pierna p1" id="pierna" src="img/pierna.png" alt="">
   </div>
-  <p class="sub">Esperá el momento: la pierna y la pelota no van al mismo ritmo.</p>`;
+  <p class="sub">Esperá a que se abran: las piernas y la pelota no van al mismo ritmo.</p>`;
   const cancha=$('#tackle'); let resuelto=false;
   const cerrar=(clase,txt,v,sigue)=>{
     if(resuelto)return; resuelto=true; clearTimeout(reloj);
@@ -1666,11 +1667,15 @@ function defender(cb){
   };
   cancha.onpointerdown=(e)=>{
     if(resuelto)return;
-    const rb=$('#balon').getBoundingClientRect(), rp=$('#pierna').getBoundingClientRect();
+    const rb=$('#balon').getBoundingClientRect();
     const x=e.clientX, y=e.clientY;
-    const enPierna = x>rp.left-6 && x<rp.right+6 && y>rp.top-6 && y<rp.bottom+6;
+    // las dos piernas cuentan: la de adelante y la de atras
+    const enPierna=[...cancha.querySelectorAll('.pierna')].some(pn=>{
+      const r=pn.getBoundingClientRect();
+      return x>r.left+r.width*.18 && x<r.right-r.width*.18 && y>r.top && y<r.bottom;
+    });
     const cx=rb.left+rb.width/2, cy=rb.top+rb.height/2;
-    const enPelota = Math.hypot(x-cx,y-cy) < rb.width*0.95;
+    const enPelota = Math.hypot(x-cx,y-cy) < rb.width*1.05;
     if(enPierna && !enPelota){
       SFX.play('uuh');
       if(enArea) cerrar('dec rojo',"Le metiste la pierna adentro del área. Penal en contra. Vos la pediste.",'mierda',
