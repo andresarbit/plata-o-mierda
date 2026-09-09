@@ -125,6 +125,18 @@ input[type=search]{width:100%;padding:13px 14px;font-size:16px;background:var(--
 .sorteoResumen span{display:inline-block;margin:4px 6px 0 0;padding:2px 8px;border:1px solid var(--line);border-radius:3px}
 .sorteoResumen span.no{text-decoration:line-through;opacity:.7}
 .sorteoResumen span.mio{border-color:var(--plata);color:var(--plata);font-weight:700}
+/* Los filtros van a la vista, no adentro de un desplegable: si estan escondidos
+   nadie los usa y la gracia de la seccion es justamente poder acotar el sorteo. */
+.fcSet{background:var(--bg2);border-radius:12px;padding:12px 12px 10px;margin:10px 0 4px}
+.fcSetTit{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--plata);margin-bottom:8px}
+.fcGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px}
+.fcGrid label{display:flex;flex-direction:column;gap:4px;grid-column:1/-1;
+  font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2)}
+.fcGrid label.mitad{grid-column:auto}
+.fcGrid select{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--ink);
+  padding:9px 8px;border-radius:7px;font-family:inherit;font-size:14px;text-transform:none;letter-spacing:0}
+.fcAviso{font-size:12px;color:var(--mierda);margin-top:8px;display:none}
+.fcAviso.on{display:block}
 /* versus de la seccion para FC */
 .vs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin:14px 0 6px;
   background:var(--bg2);border-radius:12px;padding:16px 10px}
@@ -339,37 +351,41 @@ h2 .fcLogo svg{width:19px;height:19px}
   <h2 class="display" style="font-size:26px;margin:4px 0 2px;line-height:1.08;text-wrap:balance"><span class="fcLogo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7.2 7h9.6a4 4 0 0 1 3.93 3.24l.79 4.1A2.6 2.6 0 0 1 18.97 17.5a2.6 2.6 0 0 1-2.1-1.07L15.6 14.7H8.4l-1.27 1.73A2.6 2.6 0 0 1 5.03 17.5 2.6 2.6 0 0 1 2.48 14.34l.79-4.1A4 4 0 0 1 7.2 7Z" stroke="#241a02" stroke-width="1.7" stroke-linejoin="round"/><path d="M6.6 10.4v2.2M5.5 11.5h2.2" stroke="#241a02" stroke-width="1.7" stroke-linecap="round"/><circle cx="16.2" cy="10.9" r="1.05" fill="#241a02"/><circle cx="18.1" cy="12.6" r="1.05" fill="#241a02"/></svg>FC</span>Plata o mierda para FC</h2>
   <p class="kicker" style="color:var(--ink2);font-size:14px;margin:0 0 10px">
     Tirás y te sale un versus. Tres veces podés pedir otro. La cuarta es lo que hay.</p>
-  <details class="cfg" id="fcCfg"><summary>Cómo querés el random</summary>
-    <label>Estrellas desde
-      <select id="fcMin"><option>1</option><option>1.5</option><option>2</option><option>2.5</option><option selected>3</option><option>3.5</option><option>4</option><option>4.5</option><option>5</option></select>
-    </label>
-    <label>Estrellas hasta
-      <select id="fcMax"><option>1</option><option>1.5</option><option>2</option><option>2.5</option><option>3</option><option>3.5</option><option>4</option><option>4.5</option><option selected>5</option></select>
-    </label>
-    <label>Región
-      <select id="fcReg">
-        <option value="todo" selected>Todas</option>
-        <option value="arg">Solo Argentina</option>
-        <option value="sud">Sudamérica (tipo Libertadores)</option>
-        <option value="eur">Europa (tipo Champions)</option>
-        <option value="resto">Resto del mundo</option>
-      </select>
-    </label>
-    <label>Emparejamiento
-      <select id="fcPar">
-        <option value="libre" selected>Como salga</option>
-        <option value="parejo">Parejo (hasta media estrella)</option>
-        <option value="desparejo">David contra Goliat (estrella y media o más)</option>
-      </select>
-    </label>
-    <label>Países
-      <select id="fcPais">
-        <option value="libre" selected>Como salga</option>
-        <option value="mismo">Clásico: mismo país</option>
-        <option value="distinto">Internacional: países distintos</option>
-      </select>
-    </label>
-  </details>
+  <div class="fcSet" id="fcCfg">
+    <div class="fcSetTit">Cómo querés el random</div>
+    <div class="fcGrid">
+      <label class="mitad">Estrellas desde
+        <select id="fcMin"><option>1</option><option>1.5</option><option>2</option><option>2.5</option><option selected>3</option><option>3.5</option><option>4</option><option>4.5</option><option>5</option></select>
+      </label>
+      <label class="mitad">hasta
+        <select id="fcMax"><option>1</option><option>1.5</option><option>2</option><option>2.5</option><option>3</option><option>3.5</option><option>4</option><option>4.5</option><option selected>5</option></select>
+      </label>
+      <label>Región
+        <select id="fcReg">
+          <option value="todo" selected>Todas</option>
+          <option value="arg">Solo Argentina</option>
+          <option value="sud">Sudamérica (tipo Libertadores)</option>
+          <option value="eur">Europa (tipo Champions)</option>
+          <option value="resto">Resto del mundo</option>
+        </select>
+      </label>
+      <label>Emparejamiento
+        <select id="fcPar">
+          <option value="libre" selected>Como salga</option>
+          <option value="parejo">Parejo (hasta media estrella)</option>
+          <option value="desparejo">David contra Goliat (estrella y media o más)</option>
+        </select>
+      </label>
+      <label>Países
+        <select id="fcPais">
+          <option value="libre" selected>Como salga</option>
+          <option value="mismo">Clásico: mismo país</option>
+          <option value="distinto">Internacional: países distintos</option>
+        </select>
+      </label>
+    </div>
+    <div class="fcAviso" id="fcAviso"></div>
+  </div>
   <div id="fcVs"></div>
   <div id="fcBtns"></div>
   <button class="btn sec" id="bFCsalir">Volver</button>
@@ -1113,7 +1129,7 @@ function nuevaCopa(seed){
   const rivales=[]; const equipo=null;
   // situaciones: barajadas una vez por copa, se consumen sin repetir
   const bolsa={PT:shuffle(SITUACIONES.filter(s=>s.tipo==="PT"&&s.id!=="saque")),ST:shuffle(SITUACIONES.filter(s=>s.tipo==="ST")),ET:shuffle(SITUACIONES.filter(s=>s.tipo==="ET")),ARQ:shuffle(SITUACIONES.filter(s=>s.tipo==="ARQ")),CAM:shuffle(SITUACIONES.filter(s=>s.tipo==="CAM"))};
-  G={seed:seedStr,eq:equipo,candidatos,otros,llaves:[],flags:{},tirada:0,maxRechazos:3,triviaHecha:false,lesiones:0,rechazados:[],rivales,ronda:0,resultados:[],decisiones:[],plata:0,mierda:0,carry:[],perm:{atk:1,def:1},bolsa,campeon:false};
+  G={seed:seedStr,eq:equipo,candidatos,otros,llaves:[],flags:{},crucesObjetivo:2+(rnd()<.5?1:0),crucesHechos:0,tirada:0,maxRechazos:3,triviaHecha:false,lesiones:0,rechazados:[],rivales,ronda:0,resultados:[],decisiones:[],plata:0,mierda:0,carry:[],perm:{atk:1,def:1},bolsa,campeon:false};
   location.hash="s="+encodeURIComponent(seedStr);
 }
 
@@ -1354,7 +1370,14 @@ function empezarPartido(){
   slots(50,82,n).forEach(m=>M.agenda.push({min:m,tipo:rnd()<.3?"ARQ":"ST"}));
   if(rnd()<.5)M.agenda.push({min:52+Math.floor(rnd()*28),tipo:"VAR"});
   if(rnd()<.45)M.agenda.push({min:18+Math.floor(rnd()*58),tipo:"TL"});  // tiro libre con punteria
-  if(rnd()<.5)M.agenda.push({min:22+Math.floor(rnd()*50),tipo:"DEF"}); // cruce: sacarle la pelota sin hacer falta
+  /* Cruces: se apunta a dos o tres por copa y se reparten entre los partidos que
+     quedan, en vez de tirar una moneda suelta en cada uno. Si faltan tantos como
+     partidos, sale seguro. */
+  {
+    const restantes=Math.max(1,RONDAS.length-G.ronda), faltan=Math.max(0,G.crucesObjetivo-G.crucesHechos);
+    const p=faltan>=restantes?1:Math.max(.55,faltan/restantes);
+    if(faltan>0&&rnd()<p){ G.crucesHechos++; M.agenda.push({min:22+Math.floor(rnd()*50),tipo:"DEF"}); }
+  }
   M.agenda.push({min:83+Math.floor(rnd()*3),tipo:"LATE"});
   M.agenda.push({min:87+Math.floor(rnd()*2),tipo:"ARCO"});
   M.agenda.sort((a,b)=>a.min-b.min);
@@ -1618,12 +1641,23 @@ function fcPintar(v,forzado){
   $('#fcVs').innerHTML=`<div class="fcTirada">Tirada <b>${FC.tirada}</b> de 4${forzado?" · esta es lo que hay":""}</div>
     <div class="vs">${lado(v.a)}<div class="mid">VS</div>${lado(v.b)}</div>`;
 }
+/* avisa antes de tirar si la combinacion de filtros no da ningun cruce */
+function fcChequear(){
+  const c=fcLeer(), pool=fcPool(c), av=$('#fcAviso');
+  let msg="";
+  if(pool.length<2) msg="Con ese rango de estrellas y esa región no hay equipos suficientes.";
+  else if(!fcVersus()) msg="Esos filtros no dan ningún cruce posible. Aflojá alguno.";
+  av.textContent=msg; av.classList.toggle('on',!!msg);
+  const go=$('#fcGo')||$('#fcOtra'); if(go)go.disabled=!!msg;
+  return !msg;
+}
 function fcTirar(){
+  if(!fcChequear())return;
   const v=fcVersus();
-  if(!v){ $('#fcVs').innerHTML='<p class="sit">Con esos filtros no hay dos equipos posibles. Aflojá alguno.</p>';
-          $('#fcBtns').innerHTML=''; return; }
+  if(!v){ fcChequear(); return; }
   FC.tirada++; const ultima=FC.tirada>=4;
   fcPintar(v,ultima);
+  $('#fcVs').scrollIntoView({block:'center',behavior:'smooth'});
   if(ultima){ fcCerrar(v,true); return; }
   $('#fcBtns').innerHTML=`<button class="btn oro" id="fcOk">Me lo quedo<small>Este es el partido.</small></button>
     <button class="btn sec" id="fcOtra">Otra<small>${FC.tirada===3?"Ojo: la próxima es lo que hay, salga lo que salga.":"Te quedan "+(3-FC.tirada)+" chances."}</small></button>`;
@@ -1646,9 +1680,11 @@ function fcCerrar(v,forzado){
 }
 function fcAbrir(){
   show('fc'); FC.tirada=0; FC.elegido=null;
-  $('#fcVs').innerHTML='<p class="sit" style="color:var(--ink2)">Tocá tirar y mirá qué te toca.</p>';
+  $('#fcVs').innerHTML='<p class="sit" style="color:var(--ink2)">Elegí cómo lo querés y tocá tirar.</p>';
   $('#fcBtns').innerHTML='<button class="btn oro" id="fcGo">Tirar<small>Un versus al azar. No se elige.</small></button>';
   $('#fcGo').onclick=fcTirar;
+  ['fcMin','fcMax','fcReg','fcPar','fcPais'].forEach(id=>{ $('#'+id).onchange=fcChequear });
+  fcChequear();
 }
 
 /* ============ DEFENDER ============
@@ -1710,8 +1746,17 @@ function defender(cb){
     } else if(enPelota){
       SFX.play('patada');
       const limpio=rnd()<.82;
-      if(limpio){ M.atk*=1.06; cerrar('dec',"Le sacaste la pelota limpia y salieron jugando. Qué cruce.",'plata'); }
-      else cerrar('dec',"Tocaste la pelota primero, pero el árbitro cobró falta igual. Injusticia.",'mierda');
+      if(limpio){
+        // se la sacaste: salen de contra y te queda el remate
+        cerrar('dec',"Le sacaste la pelota limpia y salieron de contra. Quedás vos de frente al arco.",'plata',
+          ()=>apuntar("patear","jugada",()=>cb()));
+      } else {
+        // el arbitro la cobra igual: mismo castigo que una falta de verdad
+        if(enArea) cerrar('dec rojo',"Tocaste la pelota primero y el árbitro cobró penal igual. Una vergüenza.",'mierda',
+          ()=>apuntar("atajar","penal",()=>cb()));
+        else cerrar('dec',"Tocaste la pelota primero, pero cobró falta igual. Tiro libre en contra.",'mierda',
+          ()=>apuntar("atajar","libre",()=>cb()));
+      }
     } else {
       SFX.play('uuh');
       cerrar('dec',"Tiraste el manotazo al aire. Te pasó y quedó de frente al arco.",'mierda',
