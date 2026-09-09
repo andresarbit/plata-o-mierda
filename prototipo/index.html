@@ -1559,9 +1559,11 @@ const ARCOS={
              {img:"arco-p6",ar:"720/509",red:[5,11,90,48]}]
   },
   atajar:{
-    penal:  [{img:"arco-a1",ar:"720/580",red:[6,36.7,89,43.3]},
-             {img:"arco-a2",ar:"720/580",red:[6,36.7,89,43.3]}],
-    jugada: [{img:"arco-a3",ar:"720/580",red:[6,36.7,89,43.3]},
+    // arco-a2 salio con jugadores desparramados por la cancha: parece una jugada
+    // y no un penal, asi que se mueve al pool de jugada hasta reemplazarla.
+    penal:  [{img:"arco-a1",ar:"720/580",red:[6,36.7,89,43.3]}],
+    jugada: [{img:"arco-a2",ar:"720/580",red:[6,36.7,89,43.3]},
+             {img:"arco-a3",ar:"720/580",red:[6,36.7,89,43.3]},
              {img:"arco-a5",ar:"720/580",red:[6,36.7,89,43.3]},
              {img:"arco-a6",ar:"720/580",red:[6,36.7,89,43.3]}],
     libre:  [{img:"arco-a4",ar:"720/580",red:[6,36.7,89,43.3]},
