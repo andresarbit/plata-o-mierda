@@ -1516,7 +1516,19 @@ const VAR_SECT=["GOL","NO ES GOL","PENAL","NO ES PENAL","AMARILLA","ROJA"];  // 
 function ruedaVAR(){
   const sh=$('#sheet');sh.style.display="block";
   const n=VAR_SECT.length, step=360/n;
-  sh.innerHTML=`<div class="eyebrow">Minuto ${M.min} · la rueda del VAR</div><p class="sit">${pick(["Jugada polémica en el área. El árbitro se va a la pantallita.","Se armó el tumulto y el árbitro dibuja la pantallita con las manos.","Todos gritan. El árbitro corre hasta el monitor al costado de la cancha."])} Girá y bancate lo que salga.</p>
+  /* La jugada revisada puede ser tuya o de ellos. Antes el texto era siempre el
+     mismo y no se entendía de quién era el gol que estaban mirando: salía "GOL"
+     y el jugador no sabía si festejar. Ahora se sortea el lado primero y toda la
+     tanda (entrada, resultado y evento) se escribe desde ese lado. */
+  const mio=rnd()<.5;
+  const intro=mio
+    ? pick(["Tumulto en el área de ellos: tu 9 la mandó adentro y todos gritan. El árbitro se va a la pantallita.",
+            "Reclamás vos. Jugada en el área de ellos y el árbitro dibuja la pantallita con las manos.",
+            "Tu 10 terminó en el piso adentro del área de ellos. El árbitro corre hasta el monitor."])
+    : pick(["Tumulto en tu área: la mandaron adentro y tu arquero grita falta. El árbitro se va a la pantallita.",
+            "Reclaman ellos. Jugada en tu área y el árbitro dibuja la pantallita con las manos.",
+            "El 9 de ellos se tiró adentro de tu área. El árbitro corre hasta el monitor."]);
+  sh.innerHTML=`<div class="eyebrow">Minuto ${M.min} · la rueda del VAR · ${mio?"revisan una jugada tuya":"revisan una jugada de ellos"}</div><p class="sit">${intro} Girá y bancate lo que salga.</p>
   <div class="foto sala"></div>
   <div class="varwrap"><div class="varptr"></div><div class="var" id="var" role="button" tabindex="0" aria-label="Girar la rueda"></div></div>
   <div class="linea"><button id="bGirar">Girar</button></div>`;
@@ -1528,18 +1540,28 @@ function ruedaVAR(){
     const w=$('#var'); w.style.transition='transform 2.6s cubic-bezier(.15,.8,.2,1)'; w.style.transform=`rotate(${ang}deg)`;
     (function ticks(k){ if(k>28)return; SFX.play('tick'); setTimeout(()=>ticks(k+1), 40+k*k*.35); })(0);
     setTimeout(()=>{
-      let txt,v,cls='dec';
-      if(res==="GOL"){M.gA++;txt="El VAR lo confirmó. GOL. La pantallita está de tu lado.";v="plata";cls='goal'}
-      else if(res==="NO ES GOL"){txt="Anulado. Tres minutos mirando el monitor para nada.";v="mierda"}
-      else if(res==="PENAL"){const g=rnd()<.8;if(g)M.gA++;txt="Penal para vos. "+(g?"El 9 la clavó abajo. Gol.":"El 9 la tiró a la tribuna. Increíble.");v=g?"plata":"mierda";cls=g?'goal':'dec'}
-      else if(res==="NO ES PENAL"){M.def*=1.08;txt="Era penal en contra y el VAR lo levantó. Te salvaste de una.";v="plata"}
-      else if(res==="AMARILLA"){M.atk*=.96;txt="Nada de nada, y amarilla al 9 por protestar de más.";v="mierda"}
-      else {M.atk*=1.12;M.def*=1.08;txt="Roja para ellos. Se quedan con diez y vos con toda la cancha.";v="plata"}
-      ev(M.min,`<b>Rueda del VAR: ${res}.</b> `+txt+` <span class="tag ${v}">${v}</span>`,cls);
-      if(res==="GOL"||(res==="PENAL"&&cls==='goal')){SFX.play('gol');ev(M.min,"GOL. "+M.gA+"-"+M.gB,'goal')}
+      let txt,v,cls='dec',gf=0,gc=0;
+      if(mio){
+        if(res==="GOL"){M.gA++;gf=1;txt="Confirmado: el gol es tuyo y vale. Por una vez la pantallita estuvo de tu lado.";v="plata";cls='goal'}
+        else if(res==="NO ES GOL"){txt="Anulado. Era gol tuyo y te lo borraron por un hombro. Tres minutos mirando el monitor para nada.";v="mierda"}
+        else if(res==="PENAL"){const g=rnd()<.8;if(g){M.gA++;gf=1}txt="Penal a favor tuyo. "+(g?"El 9 la clavó abajo. Gol.":"El 9 la tiró a la tribuna. Increíble.");v=g?"plata":"mierda";cls=g?'goal':'dec'}
+        else if(res==="NO ES PENAL"){M.atk*=.97;txt="El VAR mira, vuelve y dice que tu 10 se tiró solo. No hubo nada.";v="mierda"}
+        else if(res==="AMARILLA"){M.atk*=.96;txt="No cobró nada y encima amarilla a tu 9 por protestar de más.";v="mierda"}
+        else {M.atk*=1.12;M.def*=1.08;txt="Roja para el central de ellos, que te había frenado de atrás. Se quedan con diez y vos con toda la cancha.";v="plata"}
+      }else{
+        if(res==="GOL"){M.gB++;gc=1;txt="Confirmado: el gol de ellos es válido. Sube al marcador y no hay nada que discutir.";v="mierda";cls='goal contra'}
+        else if(res==="NO ES GOL"){txt="Anulado el gol de ellos: estaba adelantado por medio botín. Te salvó la pantallita.";v="plata"}
+        else if(res==="PENAL"){const g=rnd()<.8;if(g){M.gB++;gc=1}txt="Penal en contra. "+(g?"El 9 de ellos la clavó abajo. Gol.":"El 9 de ellos la tiró a la tribuna. Respirás.");v=g?"mierda":"plata";cls=g?'goal contra':'dec'}
+        else if(res==="NO ES PENAL"){M.def*=1.08;txt="Era penal en contra y el VAR lo levantó. Te salvaste de una.";v="plata"}
+        else if(res==="AMARILLA"){M.def*=1.04;txt="Nada de penal: amarilla al 9 de ellos por tirarse adentro de tu área.";v="plata"}
+        else {M.def*=.88;M.rojos++;txt="Roja para tu central por la plancha. Te quedás con diez y con todo el partido por delante.";v="mierda";cls='dec rojo'}
+      }
+      ev(M.min,`<b>Rueda del VAR — ${mio?"jugada tuya":"jugada de ellos"}: ${res}.</b> `+txt+` <span class="tag ${v}">${v}</span>`,cls);
+      if(gf){SFX.play('gol');ev(M.min,"GOL. "+M.gA+"-"+M.gB,'goal')}
+      else if(gc){SFX.play('golcontra');ev(M.min,"Gol de ellos. "+M.gA+"-"+M.gB,'goal contra')}
       else if(v==="plata")SFX.play('caja'); else SFX.play('uuh');
       if(v==="plata")G.plata++;else G.mierda++;
-      G.decisiones.push({ronda:RONDAS[G.ronda],min:M.min,op:"Rueda del VAR",tag:v,txt,gf:cls==='goal'?1:0});
+      G.decisiones.push({ronda:RONDAS[G.ronda],min:M.min,op:"Rueda del VAR",tag:v,txt,gf,gc});
       marcador();sh.style.display="none";reanudar();
     },2900);
   };
