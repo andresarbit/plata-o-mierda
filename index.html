@@ -231,6 +231,11 @@ h2 .fcLogo svg{width:19px;height:19px}
 .tackle .zona{position:absolute;left:4%;right:4%;top:34%;bottom:6%;border:3px solid rgba(226,70,58,.75);
   border-radius:8px;pointer-events:none;z-index:4;animation:latir 1.6s ease-in-out infinite}
 .tackle.listo .zona{animation:none;border-color:rgba(240,198,74,.7)}
+/* Si pierna.png no llega (conexion caida, cache sucio) el navegador deja el icono
+   de imagen rota. Con .falla se esconde la imagen y se dibuja una pierna por CSS:
+   fea pero jugable, que es mejor que un cuadrito roto. */
+.tackle .pierna.falla{background:linear-gradient(180deg,#25302b 0%,#1b2420 62%,#e9e6dc 62%,#c9c4b6 100%);
+  border-radius:26px 26px 10px 10px;width:12%;box-shadow:0 10px 22px rgba(0,0,0,.7)}
 .tackle .pierna{position:absolute;top:24%;height:58%;width:auto;pointer-events:none;
   transform:translateX(-50%);filter:drop-shadow(0 14px 20px rgba(0,0,0,.65))}
 .tackle .p1{z-index:3;animation:corre .72s ease-in-out infinite alternate}
@@ -1381,6 +1386,12 @@ function empezarPartido(){
   M.agenda.push({min:83+Math.floor(rnd()*3),tipo:"LATE"});
   M.agenda.push({min:87+Math.floor(rnd()*2),tipo:"ARCO"});
   M.agenda.sort((a,b)=>a.min-b.min);
+  /* Se piden las imagenes del cruce al arrancar el partido, no cuando aparece la
+     pantalla: asi llegan con veinte minutos de sobra y no dependen de que la
+     conexion este bien justo en ese segundo. */
+  if(M.agenda.some(a=>a.tipo==="DEF")){
+    ['img/defender.jpg','img/pierna.png'].forEach(u=>{try{new Image().src=u}catch(e){}});
+  }
   show('partido');
   $('#ronda').textContent=RONDAS[G.ronda]+" · semilla "+G.seed;
   $('#tA').innerHTML=escudo(G.eq,26)+G.eq.n+"<small>"+stars(G.eq.s)+"</small>";
@@ -1714,6 +1725,13 @@ function defender(cb){
   </div>
   <p class="sub">Esperá a que se abran: las piernas y la pelota no van al mismo ritmo.</p>`;
   const cancha=$('#tackle'); let resuelto=false;
+  /* Un reintento con cache-buster antes de rendirse: casi siempre la segunda entra. */
+  cancha.querySelectorAll('.pierna').forEach(pn=>{
+    pn.onerror=()=>{
+      if(!pn.dataset.reintento){ pn.dataset.reintento='1'; pn.src='img/pierna.png?r='+Date.now(); return }
+      pn.onerror=null; pn.removeAttribute('src'); pn.classList.add('falla');
+    };
+  });
   const cerrar=(clase,txt,v,sigue)=>{
     if(resuelto)return; resuelto=true;
     cancha.classList.add('listo'); cancha.onpointerdown=null;
@@ -1937,6 +1955,7 @@ function camino(){
   let s=i>=0?G.bolsa.CAM.splice(i,1)[0]:pick(SITUACIONES.filter(x=>x.tipo==="CAM"&&okc(x)));
   const sh=$('#caminoSheet');
   const amb=s.foto?`<div class="foto amb" style="background-image:url(img/${s.foto}.jpg)"></div>`:"";
+  if(s.foto){try{new Image().src='img/'+s.foto+'.jpg'}catch(e){}}
   sh.innerHTML=`<h2>${s.t}</h2><p class="sit">${s.sit}</p>${amb}`+s.ops.map((o,i)=>`<button class="btn ${i?'sec':''}" data-i="${i}">${o.l}<small>${o.d}</small></button>`).join("");
   sh.querySelectorAll('button').forEach(b=>b.onclick=()=>{
     const o=s.ops[+b.dataset.i];const r=weighted(o.r);
