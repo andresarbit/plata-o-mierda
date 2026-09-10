@@ -1546,22 +1546,28 @@ function ruedaVAR(){
    para poder sumar camaras nuevas sin tocar el resto. */
 /* Cada toma sirve para lo que muestra: la del penal solo sale en penales, la del
    tiro libre solo en tiros libres. red = boca del arco medida sobre la foto, en %. */
+/* Cada toma sirve para lo que muestra. red = boca del arco medida sobre la foto, en %.
+   Regla de oro para estas fotos: adentro del rectangulo del arco no puede haber nadie
+   mas que el arquero. Si la barrera o el pateador se meten ahi, tapan justo donde hay
+   que apuntar. Por eso en todas la barrera queda al borde de abajo del cuadro. */
 const ARCOS={
   patear:{
-    penal:  [{img:"arco-p4",ar:"720/509",red:[5,11,90,48]},
-             {img:"arco-p7",ar:"720/509",red:[5,11,90,48]}],
-    jugada: [{img:"arco-p1",ar:"720/509",red:[5,11,90,48]},
-             {img:"arco-p2",ar:"720/509",red:[5,11,90,48]},
-             {img:"arco-p3",ar:"720/509",red:[5,11,90,48]},
-             {img:"arco-p5",ar:"720/509",red:[5,11,90,48]}],
-    libre:  [{img:"arco-t1",ar:"720/509",red:[5,11,90,48]},
-             {img:"arco-t2",ar:"720/509",red:[5,11,90,48]},
-             {img:"arco-p6",ar:"720/509",red:[5,11,90,48]}]
+    penal:  [{img:"arco-pn1",ar:"720/509",red:[5,11,90,48]},
+             {img:"arco-pn2",ar:"720/509",red:[5,11,90,48]}],
+    jugada: [{img:"arco-jg1",ar:"720/509",red:[5,11,90,48]},
+             {img:"arco-jg2",ar:"720/509",red:[5,11,90,48]},
+             {img:"arco-jg3",ar:"720/509",red:[5,11,90,48]},
+             {img:"arco-jg4",ar:"720/509",red:[5,11,90,48]}],
+    libre:  [{img:"arco-tl1",ar:"720/509",red:[5,11,90,48]},
+             {img:"arco-tl2",ar:"720/509",red:[5,11,90,48]},
+             {img:"arco-tl3",ar:"720/509",red:[5,11,90,48]},
+             {img:"arco-tl4",ar:"720/509",red:[5,11,90,48]},
+             {img:"arco-tl5",ar:"720/509",red:[5,11,90,48]}]
   },
   atajar:{
-    // arco-a2 salio con jugadores desparramados por la cancha: parece una jugada
-    // y no un penal, asi que se mueve al pool de jugada hasta reemplazarla.
-    penal:  [{img:"arco-a1",ar:"720/580",red:[6,36.7,89,43.3]}],
+    penal:  [{img:"arco-pa1",ar:"720/580",red:[6,36.7,89,43.3]},
+             {img:"arco-pa2",ar:"720/580",red:[6,36.7,89,43.3]},
+             {img:"arco-pa3",ar:"720/580",red:[6,36.7,89,43.3]}],
     jugada: [{img:"arco-a2",ar:"720/580",red:[6,36.7,89,43.3]},
              {img:"arco-a3",ar:"720/580",red:[6,36.7,89,43.3]},
              {img:"arco-a5",ar:"720/580",red:[6,36.7,89,43.3]},
